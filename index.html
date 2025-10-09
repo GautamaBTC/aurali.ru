@@ -3,25 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Li-Студия массажного искусства</title>
-    <meta name="description" content="Откройте для себя мир гармонии и релакса в Li-Студии.">
+    <title>Перезагрузка тела и души в сердце Карелии</title>
+    <meta name="description" content="Каждая процедура — это не просто массаж, а авторский SPA-ритуал, созданный с учетом вашего уникального энергетического поля. Мы используем только натуральные масла и методы, проверенные временем.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Li-Студия: Перезагрузка тела и души в сердце Карелии">
+    <meta property="og:description" content="Авторские SPA-ритуалы и массаж в Сортавала.">
+    <meta property="og:image" content="data:image/svg+xml,%3csvg width='1200' height='630' viewBox='0 0 1200 630' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='%230f172a'/%3e%3ctext x='50%25' y='50%25' font-family='serif' font-size='200' fill='%23f8fafc' text-anchor='middle' dy='.3em'%3eLi%3c/text%3e%3c/svg%3e">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Li-Студия: Перезагрузка тела и души в сердце Карелии">
+    <meta property="twitter:description" content="Авторские SPA-ритуалы и массаж в Сортавала.">
+    <meta property="twitter:image" content="data:image/svg+xml,%3csvg width='1200' height='630' viewBox='0 0 1200 630' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='%230f172a'/%3e%3ctext x='50%25' y='50%25' font-family='serif' font-size='200' fill='%23f8fafc' text-anchor='middle' dy='.3em'%3eLi%3c/text%3e%3c/svg%3e">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Raleway:wght@400;600&family=Noto+Serif+Display:wght@700&display=swap&subset=cyrillic,cyrillic-ext" rel="stylesheet">
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style-v2.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=2c704256-39ca-4355-8a20-fe449f632a8b&lang=ru_RU" type="text/javascript"></script>
 </head>
 <body>
     <header class="header">
         <div class="container header__container">
             <nav class="nav">
-                <a href="#hero" class="logo nav__logo">Li</a>
-                <!-- Mobile-only theme toggle -->
                 <button class="theme-toggle" id="theme-toggle-mobile" aria-label="Переключить тему">
-                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <i class="ph-sun icon-sun"></i>
+                    <i class="ph-moon icon-moon"></i>
                 </button>
+                <a href="#hero" class="logo nav__logo">Li</a>
                 <a href="#hero" class="nav__link">Главная</a>
                 <a href="#about" class="nav__link">О студии</a>
                 <a href="#services" class="nav__link">Услуги</a>
@@ -30,10 +43,9 @@
             </nav>
             <div class="header__actions">
                 <a href="https://wa.me/79215232545" target="_blank" class="btn header__btn">Записаться</a>
-                <!-- Desktop-only theme toggle -->
                 <button class="theme-toggle" id="theme-toggle-desktop" aria-label="Переключить тему">
-                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <i class="ph-sun icon-sun"></i>
+                    <i class="ph-moon icon-moon"></i>
                 </button>
                 <button class="burger" aria-label="Открыть меню"><span></span><span></span><span></span></button>
             </div>
@@ -59,10 +71,8 @@
 
         <section id="discount" class="section discount-section">
             <div class="container discount-section__container">
-                <div class="discount-section__image">
-                    <img src="assets/images/unboxing_gift.png" alt="Подарочная коробка">
-                </div>
                 <div class="discount-section__content">
+                    <div class="section__icon"><i class="ph-gift"></i></div>
                     <h2 class="section__title">Скидка 15% на ваш первый визит</h2>
                     <p class="section__text">Забронируйте любой ритуал через наш сайт и получите эксклюзивную скидку 15%. Позвольте себе погрузиться в мир гармонии по специальной цене.</p>
                     <a href="#services" class="btn btn--primary">Выбрать ритуал</a>
@@ -72,18 +82,15 @@
 
         <section id="about" class="section">
             <div class="container text-center">
-                <img src="assets/images/section-icon-about.png" alt="Иконка секции о нас" class="section__icon">
+                <div class="section__icon"><i class="ph-leaf"></i></div>
                 <h2 class="section__title">Ваше пространство гармонии</h2>
                 <p class="section__text" style="max-width: 800px; margin: 0 auto;">Li-Студия — это не просто массаж. Это ваше личное пространство для восстановления в самом сердце Сортавала. Мы верим, что забота о себе — это искусство, и создали место, где каждая деталь работает на вашу гармонию.</p>
-                <div class="about__image-wrapper">
-                    <img src="assets/images/owner-photo.png" alt="Владелица салона Li-Студия" class="about__photo">
-                </div>
             </div>
         </section>
 
         <section id="services" class="section services__section">
             <div class="container text-center">
-                <img src="assets/images/section-icon-services.png" alt="Иконка секции ритуалы" class="section__icon">
+                <div class="section__icon"><i class="ph-sparkle"></i></div>
                 <h2 class="section__title">Наши ритуалы</h2>
                 <div id="services-container" class="services-grid"></div>
             </div>
@@ -91,25 +98,16 @@
 
         <section id="certificates" class="section">
             <div class="container text-center">
+                <div class="section__icon"><i class="ph-seal-percent"></i></div>
                 <h2 class="section__title">Подарочные сертификаты</h2>
                 <p class="section__text" style="max-width: 700px; margin: 0 auto var(--space-6) auto;">Подарите близким незабываемый опыт релаксации и восстановления.
                 Наши сертификаты — это идеальный подарок на любой случай.</p>
                 <div class="certificates-grid">
-                    <div class="certificate-card">
-                        <div class="certificate-card__value">500₽</div>
-                    </div>
-                    <div class="certificate-card">
-                        <div class="certificate-card__value">1000₽</div>
-                    </div>
-                    <div class="certificate-card">
-                        <div class="certificate-card__value">1500₽</div>
-                    </div>
-                    <div class="certificate-card">
-                        <div class="certificate-card__value">2000₽</div>
-                    </div>
-                    <div class="certificate-card">
-                        <div class="certificate-card__value">3000₽</div>
-                    </div>
+                    <div class="certificate-card"><div class="certificate-card__value">500₽</div></div>
+                    <div class="certificate-card"><div class="certificate-card__value">1000₽</div></div>
+                    <div class="certificate-card"><div class="certificate-card__value">1500₽</div></div>
+                    <div class="certificate-card"><div class="certificate-card__value">2000₽</div></div>
+                    <div class="certificate-card"><div class="certificate-card__value">3000₽</div></div>
                 </div>
                  <a href="https://wa.me/79215232545" target="_blank" class="btn btn--primary" style="margin-top: var(--space-6);">Приобрести сертификат</a>
             </div>
@@ -117,7 +115,7 @@
 
         <section id="reviews" class="section">
             <div class="container text-center">
-                <img src="assets/images/section-icon-reviews.png" alt="Иконка секции отзывы" class="section__icon">
+                <div class="section__icon"><i class="ph-chat-circle-text"></i></div>
                 <h2 class="section__title">Что говорят наши гости</h2>
                 <div id="reviews-container" class="reviews-grid"></div>
             </div>
@@ -127,7 +125,7 @@
             <div class="container contacts__container">
                 <div class="contacts__info">
                     <div class="text-center">
-                        <img src="assets/images/image-section-icon-contacts.png" alt="Иконка секции контакты" class="section__icon">
+                        <div class="section__icon"><i class="ph-map-pin"></i></div>
                         <h2 class="section__title">Свяжитесь с нами</h2>
                     </div>
                     <ul class="contacts__list">

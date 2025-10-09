@@ -76,7 +76,7 @@ const renderServices = (services) => {
     state.services = services;
 
     container.innerHTML = services.map(service => `
-        <div class="service-card" data-id="${service.id}">
+        <a href="#" class="service-card" data-id="${service.id}">
             <div class="service-card__bg"></div>
             <div class="service-card__content">
                 <div class="service-card__icon">${service.icon_svg || ''}</div>
@@ -85,12 +85,13 @@ const renderServices = (services) => {
                 <p><strong>${service.price}</strong></p>
                 <span class="service-card__details">Подробнее</span>
             </div>
-        </div>
+        </a>
     `).join('');
 
     container.addEventListener('click', e => {
         const card = e.target.closest('.service-card');
         if (card && card.dataset.id) {
+            e.preventDefault();
             showModal(card.dataset.id);
         }
     });

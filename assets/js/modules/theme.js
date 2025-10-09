@@ -29,8 +29,8 @@ const getPreferredTheme = () => {
     if (savedTheme) {
         return savedTheme;
     }
-    // If no saved theme, use OS preference. Default to dark if no preference.
-    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    // Default to light theme as requested by the client.
+    return 'light';
 };
 
 /**
