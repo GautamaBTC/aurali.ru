@@ -22,7 +22,7 @@
 
     /* Typography */
     --font-main: 'Raleway', sans-serif;
-    --font-headers: 'Noto Serif Display', serif;
+    --font-headers: 'Raleway', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
     --border-radius-card: 12px;
     --border-radius-btn: 8px;
@@ -110,47 +110,53 @@ body::before {
 .container { max-width: 1100px; margin: 0 auto; padding: 0 clamp(var(--space-2), 5vw, var(--space-5)); }
 
 
-/* 3. Theme Toggle Button */
-.theme-toggle {
-    background: transparent;
-    border: none;
-    color: var(--color-text);
-    width: 48px; /* Min 48px tap target */
-    height: 48px; /* Min 48px tap target */
-    border-radius: 50%;
+/* 3. Theme Switcher */
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    transition: .4s;
+    border-radius: 28px;
 }
-.theme-toggle:hover {
-    color: var(--color-accent-end);
-    transform: scale(1.1);
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--color-text);
+    transition: .4s;
+    border-radius: 50%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.106a.75.75 0 010 1.06l-1.591 1.59a.75.75 0 11-1.06-1.06l1.59-1.59a.75.75 0 011.06 0zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM17.836 17.836a.75.75 0 01-1.06 0l-1.59-1.591a.75.75 0 111.06-1.06l1.59 1.59a.75.75 0 010 1.061zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.836a.75.75 0 010-1.06l1.59-1.59a.75.75 0 011.06 1.06l-1.59 1.59a.75.75 0 01-1.06 0zM3 12a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H3.75A.75.75 0 013 12zM6.106 6.106a.75.75 0 011.06 0l1.591 1.59a.75.75 0 01-1.06 1.06l-1.59-1.59a.75.75 0 010-1.06z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px;
 }
-.theme-toggle i {
-    font-size: 1.5rem; /* 24px */
+html[data-theme="dark"] .slider:before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 004.463-.948.75.75 0 11.226 1.482A10.47 10.47 0 0118 16.5a10.5 10.5 0 01-10.5-10.5 10.47 10.47 0 012.272-6.594.75.75 0 01.819-.162z" clip-rule="evenodd"/></svg>');
 }
-#theme-toggle-mobile {
-    display: none;
+input:checked + .slider:before {
+    transform: translateX(22px);
 }
-/* Hide/show the correct icon based on theme */
-.theme-toggle .icon-moon {
-    display: none;
-}
-html[data-theme="light"] .theme-toggle .icon-sun {
-    display: none;
-}
-html[data-theme="light"] .theme-toggle .icon-moon {
-    display: block;
-}
-.theme-toggle .icon-sun,
-.theme-toggle .icon-moon {
-    transition: transform 0.4s ease-in-out;
-}
-.theme-toggle.is-spinning .icon-sun,
-.theme-toggle.is-spinning .icon-moon {
-    transform: rotate(360deg);
+#theme-toggle-desktop {
+    display: inline-block;
 }
 
 
@@ -540,7 +546,7 @@ body.menu-open .burger span:nth-child(3) {
         background: var(--color-bg);
         display: flex;
         flex-direction: column; justify-content: flex-start; align-items: center; gap: var(--space-4);
-        padding-top: 15vh;
+        padding-top: 10vh;
         opacity: 0;
         visibility: hidden;
         pointer-events: none;

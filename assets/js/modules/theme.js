@@ -40,34 +40,36 @@ const getPreferredTheme = () => {
  * - Listens for changes in OS theme preference.
  */
 export const initTheme = () => {
-    const desktopToggle = document.getElementById('theme-toggle-desktop');
-    const mobileToggle = document.getElementById('theme-toggle-mobile');
-    const toggles = [desktopToggle, mobileToggle].filter(Boolean); // Filter out nulls
+    const desktopSwitch = document.getElementById('theme-switch-desktop');
+    const mobileSwitch = document.getElementById('theme-switch-mobile');
+    const switches = [desktopSwitch, mobileSwitch].filter(Boolean);
 
-    if (toggles.length === 0) return;
+    if (switches.length === 0) return;
 
-    // 1. Set initial theme on page load
-    applyTheme(getPreferredTheme());
-
-    // 2. Create a shared handler for the click event
-    const handleThemeToggle = (e) => {
-        const button = e.currentTarget;
-        // Add spinning class for animation
-        button.classList.add('is-spinning');
-
-        const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        applyTheme(newTheme);
-        saveTheme(newTheme);
-
-        // Remove the class after the animation completes
-        button.addEventListener('transitionend', () => {
-            button.classList.remove('is-spinning');
-        }, { once: true });
+    const syncSwitches = (state) => {
+        switches.forEach(sw => {
+            sw.checked = state;
+        });
     };
 
-    // 3. Add click listener to all available toggles
-    toggles.forEach(toggle => {
-        toggle.addEventListener('click', handleThemeToggle);
+    // 1. Set initial theme and switch state on page load
+    const currentTheme = getPreferredTheme();
+    applyTheme(currentTheme);
+    syncSwitches(currentTheme === 'dark');
+
+
+    // 2. Create a shared handler for the change event
+    const handleThemeToggle = (e) => {
+        const isChecked = e.target.checked;
+        const newTheme = isChecked ? 'dark' : 'light';
+        applyTheme(newTheme);
+        saveTheme(newTheme);
+        syncSwitches(isChecked);
+    };
+
+    // 3. Add change listener to all available switches
+    switches.forEach(toggle => {
+        toggle.addEventListener('change', handleThemeToggle);
     });
 
     // 4. Listen for OS-level theme changes

@@ -76,23 +76,23 @@ const renderServices = (services) => {
     state.services = services;
 
     container.innerHTML = services.map(service => `
-        <a href="#" class="service-card" data-id="${service.id}">
+        <div class="service-card">
             <div class="service-card__bg"></div>
             <div class="service-card__content">
                 <div class="service-card__icon">${service.icon_svg || ''}</div>
                 <h3>${service.title}</h3>
                 <p>${service.shortDescription}</p>
                 <p><strong>${service.price}</strong></p>
-                <span class="service-card__details">Подробнее</span>
+                <a href="#" class="service-card__details" data-id="${service.id}">Подробнее</a>
             </div>
-        </a>
+        </div>
     `).join('');
 
     container.addEventListener('click', e => {
-        const card = e.target.closest('.service-card');
-        if (card && card.dataset.id) {
+        const detailsLink = e.target.closest('.service-card__details');
+        if (detailsLink && detailsLink.dataset.id) {
             e.preventDefault();
-            showModal(card.dataset.id);
+            showModal(detailsLink.dataset.id);
         }
     });
 };
