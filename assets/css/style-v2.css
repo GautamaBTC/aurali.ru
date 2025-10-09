@@ -155,8 +155,8 @@ html[data-theme="dark"] .slider:before {
 input:checked + .slider:before {
     transform: translateX(22px);
 }
-#theme-toggle-desktop {
-    display: inline-block;
+#theme-toggle-mobile {
+    display: none; /* Hidden by default */
 }
 
 
@@ -208,7 +208,7 @@ input:checked + .slider:before {
 }
 
 /* 6. Hero Section */
-main { padding-top: 0; } /* Remove padding, hero is full screen */
+main { padding-top: 5rem; } /* Offset for fixed header */
 .hero {
     min-height: 100vh;
     display: flex;
@@ -330,33 +330,24 @@ section[id] {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
-/* Certificate Card Styles */
-.certificate-card {
-    position: relative;
-    aspect-ratio: 1.6 / 1;
-    background-color: var(--color-surface-1);
+/* Certificate Styles */
+.certificate-item {
+    background-color: transparent;
     border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-card);
-    box-shadow: var(--shadow-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border-radius: var(--border-radius-btn);
+    padding: var(--space-3) var(--space-4);
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: default; /* Not clickable */
 }
-.certificate-card:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: var(--shadow-lg), var(--shadow-glow);
+
+.certificate-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
     border-color: var(--color-accent-start);
-}
-.certificate-card__value {
-    font-family: var(--font-headers);
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 700;
-    color: var(--color-text-secondary);
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-}
-html[data-theme="light"] .certificate-card__value {
-    color: var(--color-text);
+    background-color: var(--color-surface-1);
 }
 
 
@@ -595,6 +586,9 @@ body.menu-open .burger span:nth-child(3) {
         grid-template-columns: 1fr;
     }
     #theme-toggle-desktop {
-        display: none;
+        display: none !important;
+    }
+    #theme-toggle-mobile {
+        display: inline-block !important;
     }
 }
