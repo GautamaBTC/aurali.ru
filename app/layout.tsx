@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { JetBrains_Mono, Manrope } from "next/font/google";
 import { MobileMenu } from "@/components/menu";
-import { ParallaxBackground } from "@/components/parallax/ParallaxBackground";
+import ParallaxBackground from "@/components/parallax/ParallaxBackground";
 import { siteConfig } from "@/lib/siteConfig";
 import "./globals.css";
 

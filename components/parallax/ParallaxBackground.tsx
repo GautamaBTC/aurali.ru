@@ -3,81 +3,104 @@
 import { useCallback, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { GlowParticles } from "@/components/parallax/GlowParticles";
 
-interface ParallaxLayer {
+const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor;
+
+interface Layer {
+  id: string;
   className: string;
-  style?: React.CSSProperties;
   scrollSpeed: number;
   mouseSpeed: number;
+  blur: number;
+  breathe?: boolean;
 }
 
-const LAYERS: readonly ParallaxLayer[] = [
+const LAYERS: readonly Layer[] = [
   {
-    className: "absolute inset-0",
-    style: {
-      background: "radial-gradient(ellipse 80% 60% at 50% -20%, rgba(30,60,120,0.45), transparent 70%)",
-    },
-    scrollSpeed: 0.15,
-    mouseSpeed: 0.005,
-  },
-  {
-    className: "absolute -top-1/4 left-1/4 h-[120vh] w-[120vw] rounded-full blur-3xl",
-    style: {
-      background: "radial-gradient(circle, rgba(56,120,200,0.18), transparent 55%)",
-    },
-    scrollSpeed: 0.3,
-    mouseSpeed: 0.012,
-  },
-  {
-    className: "absolute top-1/3 -right-1/4 h-[100vh] w-[100vw] rounded-full blur-3xl",
-    style: {
-      background: "radial-gradient(circle, rgba(100,60,180,0.14), transparent 50%)",
-    },
-    scrollSpeed: 0.45,
-    mouseSpeed: 0.018,
-  },
-  {
-    className: "absolute inset-0",
-    style: {
-      background: "linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.015) 50%, transparent 60%)",
-    },
-    scrollSpeed: 0.55,
-    mouseSpeed: 0.022,
-  },
-  {
-    className: "absolute inset-0 bg-repeat mix-blend-soft-light opacity-[0.035]",
-    style: {
-      backgroundImage:
-        "url('data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20256%20256%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.85%22%20numOctaves%3D%224%22%20stitchTiles%3D%22stitch%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23n)%22%2F%3E%3C%2Fsvg%3E')",
-      backgroundSize: "180px 180px",
-    },
+    id: "deep-radial",
+    className: "absolute inset-0 scale-[1.5]",
     scrollSpeed: 0.08,
+    mouseSpeed: 0.003,
+    blur: 0,
+  },
+  {
+    id: "aurora-1",
+    className: "absolute -left-[15%] -top-[30%] h-[80vh] w-[80vw] rounded-full",
+    scrollSpeed: 0.22,
+    mouseSpeed: 0.015,
+    blur: 80,
+    breathe: true,
+  },
+  {
+    id: "aurora-2",
+    className: "absolute -right-[20%] top-[20%] h-[70vh] w-[75vw] rounded-full",
+    scrollSpeed: 0.38,
+    mouseSpeed: 0.025,
+    blur: 100,
+    breathe: true,
+  },
+  {
+    id: "aurora-3",
+    className: "absolute left-[10%] top-[60%] h-[50vh] w-[60vw] rounded-full",
+    scrollSpeed: 0.5,
+    mouseSpeed: 0.03,
+    blur: 120,
+    breathe: true,
+  },
+  {
+    id: "light-streak",
+    className: "absolute inset-0",
+    scrollSpeed: 0.6,
+    mouseSpeed: 0.035,
+    blur: 0,
+  },
+  {
+    id: "vignette",
+    className: "absolute inset-0",
+    scrollSpeed: 0,
     mouseSpeed: 0,
+    blur: 0,
   },
 ];
 
-interface ParallaxBackgroundProps {
-  scrollContainerRef?: React.RefObject<HTMLElement | null>;
+const layerStyleById: Record<string, React.CSSProperties> = {
+  "deep-radial": {
+    background: "radial-gradient(ellipse 70% 50% at 50% -10%, rgba(20,50,120,0.5), transparent 65%)",
+  },
+  "aurora-1": {
+    background: "radial-gradient(circle, rgba(56,130,220,0.22), transparent 50%)",
+  },
+  "aurora-2": {
+    background: "radial-gradient(circle, rgba(120,50,200,0.16), transparent 45%)",
+  },
+  "aurora-3": {
+    background: "radial-gradient(circle, rgba(0,200,180,0.1), transparent 50%)",
+  },
+  "light-streak": {
+    background:
+      "linear-gradient(125deg, transparent 35%, rgba(255,255,255,0.018) 48%, rgba(255,255,255,0.025) 50%, rgba(255,255,255,0.018) 52%, transparent 65%)",
+  },
+  vignette: {
+    background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%)",
+  },
+};
+
+interface Props {
   intensity?: number;
 }
 
-export function ParallaxBackground({ scrollContainerRef, intensity = 1 }: ParallaxBackgroundProps) {
+export default function ParallaxBackground({ intensity = 1 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const scrollLayerRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const mouseLayerRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const mousePos = useRef({ x: 0, y: 0 });
-  const rafId = useRef<number>(0);
+  const layerRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const grainRef = useRef<HTMLDivElement | null>(null);
+  const mouse = useRef({ x: 0, y: 0 });
+  const smoothMouse = useRef({ x: 0, y: 0 });
+  const isMobile = useRef(false);
 
-  const setScrollLayerRef = useCallback(
-    (index: number) => (el: HTMLDivElement | null) => {
-      scrollLayerRefs.current[index] = el;
-    },
-    [],
-  );
-
-  const setMouseLayerRef = useCallback(
-    (index: number) => (el: HTMLDivElement | null) => {
-      mouseLayerRefs.current[index] = el;
+  const setLayerRef = useCallback(
+    (i: number) => (el: HTMLDivElement | null) => {
+      layerRefs.current[i] = el;
     },
     [],
   );
@@ -87,107 +110,141 @@ export function ParallaxBackground({ scrollContainerRef, intensity = 1 }: Parall
 
     gsap.registerPlugin(ScrollTrigger);
 
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const mobileFactor = isMobile ? 0.45 : 1;
-    const factor = intensity * mobileFactor;
-
-    if (prefersReduced) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       gsap.set(containerRef.current, { opacity: 1 });
       return;
     }
 
+    isMobile.current = window.matchMedia("(max-width: 768px)").matches;
+    const mob = isMobile.current ? 0.4 : 1;
+    const k = intensity * mob;
+
     const ctx = gsap.context(() => {
-      gsap.fromTo(containerRef.current, { opacity: 0 }, { opacity: 1, duration: 1.6, ease: "power2.out" });
+      const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+      intro.fromTo(containerRef.current, { opacity: 0 }, { opacity: 1, duration: 2 });
 
       LAYERS.forEach((layer, i) => {
-        const el = scrollLayerRefs.current[i];
+        const el = layerRefs.current[i];
         if (!el) return;
+        intro.fromTo(el, { scale: 1.15, opacity: 0 }, { scale: 1, opacity: 1, duration: 2.2, ease: "power2.out" }, i * 0.1);
+      });
 
-        gsap.fromTo(
-          el,
-          { y: 30 * layer.scrollSpeed * factor },
-          {
-            y: 0,
-            duration: 1.8,
-            delay: i * 0.12,
-            ease: "power3.out",
-          },
-        );
-
+      LAYERS.forEach((layer, i) => {
+        const el = layerRefs.current[i];
+        if (!el || layer.scrollSpeed === 0) return;
         gsap.to(el, {
-          y: () => layer.scrollSpeed * factor * window.innerHeight * 0.6,
+          y: () => layer.scrollSpeed * k * window.innerHeight * 0.7,
           ease: "none",
           scrollTrigger: {
             trigger: document.documentElement,
             start: "top top",
             end: "bottom bottom",
-            scrub: 1.2,
-            scroller: scrollContainerRef?.current ?? undefined,
+            scrub: 1.4,
             invalidateOnRefresh: true,
           },
         });
       });
-    }, containerRef);
 
-    if (!isMobile) {
-      const quickSetters = LAYERS.map((layer, i) => {
-        const el = mouseLayerRefs.current[i];
-        if (!el || layer.mouseSpeed === 0) return null;
-        return {
-          xTo: gsap.quickTo(el, "x", { duration: 0.8, ease: "power2.out" }),
-          yTo: gsap.quickTo(el, "y", { duration: 0.8, ease: "power2.out" }),
-          speed: layer.mouseSpeed,
-        };
+      LAYERS.forEach((layer, i) => {
+        const el = layerRefs.current[i];
+        if (!el || !layer.breathe) return;
+
+        gsap.to(el, {
+          scale: 1.08 + i * 0.03,
+          rotation: 8 - i * 4,
+          duration: 8 + i * 2,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+
+        gsap.to(el, {
+          x: `+=${30 + i * 15}`,
+          y: `+=${20 - i * 10}`,
+          duration: 12 + i * 3,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: i * 1.5,
+        });
       });
 
-      const handleMouseMove = (e: MouseEvent) => {
-        mousePos.current = {
-          x: (e.clientX / window.innerWidth - 0.5) * 2,
-          y: (e.clientY / window.innerHeight - 0.5) * 2,
-        };
-      };
-
-      const tickMouse = () => {
-        quickSetters.forEach((setter) => {
-          if (!setter) return;
-          const mx = mousePos.current.x * setter.speed * window.innerWidth * factor;
-          const my = mousePos.current.y * setter.speed * window.innerHeight * factor;
-          setter.xTo(mx);
-          setter.yTo(my);
+      if (grainRef.current) {
+        gsap.to(grainRef.current, {
+          backgroundPosition: "100% 100%",
+          duration: 0.4,
+          repeat: -1,
+          ease: "steps(4)",
         });
-        rafId.current = window.requestAnimationFrame(tickMouse);
-      };
+      }
+    }, containerRef);
 
-      window.addEventListener("mousemove", handleMouseMove, { passive: true });
-      rafId.current = window.requestAnimationFrame(tickMouse);
+    let animId = 0;
 
-      return () => {
-        ctx.revert();
-        window.removeEventListener("mousemove", handleMouseMove);
-        window.cancelAnimationFrame(rafId.current);
+    const onMouseMove = (e: MouseEvent) => {
+      mouse.current = {
+        x: (e.clientX / window.innerWidth - 0.5) * 2,
+        y: (e.clientY / window.innerHeight - 0.5) * 2,
       };
+    };
+
+    const lerpFactor = 0.06;
+
+    const tick = () => {
+      smoothMouse.current.x = lerp(smoothMouse.current.x, mouse.current.x, lerpFactor);
+      smoothMouse.current.y = lerp(smoothMouse.current.y, mouse.current.y, lerpFactor);
+
+      LAYERS.forEach((layer, i) => {
+        const el = layerRefs.current[i];
+        if (!el || layer.mouseSpeed === 0) return;
+        const moveX = smoothMouse.current.x * layer.mouseSpeed * window.innerWidth * k;
+        gsap.set(el, { x: moveX, overwrite: "auto" });
+      });
+
+      animId = window.requestAnimationFrame(tick);
+    };
+
+    if (!isMobile.current) {
+      window.addEventListener("mousemove", onMouseMove, { passive: true });
+      animId = window.requestAnimationFrame(tick);
     }
 
     return () => {
       ctx.revert();
+      if (!isMobile.current) {
+        window.removeEventListener("mousemove", onMouseMove);
+        window.cancelAnimationFrame(animId);
+      }
     };
-  }, [intensity, scrollContainerRef]);
+  }, [intensity]);
 
   return (
-    <div
-      ref={containerRef}
-      aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden opacity-0"
-      style={{ willChange: "opacity" }}
-    >
+    <div ref={containerRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden opacity-0">
       {LAYERS.map((layer, i) => (
-        <div key={i} ref={setScrollLayerRef(i)} className="absolute inset-0" style={{ willChange: "transform" }}>
-          <div ref={setMouseLayerRef(i)} className={layer.className} style={{ ...layer.style, willChange: "transform" }} />
-        </div>
+        <div
+          key={layer.id}
+          ref={setLayerRef(i)}
+          className={layer.className}
+          style={{
+            ...layerStyleById[layer.id],
+            willChange: "transform",
+            filter: layer.blur ? `blur(${layer.blur}px)` : undefined,
+          }}
+        />
       ))}
+
+      <GlowParticles />
+
+      <div
+        ref={grainRef}
+        className="absolute inset-0 mix-blend-overlay opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+          backgroundSize: "180px 180px",
+          willChange: "background-position",
+        }}
+      />
     </div>
   );
 }
-
-export default ParallaxBackground;
