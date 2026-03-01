@@ -1,4 +1,4 @@
-﻿import type { ChannelConfig, DemoScenario, MeterZone, SegmentMap } from "./multimeter.types";
+﻿import type { ChannelConfig, DemoScenario, MeterZone, RangeMode, SegmentMap } from "./multimeter.types";
 
 const V_ZONES: readonly MeterZone[] = [
   { min: 0, max: 8, color: "#ff3b3b", label: "CRIT", labelRu: "КРИТИЧНО" },
@@ -88,7 +88,7 @@ export const CHANNELS: Record<string, ChannelConfig> = {
     formatUnit: fmtRUnit,
     formatCompact: fmtRCompact,
   },
-};
+} as const;
 
 export function getBargraphRatio(v: number, cfg: ChannelConfig): number {
   if (cfg.mode === "resistance") {
@@ -128,6 +128,12 @@ export const SEGMENTS: SegmentMap = {
   O: [true, true, true, true, true, true, false],
 };
 
+export const RANGE_OPTIONS: Record<string, readonly RangeMode[]> = {
+  voltage: ["auto", "4V", "32V", "400V"],
+  current: ["auto", "400mA", "10A"],
+  resistance: ["auto", "40kΩ", "4MΩ"],
+};
+
 export const SCENARIOS: readonly DemoScenario[] = [
   { label: "Двигатель заглушен", voltage: 12.6, current: 0.35, resistance: 36000, frequency: 0, vpp: 0.05 },
   { label: "Стартер крутит", voltage: 10.2, current: 125, resistance: 82, frequency: 12, vpp: 3.8 },
@@ -141,6 +147,6 @@ export const SCENARIOS: readonly DemoScenario[] = [
   { label: "Обрыв цепи", voltage: 14.4, current: 0.001, resistance: 850000, frequency: 60, vpp: 0.1 },
   { label: "Нормальный режим", voltage: 14.2, current: 5.6, resistance: 2536, frequency: 56, vpp: 0.5 },
   { label: "Подогрев сидений", voltage: 13.9, current: 9.8, resistance: 1418, frequency: 58, vpp: 0.7 },
-];
+] as const;
 
 export const HISTORY_MAX = 50;

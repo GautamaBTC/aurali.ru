@@ -4,15 +4,23 @@ import { useEffect } from "react";
 
 export function useLockScroll(locked: boolean): void {
   useEffect(() => {
-    if (!locked) {
-      return;
+    const html = document.documentElement;
+
+    if (locked) {
+      const scrollY = window.scrollY;
+      html.classList.add("menu-locked");
+      html.style.top = `-${scrollY}px`;
+      html.dataset.scrollY = String(scrollY);
+    } else {
+      const scrollY = Number.parseInt(html.dataset.scrollY ?? "0", 10);
+      html.classList.remove("menu-locked");
+      html.style.top = "";
+      window.scrollTo(0, scrollY);
     }
 
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
     return () => {
-      document.body.style.overflow = originalOverflow;
+      html.classList.remove("menu-locked");
+      html.style.top = "";
     };
   }, [locked]);
 }

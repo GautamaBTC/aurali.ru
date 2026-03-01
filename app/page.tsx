@@ -1,10 +1,9 @@
+﻿import Multimeter from "@/components/multimeter/Multimeter";
 import { StickyMobileActions } from "@/components/effects/StickyMobileActions";
 import { ParallaxSection } from "@/components/parallax/ParallaxSection";
 import { Reveal } from "@/components/effects/Reveal";
 import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
-import MultimeterFinal from "@/components/multimeter-final/Multimeter";
 import { AdvantagesSection } from "@/components/sections/AdvantagesSection";
 import { BrandsSection } from "@/components/sections/BrandsSection";
 import { CompareSection } from "@/components/sections/CompareSection";
@@ -25,7 +24,6 @@ export default function Home() {
         Перейти к содержимому
       </a>
       <ScrollProgress />
-      <Header />
       <main id="main-content">
         <Reveal>
           <HeroSection />
@@ -108,7 +106,7 @@ export default function Home() {
         <Reveal>
           <ContactSection />
         </Reveal>
-        <MultimeterFinal autoAnimate animationInterval={3200} />
+        <Multimeter autoAnimate animationInterval={3200} />
       </main>
       <StickyMobileActions />
       <Footer />

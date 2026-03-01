@@ -1,4 +1,6 @@
 ﻿export type MeterMode = "voltage" | "current" | "resistance";
+export type RangeMode = "auto" | "4V" | "32V" | "400V" | "10A" | "400mA" | "40kΩ" | "4MΩ";
+export type RateMode = "slow" | "med" | "fast";
 
 export interface MeterZone {
   readonly min: number;
@@ -43,6 +45,18 @@ export interface ComputedState {
   vpp: number;
   duty: number;
   impedance: number;
+  peakVoltage: number;
+  peakCurrent: number;
+}
+
+export interface ToolbarState {
+  hold: boolean;
+  rel: boolean;
+  peak: boolean;
+  acdc: "DC" | "AC";
+  range: RangeMode;
+  rate: RateMode;
+  recording: boolean;
 }
 
 export interface DemoScenario {

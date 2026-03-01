@@ -1,8 +1,8 @@
 ﻿"use client";
 
 import { memo } from "react";
-import { MeterBargraph } from "./MeterBargraph";
 import { MeterLcd } from "./MeterLcd";
+import { MeterBargraph } from "./MeterBargraph";
 import type { ChannelConfig, ChannelState, MeterMode } from "./multimeter.types";
 import type { ChannelRefs } from "./useMultimeter";
 
@@ -25,33 +25,33 @@ export const MeterDisplay = memo(function MeterDisplay({ config, state, setRef }
   const { zone, displayValue, displayUnit, overload } = state;
 
   return (
-    <div className="flex flex-col gap-2 rounded-xl p-3 transition-colors hover:bg-white/[0.01]" style={{ border: "1px solid rgba(255,255,255,0.03)" }}>
+    <div className="flex flex-1 flex-col gap-2.5 rounded-xl p-3 transition-colors hover:bg-white/[0.015]" style={{ border: "1px solid rgba(255,255,255,0.04)" }}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span
             className="flex h-5 w-5 items-center justify-center rounded text-[9px]"
             style={{
-              backgroundColor: withAlpha(zone.color, 0.1),
+              backgroundColor: withAlpha(zone.color, 0.12),
               color: zone.color,
-              border: `1px solid ${withAlpha(zone.color, 0.2)}`,
-              boxShadow: `0 0 8px ${withAlpha(zone.color, 0.1)}`,
-              transition: "all 0.6s ease",
+              border: `1px solid ${withAlpha(zone.color, 0.25)}`,
+              boxShadow: `0 0 10px ${withAlpha(zone.color, 0.1)}`,
+              transition: "all 0.8s cubic-bezier(0.4,0,0.2,1)",
             }}
           >
             {config.icon}
           </span>
-          <span className="font-mono text-[8px] font-bold tracking-[0.15em] text-white/15">{config.shortLabel}</span>
+          <span className="font-mono text-[8px] font-bold tracking-[0.15em] text-white/35">{config.shortLabel}</span>
         </div>
 
-        <div className="flex items-center gap-2">
-          {overload ? <span className="animate-pulse font-mono text-[8px] font-bold text-red-500">OL</span> : null}
+        <div className="flex items-center gap-1.5">
+          {overload ? <span className="animate-pulse font-mono text-[8px] font-bold text-red-500" style={{ textShadow: "0 0 6px rgba(255,59,59,0.5)" }}>OL</span> : null}
           <span
             className="rounded px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-wider"
             style={{
-              backgroundColor: withAlpha(zone.color, 0.1),
+              backgroundColor: withAlpha(zone.color, 0.12),
               color: zone.color,
-              border: `1px solid ${withAlpha(zone.color, 0.15)}`,
-              transition: "all 0.6s ease",
+              border: `1px solid ${withAlpha(zone.color, 0.2)}`,
+              transition: "all 0.8s cubic-bezier(0.4,0,0.2,1)",
             }}
           >
             {zone.labelRu}
@@ -65,17 +65,18 @@ export const MeterDisplay = memo(function MeterDisplay({ config, state, setRef }
 
       <div className="flex items-center justify-between px-0.5">
         {[
-          { label: "MIN", value: config.formatCompact(state.min) },
-          { label: "MAX", value: config.formatCompact(state.max) },
-          { label: "AVG", value: config.formatCompact(state.avg) },
-        ].map((row) => (
-          <div key={row.label} className="flex items-center gap-1">
-            <span className="font-mono text-[6px] font-bold tracking-wider text-white/10">{row.label}</span>
-            <span className="font-mono text-[8px] tabular-nums text-white/25">{row.value}</span>
+          { label: "MIN", value: config.formatCompact(state.min), color: "#22d3ee" },
+          { label: "MAX", value: config.formatCompact(state.max), color: "#ff8c21" },
+          { label: "AVG", value: config.formatCompact(state.avg), color: "#818cf8" },
+        ].map((r) => (
+          <div key={r.label} className="flex items-center gap-1">
+            <span className="font-mono text-[6px] font-bold tracking-wider" style={{ color: r.color, opacity: 0.4 }}>
+              {r.label}
+            </span>
+            <span className="font-mono text-[8px] tabular-nums text-white/40">{r.value}</span>
           </div>
         ))}
       </div>
     </div>
   );
 });
-

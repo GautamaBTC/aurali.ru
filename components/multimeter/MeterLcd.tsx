@@ -28,9 +28,9 @@ const LcdChar = memo(function LcdChar({ char, color }: { char: string; color: st
   return (
     <svg viewBox="0 0 28 48" className="h-full" style={{ width: "100%" }}>
       {SEG_PATHS.map((d, i) => {
-        const isOn = map[i] ?? false;
+        const on = map[i] ?? false;
         return (
-          <path key={i} d={d} fill={isOn ? color : "rgba(255,255,255,0.025)"} style={{ filter: isOn ? `drop-shadow(0 0 2px ${color}cc)` : "none", transition: "fill 0.12s ease" }} />
+          <path key={i} d={d} fill={on ? color : "rgba(255,255,255,0.025)"} style={{ filter: on ? `drop-shadow(0 0 3px ${color}90)` : "none", transition: "fill 0.15s ease" }} />
         );
       })}
     </svg>
@@ -78,33 +78,26 @@ export const MeterLcd = memo(function MeterLcd({ initialValue, initialUnit, colo
   return (
     <div
       ref={mergeRef}
-      className="relative flex items-center gap-0.5 rounded-lg px-3 py-2"
+      className="relative flex items-center gap-0.5 rounded-lg px-3 py-2.5"
       style={{
-        background: "rgba(0,0,0,0.5)",
-        border: "1px solid rgba(255,255,255,0.04)",
-        boxShadow: "inset 0 2px 6px rgba(0,0,0,0.4)",
+        background: "linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.45) 100%)",
+        border: "1px solid rgba(255,255,255,0.05)",
+        boxShadow: "inset 0 2px 8px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.02)",
       }}
     >
-      <div className="pointer-events-none absolute inset-0 rounded-lg" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.1) 100%)" }} aria-hidden />
+      <div className="pointer-events-none absolute inset-0 rounded-lg" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.015) 0%, transparent 40%)" }} aria-hidden />
 
-      <div className={`flex items-center gap-[2px] ${overload ? "animate-pulse" : ""}`} style={{ height: "clamp(28px, 5vw, 42px)" }}>
+      <div className={`flex items-center gap-[2px] ${overload ? "animate-pulse" : ""}`} style={{ height: "clamp(30px, 5vw, 44px)" }}>
         {displayChars.map((ch, i) => (
           <LcdChar key={`${i}-${ch}`} char={ch} color={displayColor} />
         ))}
       </div>
 
-      <span
-        className="ml-1 self-end font-mono text-[10px] font-bold tracking-wider"
-        style={{ color: displayColor, opacity: 0.5, textShadow: `0 0 4px ${displayColor}4d`, paddingBottom: 2 }}
-      >
+      <span className="ml-1.5 self-end pb-0.5 font-mono text-[10px] font-bold tracking-wider" style={{ color: displayColor, opacity: 0.6, textShadow: `0 0 6px ${displayColor}40` }}>
         {unit}
       </span>
 
-      <div
-        className="pointer-events-none absolute inset-0 rounded-lg opacity-[0.04]"
-        style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent 0px, transparent 1px, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px)" }}
-        aria-hidden
-      />
+      <div className="pointer-events-none absolute inset-0 rounded-lg opacity-[0.03]" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px)" }} aria-hidden />
     </div>
   );
 });
@@ -112,4 +105,3 @@ export const MeterLcd = memo(function MeterLcd({ initialValue, initialUnit, colo
 function padValue(str: string): string[] {
   return str.padStart(5, " ").split("");
 }
-

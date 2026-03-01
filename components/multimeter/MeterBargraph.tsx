@@ -12,18 +12,17 @@ type Props = {
 
 export const MeterBargraph = memo(function MeterBargraph({ segments, mode, setRef }: Props) {
   return (
-    <div className="flex items-end gap-[2px]">
-      <span className="mr-1 self-center font-mono text-[6px] text-white/10">L</span>
+    <div className="flex items-center gap-[1.5px]">
+      <span className="mr-0.5 font-mono text-[7px] text-white/20">L</span>
       {Array.from({ length: segments }, (_, i) => (
         <span
           key={i}
           ref={(el) => setRef(mode, "barEls", el, i)}
           className="rounded-[1px]"
-          style={{ width: "clamp(3px, 0.8vw, 6px)", height: 10, backgroundColor: "rgba(255,255,255,0.03)", transition: "background-color 0.06s linear, box-shadow 0.06s linear" }}
+          style={{ width: "clamp(3px, 0.7vw, 6px)", height: 12, backgroundColor: "rgba(255,255,255,0.04)", transition: "background-color 0.08s linear, box-shadow 0.08s linear" }}
         />
       ))}
-      <span className="ml-1 self-center font-mono text-[6px] text-white/10">H</span>
+      <span className="ml-0.5 font-mono text-[7px] text-white/20">H</span>
     </div>
   );
 });
-

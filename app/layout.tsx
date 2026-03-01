@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { JetBrains_Mono, Manrope } from "next/font/google";
+import { MobileMenu } from "@/components/menu";
 import { siteConfig } from "@/lib/siteConfig";
 import "./globals.css";
 
@@ -101,8 +102,9 @@ export default function RootLayout({
 
   return (
     <html lang="ru">
-      <body className={`${manrope.variable} ${jetBrainsMono.variable} antialiased`}>
+      <body className={`${manrope.variable} ${jetBrainsMono.variable} bg-[#12151A] pt-[80px] antialiased`}>
         <div className="noise-overlay" />
+        <MobileMenu />
         {children}
         <Script id="local-business-jsonld" type="application/ld+json">
           {JSON.stringify(localBusinessJsonLd)}
