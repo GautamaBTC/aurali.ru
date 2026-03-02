@@ -1,28 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="360" height="96" viewBox="0 0 360 96" role="img" aria-labelledby="title desc">
-  <title id="title">Логотип VIPАвто 161</title>
-  <desc id="desc">Плашка с логотипом VIPАвто 161</desc>
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="200" height="54" viewBox="0 0 260 70" class="plate-logo" aria-label="VIPАвто 161">
   <defs>
-    <linearGradient id="plateBg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FDFDFD"/>
-      <stop offset="100%" stop-color="#F1F2F4"/>
+    <linearGradient id="plateBg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#fdfdfd"/>
+      <stop offset="100%" stop-color="#f1f2f4"/>
     </linearGradient>
-    <linearGradient id="neonLine" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#CCFF00"/>
-      <stop offset="100%" stop-color="#00F0FF"/>
-    </linearGradient>
-    <filter id="plateShadow" x="-10%" y="-20%" width="130%" height="150%">
-      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0B1020" flood-opacity="0.28"/>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#111827" flood-opacity="0.35"/>
     </filter>
   </defs>
-
-  <g filter="url(#plateShadow)">
-    <rect x="6" y="8" width="348" height="80" rx="18" fill="url(#plateBg)" stroke="#D8DCE3" stroke-width="2"/>
-    <rect x="16" y="16" width="328" height="64" rx="12" fill="#FFFFFF" opacity="0.65"/>
-  </g>
-
-  <path d="M26 78h308" stroke="url(#neonLine)" stroke-width="3" stroke-linecap="round"/>
-
-  <text x="34" y="62" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="800" fill="#0B1020" letter-spacing="-1.2">VIP</text>
-  <text x="132" y="62" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="800" fill="#151A2E" letter-spacing="-1.4">Авто</text>
-  <text x="286" y="62" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800" fill="#0B1020">161</text>
+  <rect class="svg-elem-1" x="3" y="5" width="254" height="60" rx="9" fill="url(#plateBg)" stroke="#1a1f2b" stroke-width="3.2" filter="url(#shadow)"/>
+  <rect class="svg-elem-2" x="7" y="9" width="246" height="52" rx="7" fill="none" stroke="#0d121f" stroke-width="1.6"/>
+  <line class="svg-elem-3" x1="186" y1="9" x2="186" y2="61" stroke="#0d121f" stroke-width="2"/>
+  <text class="svg-elem-4" x="20" y="48" fill="#0d121f" font-family="DIN Condensed, 'Segoe UI', Arial" font-weight="700" font-size="34" letter-spacing="1.2">VIPАВТО</text>
+  <text class="svg-elem-5" x="196" y="36" fill="#0d121f" font-family="DIN Condensed, 'Segoe UI', Arial" font-weight="700" font-size="24" letter-spacing="1">161</text>
+  <text class="svg-elem-6" x="196" y="52.5" fill="#0d121f" font-family="DIN Condensed, 'Segoe UI', Arial" font-weight="700" font-size="13">RUS</text>
+  <rect class="svg-elem-7" x="224" y="42" width="22" height="12" fill="#fff" stroke="#0d121f" stroke-width="1"/>
+  <rect class="svg-elem-8" x="224" y="42" width="22" height="4" fill="#fff"/>
+  <rect class="svg-elem-9" x="224" y="46" width="22" height="4" fill="#0052b4"/>
+  <rect class="svg-elem-10" x="224" y="50" width="22" height="4" fill="#d80027"/>
 </svg>
