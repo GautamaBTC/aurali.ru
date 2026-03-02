@@ -92,6 +92,7 @@ interface Props {
 
 export default function ParallaxBackground({ intensity = 1 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const videoLayerRef = useRef<HTMLDivElement | null>(null);
   const layerRefs = useRef<Array<HTMLDivElement | null>>([]);
   const grainRef = useRef<HTMLDivElement | null>(null);
   const mouse = useRef({ x: 0, y: 0 });
@@ -223,11 +224,41 @@ export default function ParallaxBackground({ intensity = 1 }: Props) {
     };
   }, [intensity]);
 
+  useEffect(() => {
+    const layer = videoLayerRef.current;
+    if (!layer) return;
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const scrollState = { current: 0, target: 0 };
+    let raf = 0;
+    const speed = 0.075;
+    const smooth = 0.045;
+
+    const tick = () => {
+      scrollState.current = lerp(scrollState.current, scrollState.target, smooth);
+      layer.style.transform = `translate3d(0, ${scrollState.current.toFixed(2)}px, 0)`;
+      raf = window.requestAnimationFrame(tick);
+    };
+
+    const onScroll = () => {
+      scrollState.target = Math.min(260, window.scrollY * speed);
+    };
+
+    onScroll();
+    raf = window.requestAnimationFrame(tick);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
   return (
     <div ref={containerRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden opacity-0">
-      <div className="absolute inset-0 md:hidden">
+      <div ref={videoLayerRef} className="absolute inset-[-12%] will-change-transform">
         <video
-          className="h-full w-full object-cover object-center opacity-[0.45]"
+          className="h-full w-full object-cover object-center opacity-[0.5]"
           src="/uploads/videos/hader.mp4"
           autoPlay
           muted
@@ -235,12 +266,12 @@ export default function ParallaxBackground({ intensity = 1 }: Props) {
           playsInline
           preload="metadata"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,10,20,0.22)_0%,rgba(5,10,20,0.5)_52%,rgba(5,10,20,0.84)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(0,240,255,0.16),transparent_46%),radial-gradient(circle_at_50%_95%,rgba(5,10,20,0.92),rgba(5,10,20,0.96)_76%)]" />
-        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "linear-gradient(rgba(224,230,237,0.24) 1px, transparent 1px), linear-gradient(90deg, rgba(224,230,237,0.24) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,10,20,0.2)_0%,rgba(5,10,20,0.46)_48%,rgba(5,10,20,0.86)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(0,240,255,0.15),transparent_45%),radial-gradient(circle_at_86%_92%,rgba(204,255,0,0.12),transparent_38%)]" />
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(rgba(224,230,237,0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(224,230,237,0.22) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
       </div>
 
-      <div className="hidden md:block">
+      <div className="hidden md:block opacity-85">
         {LAYERS.map((layer, i) => (
           <div
             key={layer.id}

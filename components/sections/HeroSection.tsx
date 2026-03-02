@@ -1,60 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-"use client";
-
-import { useEffect, useRef } from "react";
 import { Magnetic } from "@/components/effects/Magnetic";
 import { TypeWriter } from "@/components/effects/TypeWriter";
 import { siteConfig } from "@/lib/siteConfig";
 
 export function HeroSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const videoLayerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    const layer = videoLayerRef.current;
-    if (!section || !layer) return;
-
-    let raf = 0;
-    const update = () => {
-      const rect = section.getBoundingClientRect();
-      const offset = Math.max(-80, Math.min(120, -rect.top * 0.22));
-      layer.style.transform = `translate3d(-50%, ${offset}px, 0)`;
-    };
-
-    const onScroll = () => {
-      window.cancelAnimationFrame(raf);
-      raf = window.requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-
   return (
-    <section ref={sectionRef} id="top" className="section-padding relative overflow-hidden pt-24 md:pt-28">
-      <div ref={videoLayerRef} className="pointer-events-none absolute left-1/2 top-0 h-[72vh] min-h-[460px] w-screen -translate-x-1/2 will-change-transform">
-        <video
-          className="h-full w-full object-cover object-center opacity-[0.5]"
-          src="/uploads/videos/hader.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,10,20,0.32)_0%,rgba(5,10,20,0.58)_56%,rgba(5,10,20,0.88)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_24%,rgba(0,240,255,0.22),transparent_42%),radial-gradient(circle_at_18%_90%,rgba(204,255,0,0.16),transparent_40%)]" />
-      </div>
-
+    <section id="top" className="section-padding pt-24 md:pt-28">
       <div className="container-shell">
-        <div className="card-surface relative z-10 overflow-hidden bg-[rgba(5,10,20,0.62)] p-6 md:p-8">
+        <div className="card-surface relative overflow-hidden bg-[rgba(5,10,20,0.62)] p-6 md:p-8">
           <div className="pointer-events-none absolute right-3 top-3 z-[1] hidden items-center gap-2 rounded-full border border-[var(--accent-2)]/30 bg-[rgba(5,10,20,0.55)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent-2)] backdrop-blur md:inline-flex">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--accent)]" />
             LIVE FEED
