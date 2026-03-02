@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { BurgerButton } from "@/components/menu/BurgerButton";
 import { MenuFooter } from "@/components/menu/MenuFooter";
 import { MenuLink } from "@/components/menu/MenuLink";
@@ -66,10 +67,8 @@ export function MobileMenu() {
           "fixed left-0 right-0 top-0 z-[100] flex h-20 items-center justify-between bg-[rgba(5,10,20,0.75)] px-5 shadow-[0_1px_0_rgba(224,230,237,0.05),0_4px_24px_rgba(0,0,0,0.35)] backdrop-blur-[20px] backdrop-saturate-[180%]",
         )}
       >
-        <Link href="/" className="relative z-[101] select-none text-lg font-bold uppercase tracking-[0.15em] text-white" aria-label="VIPAuto161 Главная">
-          VIP
-          <span className="text-[var(--accent)] drop-shadow-[0_0_20px_rgba(204,255,0,0.5)]">Auto</span>
-          161
+        <Link href="/" className="relative z-[101] select-none" aria-label="VIPAuto161 Главная">
+          <Image src="/images/plate-logo.svg" alt="VIPАвто 161" width={164} height={44} className="h-9 w-auto" priority />
         </Link>
 
         <BurgerButton setLineTopRef={setLineTopRef} setLineMidRef={setLineMidRef} setLineBotRef={setLineBotRef} />

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { MobileNav } from "@/components/navigation/MobileNav";
 import { cn } from "@/lib/cn";
@@ -48,9 +49,8 @@ export function Header() {
       )}
     >
       <div className="container-shell flex h-full items-center justify-between">
-        <Link href="/" className="relative z-[200] flex items-center gap-1.5 text-lg font-bold tracking-tight">
-          <span className="text-white">VIP</span>
-          <span className="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent">Авто</span>
+        <Link href="/" className="relative z-[200] flex items-center" aria-label="VIPАвто главная">
+          <Image src="/images/plate-logo.svg" alt="VIPАвто 161" width={180} height={48} className="h-9 w-auto sm:h-10" priority />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">

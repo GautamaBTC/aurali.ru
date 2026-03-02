@@ -46,11 +46,17 @@ export const metadata: Metadata = {
     locale: "ru_RU",
     url: siteConfig.siteUrl,
     siteName: "VIPАвто",
+    images: [
+      {
+        url: "/images/plate-logo.svg",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "VIPАвто",
     description: "Премиальная автоэлектрика и автоэлектроника в г. Шахты.",
+    images: ["/images/plate-logo.svg"],
   },
   robots: {
     index: true,
@@ -68,7 +74,7 @@ const localBusinessJsonLd = {
   "@context": "https://schema.org",
   "@type": "AutoRepair",
   name: siteConfig.brand,
-  image: `${siteConfig.siteUrl}/next.svg`,
+  image: `${siteConfig.siteUrl}/images/plate-logo.svg`,
   priceRange: "₽₽",
   address: {
     "@type": "PostalAddress",
