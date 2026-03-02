@@ -4,13 +4,13 @@ export function BrandsSection() {
   return (
     <section className="section-padding">
       <div className="container-shell">
-        <h2 className="text-2xl font-bold sm:text-3xl">С какими марками работаем</h2>
-        <p className="mt-2 text-[var(--text-secondary)]">
+        <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl">С какими марками работаем</h2>
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-400 md:text-lg">
           Европейские, корейские, японские и китайские автомобили. Подбираем решения под конкретную платформу.
         </p>
-        <div className="mt-6 flex flex-wrap gap-2">
+        <div className="mt-8 flex flex-wrap gap-3 md:gap-4">
           {brands.map((brand) => (
-            <span key={brand.id} className="rounded-full border border-white/15 px-4 py-2 text-sm text-[var(--text-secondary)]">
+            <span key={brand.id} className="rounded-full border border-zinc-700 px-3 py-1 text-xs font-medium uppercase tracking-widest text-zinc-400">
               {brand.name}
             </span>
           ))}

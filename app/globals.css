@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #090d12;
-  --bg-secondary: #121821;
-  --bg-elevated: #182130;
-  --text-primary: #edf3fa;
-  --text-secondary: #9fb0c4;
-  --line: rgba(237, 243, 250, 0.14);
+  --bg-primary: #09090b;
+  --bg-secondary: #18181b;
+  --bg-elevated: #27272a;
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --line: #27272a;
   --accent: #d71717;
   --accent-2: #ff5f2e;
   --accent-glow: rgba(215, 23, 23, 0.35);
@@ -54,23 +54,49 @@ select:focus-visible {
 }
 
 .container-shell {
-  width: min(1120px, calc(100% - 2rem));
+  max-width: 80rem;
   margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-shell {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-shell {
+    padding-inline: 2rem;
+  }
 }
 
 .section-padding {
-  padding-block: clamp(3.5rem, 7vw, 6rem);
+  padding-block: 4rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-block: 6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding-block: 8rem;
+  }
 }
 
 .card-surface {
-  background: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--bg-elevated), transparent 10%) 0%,
-    color-mix(in srgb, var(--bg-secondary), transparent 5%) 100%
-  );
-  border: 1px solid var(--line);
-  border-radius: 1.1rem;
+  background: rgb(24 24 27 / 0.5);
+  border: 1px solid rgb(39 39 42);
+  border-radius: 0.75rem;
   backdrop-filter: blur(8px);
+  transition: border-color 300ms ease;
+}
+
+.card-surface:hover {
+  border-color: rgb(63 63 70);
 }
 
 .noise-overlay {
