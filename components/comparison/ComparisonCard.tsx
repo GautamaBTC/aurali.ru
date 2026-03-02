@@ -27,15 +27,15 @@ export const ComparisonCard = forwardRef<HTMLDivElement, ComparisonCardProps>(
           className={cn(
             "absolute left-1/2 top-0 h-[2px] w-0 -translate-x-1/2 rounded-b transition-[width] duration-500 ease-out group-hover:w-3/5",
             isVip
-              ? "bg-gradient-to-r from-transparent via-[#00b894] to-transparent"
-              : "bg-gradient-to-r from-transparent via-[#e74c3c]/70 to-transparent",
+              ? "bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent"
+              : "bg-gradient-to-r from-transparent via-[var(--accent-2)]/65 to-transparent",
           )}
         />
         <div
           aria-hidden
           className={cn(
             "pointer-events-none absolute -right-16 -top-16 h-[160px] w-[160px] rounded-full blur-[60px] opacity-0 transition-opacity duration-700 group-hover:opacity-100",
-            isVip ? "bg-[#00b894]/15" : "bg-[#e74c3c]/10",
+            isVip ? "bg-[var(--accent)]/20" : "bg-[var(--accent-2)]/16",
           )}
         />
 
@@ -43,11 +43,11 @@ export const ComparisonCard = forwardRef<HTMLDivElement, ComparisonCardProps>(
           className={cn(
             "mb-5 inline-flex w-fit items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wider sm:mb-6 sm:text-xs",
             isVip
-              ? "border border-[#00b894]/30 bg-[#00b894]/15 text-[#00b894]"
-              : "border border-[#e74c3c]/20 bg-[#e74c3c]/10 text-[#e74c3c]/75",
+              ? "border border-[var(--accent)]/35 bg-[var(--accent)]/15 text-[var(--accent)]"
+              : "border border-[var(--accent-2)]/25 bg-[var(--accent-2)]/12 text-[var(--accent-2)]/80",
           )}
         >
-          <span className={cn("h-1.5 w-1.5 rounded-full", isVip ? "bg-[#00b894] animate-badge-pulse" : "bg-[#e74c3c]/65")} />
+          <span className={cn("h-1.5 w-1.5 rounded-full", isVip ? "bg-[var(--accent)] animate-badge-pulse" : "bg-[var(--accent-2)]/70")} />
           {badge}
         </div>
 
@@ -55,12 +55,12 @@ export const ComparisonCard = forwardRef<HTMLDivElement, ComparisonCardProps>(
           <div
             className={cn(
               "flex h-10 w-10 items-center justify-center rounded-2xl transition-all duration-400 group-hover:scale-110 sm:h-11 sm:w-11",
-              isVip ? "bg-[#00b894]/15 text-[#00b894]" : "bg-[#e74c3c]/10 text-[#e74c3c]/60",
+              isVip ? "bg-[var(--accent)]/15 text-[var(--accent)]" : "bg-[var(--accent-2)]/10 text-[var(--accent-2)]/70",
             )}
           >
             {titleIcon}
           </div>
-          <h3 className={cn("text-lg font-bold tracking-tight sm:text-xl lg:text-2xl", isVip ? "text-white" : "text-white/50")}>
+          <h3 className={cn("text-lg font-bold tracking-tight sm:text-xl lg:text-2xl", isVip ? "text-white" : "text-white/60")}>
             {title}
           </h3>
         </div>
@@ -70,7 +70,7 @@ export const ComparisonCard = forwardRef<HTMLDivElement, ComparisonCardProps>(
         {!isVip ? (
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-3xl border border-dashed border-[#e74c3c]/15"
+            className="pointer-events-none absolute inset-0 rounded-3xl border border-dashed border-[var(--accent-2)]/22"
           />
         ) : null}
       </article>

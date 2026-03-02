@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #09090b;
-  --bg-secondary: #18181b;
-  --bg-elevated: #27272a;
-  --text-primary: #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --line: #27272a;
-  --accent: #d71717;
-  --accent-2: #ff5f2e;
-  --accent-glow: rgba(215, 23, 23, 0.35);
+  --bg-primary: #050a14;
+  --bg-secondary: #0a1322;
+  --bg-elevated: #101d32;
+  --text-primary: #e0e6ed;
+  --text-secondary: #9fadbc;
+  --line: #22324c;
+  --accent: #ccff00;
+  --accent-2: #00f0ff;
+  --accent-glow: rgba(204, 255, 0, 0.35);
+  --accent-2-glow: rgba(0, 240, 255, 0.35);
   --header-h: 80px;
 }
 
@@ -29,7 +30,10 @@ html.menu-locked {
 
 body {
   min-height: 100dvh;
-  background: #090d12;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(0, 240, 255, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 82% 0%, rgba(204, 255, 0, 0.05) 0%, transparent 34%),
+    #050a14;
   color: var(--text-primary);
   font-family: var(--font-manrope), sans-serif;
   overflow-x: hidden;
@@ -88,15 +92,16 @@ select:focus-visible {
 }
 
 .card-surface {
-  background: rgb(24 24 27 / 0.5);
-  border: 1px solid rgb(39 39 42);
+  background: rgb(10 19 34 / 0.55);
+  border: 1px solid rgb(34 50 76);
   border-radius: 0.75rem;
-  backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.03);
+  backdrop-filter: blur(12px);
   transition: border-color 300ms ease;
 }
 
 .card-surface:hover {
-  border-color: rgb(63 63 70);
+  border-color: rgb(0 240 255 / 0.45);
 }
 
 .noise-overlay {
@@ -123,19 +128,19 @@ select:focus-visible {
   position: relative;
   overflow: hidden;
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(224, 230, 237, 0.08);
+  background: rgba(10, 19, 34, 0.5);
   backdrop-filter: blur(20px);
   transition: all 400ms ease;
   cursor: default;
 }
 
 .glass-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(16, 29, 50, 0.7);
+  border-color: rgba(0, 240, 255, 0.24);
   box-shadow:
     0 20px 60px -20px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
+    0 0 0 1px rgba(0, 240, 255, 0.1);
 }
 
 .glow-line {
@@ -218,25 +223,25 @@ select:focus-visible {
 }
 
 .cmp-card--garage {
-  background: rgba(231, 76, 60, 0.03);
-  border: 1px solid rgba(231, 76, 60, 0.12);
+  background: rgba(159, 173, 188, 0.04);
+  border: 1px solid rgba(159, 173, 188, 0.18);
 }
 
 .cmp-card--garage:hover {
-  background: rgba(231, 76, 60, 0.05);
-  border-color: rgba(231, 76, 60, 0.2);
-  box-shadow: 0 20px 80px -20px rgba(231, 76, 60, 0.12);
+  background: rgba(159, 173, 188, 0.07);
+  border-color: rgba(159, 173, 188, 0.3);
+  box-shadow: 0 20px 80px -20px rgba(159, 173, 188, 0.18);
 }
 
 .cmp-card--vip {
-  background: rgba(0, 184, 148, 0.04);
-  border: 1px solid rgba(0, 184, 148, 0.16);
+  background: rgba(204, 255, 0, 0.05);
+  border: 1px solid rgba(204, 255, 0, 0.2);
 }
 
 .cmp-card--vip:hover {
-  background: rgba(0, 184, 148, 0.08);
-  border-color: rgba(0, 184, 148, 0.28);
-  box-shadow: 0 20px 80px -20px rgba(0, 184, 148, 0.18);
+  background: rgba(204, 255, 0, 0.09);
+  border-color: rgba(0, 240, 255, 0.3);
+  box-shadow: 0 20px 80px -20px rgba(204, 255, 0, 0.22);
 }
 
 @keyframes float-slow {
@@ -314,20 +319,20 @@ select:focus-visible {
 
 .shadow-crimson-line {
   box-shadow:
-    0 0 8px rgba(220, 38, 38, 0.6),
-    0 0 20px rgba(220, 38, 38, 0.3);
+    0 0 8px rgba(0, 240, 255, 0.55),
+    0 0 20px rgba(0, 240, 255, 0.28);
 }
 
 .shadow-crimson-cta {
   box-shadow:
-    0 4px 15px rgba(220, 38, 38, 0.3),
+    0 4px 15px rgba(204, 255, 0, 0.3),
     0 1px 3px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .shadow-crimson-cta-hover {
   box-shadow:
-    0 8px 30px rgba(220, 38, 38, 0.4),
+    0 8px 30px rgba(204, 255, 0, 0.42),
     0 2px 8px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
@@ -336,13 +341,13 @@ select:focus-visible {
   0%,
   100% {
     box-shadow:
-      0 0 10px rgba(220, 38, 38, 0.15),
-      0 0 30px rgba(220, 38, 38, 0.05);
+      0 0 10px rgba(0, 240, 255, 0.2),
+      0 0 30px rgba(0, 240, 255, 0.06);
   }
   50% {
     box-shadow:
-      0 0 15px rgba(220, 38, 38, 0.3),
-      0 0 40px rgba(220, 38, 38, 0.1);
+      0 0 15px rgba(204, 255, 0, 0.3),
+      0 0 40px rgba(204, 255, 0, 0.1);
   }
 }
 

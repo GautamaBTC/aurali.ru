@@ -63,12 +63,12 @@ export function MobileMenu() {
 
       <header
         className={cn(
-          "fixed left-0 right-0 top-0 z-[100] flex h-20 items-center justify-between bg-[rgba(18,21,26,0.7)] px-5 shadow-[0_1px_0_rgba(255,255,255,0.04),0_4px_24px_rgba(0,0,0,0.3)] backdrop-blur-[20px] backdrop-saturate-[180%]",
+          "fixed left-0 right-0 top-0 z-[100] flex h-20 items-center justify-between bg-[rgba(5,10,20,0.75)] px-5 shadow-[0_1px_0_rgba(224,230,237,0.05),0_4px_24px_rgba(0,0,0,0.35)] backdrop-blur-[20px] backdrop-saturate-[180%]",
         )}
       >
         <Link href="/" className="relative z-[101] select-none text-lg font-bold uppercase tracking-[0.15em] text-white" aria-label="VIPAuto161 Главная">
           VIP
-          <span className="text-[#dc2626] drop-shadow-[0_0_20px_rgba(220,38,38,0.5)]">Auto</span>
+          <span className="text-[var(--accent)] drop-shadow-[0_0_20px_rgba(204,255,0,0.5)]">Auto</span>
           161
         </Link>
 
@@ -82,7 +82,7 @@ export function MobileMenu() {
         aria-modal="true"
         aria-label="Меню навигации"
         className={cn(
-          "fixed inset-0 z-[99] invisible pointer-events-none flex flex-col items-center justify-center bg-[rgba(10,12,16,0.97)] px-6 pb-[calc(32px+env(safe-area-inset-bottom,0px))] pt-28 backdrop-blur-[50px] backdrop-saturate-[120%] md:hidden",
+          "fixed inset-0 z-[99] invisible pointer-events-none flex flex-col items-center justify-center bg-[rgba(5,10,20,0.97)] px-6 pb-[calc(32px+env(safe-area-inset-bottom,0px))] pt-28 backdrop-blur-[50px] backdrop-saturate-[120%] md:hidden",
         )}
         onClick={(e) => {
           if (e.target === e.currentTarget) close();
@@ -90,13 +90,13 @@ export function MobileMenu() {
       >
         <div
           className="pointer-events-none absolute -right-[15%] -top-[25%] h-[55vw] w-[55vw] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(220,38,38,0.05) 0%, transparent 65%)" }}
+          style={{ background: "radial-gradient(circle, rgba(204,255,0,0.08) 0%, transparent 65%)" }}
           aria-hidden="true"
         />
 
         <div
           className="pointer-events-none absolute -bottom-[15%] -left-[15%] h-[45vw] w-[45vw] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(22,33,62,0.12) 0%, transparent 65%)" }}
+          style={{ background: "radial-gradient(circle, rgba(0,240,255,0.12) 0%, transparent 65%)" }}
           aria-hidden="true"
         />
 
@@ -108,7 +108,7 @@ export function MobileMenu() {
 
         <div
           ref={handleDividerRef}
-          className="my-7 h-px w-16 origin-left scale-x-0 bg-gradient-to-r from-transparent via-[#dc2626]/25 to-transparent opacity-0"
+          className="my-7 h-px w-16 origin-left scale-x-0 bg-gradient-to-r from-transparent via-[var(--accent)]/35 to-transparent opacity-0"
           aria-hidden="true"
         />
 

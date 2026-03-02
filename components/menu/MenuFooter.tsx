@@ -18,7 +18,7 @@ export const MenuFooter = forwardRef<HTMLDivElement, MenuFooterProps>(function M
       <a
         href={telHref}
         className={cn(
-          "inline-flex items-center gap-3 rounded-xl bg-transparent px-5 py-3 text-lg font-medium tracking-wide text-white/90 transition-all duration-300 hover:bg-white/[0.03] hover:text-[#dc2626] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]",
+          "inline-flex items-center gap-3 rounded-xl bg-transparent px-5 py-3 text-lg font-medium tracking-wide text-white/90 transition-all duration-300 hover:bg-white/[0.03] hover:text-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]",
         )}
         aria-label="Позвонить"
       >
@@ -35,7 +35,7 @@ export const MenuFooter = forwardRef<HTMLDivElement, MenuFooterProps>(function M
         href="#contacts"
         onClick={onCtaClick}
         className={cn(
-          "group relative mt-3 inline-flex w-full max-w-[260px] items-center justify-center gap-2 overflow-hidden rounded-2xl bg-[#dc2626] px-8 py-4 text-[0.9rem] font-semibold uppercase tracking-[0.12em] text-white shadow-[0_4px_20px_rgba(220,38,38,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.04] hover:shadow-[0_8px_35px_rgba(220,38,38,0.45),inset_0_1px_0_rgba(255,255,255,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white active:scale-[0.97]",
+          "group relative mt-3 inline-flex w-full max-w-[260px] items-center justify-center gap-2 overflow-hidden rounded-2xl bg-[var(--accent)] px-8 py-4 text-[0.9rem] font-semibold uppercase tracking-[0.12em] text-[var(--bg-primary)] shadow-[0_4px_20px_rgba(204,255,0,0.34),inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.04] hover:shadow-[0_8px_35px_rgba(204,255,0,0.48),inset_0_1px_0_rgba(255,255,255,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-2)] active:scale-[0.97]",
         )}
         role="button"
       >

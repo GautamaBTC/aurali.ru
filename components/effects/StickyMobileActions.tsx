@@ -19,14 +19,16 @@ export function StickyMobileActions() {
         visible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
       }`}
     >
-      <div className="mx-auto grid max-w-md grid-cols-2 gap-2 rounded-2xl border border-white/20 bg-[rgba(9,13,18,0.94)] p-2 backdrop-blur-md">
-        <a href={`tel:${siteConfig.phones[0].replace(/[^\d+]/g, "")}`} className="rounded-xl border border-white/15 px-3 py-3 text-center font-semibold">
+      <div className="mx-auto grid max-w-md grid-cols-2 gap-2 rounded-2xl border border-[var(--line)] bg-[rgba(5,10,20,0.94)] p-2 backdrop-blur-md">
+        <a href={`tel:${siteConfig.phones[0].replace(/[^\d+]/g, "")}`} className="rounded-xl border border-[var(--line)] px-3 py-3 text-center font-semibold text-[var(--text-primary)]">
           Позвонить
         </a>
-        <a href={siteConfig.social.whatsapp} className="rounded-xl bg-[var(--accent)] px-3 py-3 text-center font-semibold">
+        <a href={siteConfig.social.whatsapp} className="rounded-xl bg-[var(--accent)] px-3 py-3 text-center font-semibold text-[var(--bg-primary)] shadow-[0_0_18px_rgba(204,255,0,0.28)]">
           Записаться
         </a>
       </div>
     </div>
   );
 }
+
+

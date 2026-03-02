@@ -22,12 +22,12 @@ export function ComparisonItem({ icon, text, variant }: ComparisonItemProps) {
       <div
         className={cn(
           "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-all duration-400 group-hover/item:scale-110 group-hover/item:-rotate-3 sm:h-10 sm:w-10",
-          isPositive ? "bg-[#00b894]/15 text-[#00b894]" : "bg-[#e74c3c]/12 text-[#e74c3c]/70",
+          isPositive ? "bg-[var(--accent)]/15 text-[var(--accent)]" : "bg-[var(--accent-2)]/12 text-[var(--accent-2)]/75",
         )}
       >
         {icon}
       </div>
-      <p className={cn("pt-1 text-sm leading-relaxed sm:pt-1.5 sm:text-[15px]", isPositive ? "text-white/80" : "text-white/50")}>
+      <p className={cn("pt-1 text-sm leading-relaxed sm:pt-1.5 sm:text-[15px]", isPositive ? "text-white/85" : "text-white/60")}>
         {text}
       </p>
     </div>

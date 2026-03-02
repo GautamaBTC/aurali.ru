@@ -16,21 +16,21 @@ const accentMap = {
   },
   orange: {
     iconBg: "bg-[var(--accent-2)]/15",
-    suffixColor: "text-[#ffb089]",
+    suffixColor: "text-[var(--accent-2)]",
     lineClass: "from-transparent via-[var(--accent-2)] to-transparent",
     glowClass: "bg-[var(--accent-2)]/30",
   },
   blue: {
-    iconBg: "bg-[#6ea8fd1f]",
-    suffixColor: "text-[#93c5fd]",
-    lineClass: "from-transparent via-[#60a5fa] to-transparent",
-    glowClass: "bg-[#60a5fa33]",
+    iconBg: "bg-[var(--accent-2)]/15",
+    suffixColor: "text-[var(--accent-2)]",
+    lineClass: "from-transparent via-[var(--accent-2)] to-transparent",
+    glowClass: "bg-[var(--accent-2)]/30",
   },
   green: {
-    iconBg: "bg-[#22c55e1f]",
-    suffixColor: "text-[#86efac]",
-    lineClass: "from-transparent via-[#22c55e] to-transparent",
-    glowClass: "bg-[#22c55e33]",
+    iconBg: "bg-[var(--accent)]/15",
+    suffixColor: "text-[var(--accent)]",
+    lineClass: "from-transparent via-[var(--accent)] to-transparent",
+    glowClass: "bg-[var(--accent)]/30",
   },
 } as const;
 

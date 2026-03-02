@@ -60,7 +60,7 @@ export function MenuParticles() {
   return (
     <div ref={containerRef} className="pointer-events-none fixed inset-0 -z-10 overflow-hidden md:hidden" aria-hidden="true">
       {particles.map((p) => (
-        <span key={p.id} className="p-dot absolute rounded-full bg-[#dc2626]/10" style={{ left: `${p.x}%`, width: `${p.size}px`, height: `${p.size}px` }} />
+        <span key={p.id} className="p-dot absolute rounded-full bg-[var(--accent-2)]/20" style={{ left: `${p.x}%`, width: `${p.size}px`, height: `${p.size}px` }} />
       ))}
     </div>
   );

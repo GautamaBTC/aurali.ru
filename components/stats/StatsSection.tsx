@@ -55,7 +55,7 @@ export function StatsSection() {
         className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[80px]"
         style={{
           background:
-            "radial-gradient(circle, rgba(215, 23, 23, 0.12) 0%, rgba(255, 95, 46, 0.08) 42%, transparent 72%)",
+            "radial-gradient(circle, rgba(0, 240, 255, 0.12) 0%, rgba(204, 255, 0, 0.08) 42%, transparent 72%)",
         }}
       />
 
@@ -81,11 +81,11 @@ export function StatsSection() {
               item.id === "experience" ? (
                 <Clock className="h-[22px] w-[22px] stroke-[var(--accent-2)]" strokeWidth={2} />
               ) : item.id === "rating" ? (
-                <Star className="h-[22px] w-[22px] stroke-[#ffb089]" strokeWidth={2} />
+                <Star className="h-[22px] w-[22px] stroke-[var(--accent)]" strokeWidth={2} />
               ) : item.id === "reviews" ? (
-                <Users className="h-[22px] w-[22px] stroke-[#93c5fd]" strokeWidth={2} />
+                <Users className="h-[22px] w-[22px] stroke-[var(--accent-2)]" strokeWidth={2} />
               ) : (
-                <LayoutGrid className="h-[22px] w-[22px] stroke-[#86efac]" strokeWidth={2} />
+                <LayoutGrid className="h-[22px] w-[22px] stroke-[var(--accent)]" strokeWidth={2} />
               );
 
             return (
@@ -106,3 +106,4 @@ export function StatsSection() {
     </section>
   );
 }
+

@@ -57,7 +57,7 @@ export function LeadForm() {
   return (
     <form onSubmit={submit} className="space-y-4 md:space-y-6" noValidate>
       <label htmlFor="lead-name" className="block">
-        <span className="mb-2 block text-sm font-medium text-zinc-300">Имя</span>
+        <span className="mb-2 block text-sm font-medium text-[var(--text-primary)]/90">Имя</span>
         <input
           id="lead-name"
           name="name"
@@ -67,7 +67,7 @@ export function LeadForm() {
           onChange={(event) => setName(event.target.value)}
           aria-invalid={Boolean(errors.name)}
           aria-describedby={errors.name ? "lead-name-error" : undefined}
-          className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50"
+          className="w-full rounded-lg border border-[var(--line)] bg-[var(--bg-secondary)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/55 focus:border-[var(--accent-2)] focus:ring-1 focus:ring-[var(--accent-2)]/40"
           placeholder="Как к вам обращаться"
         />
         {errors.name ? (
@@ -77,7 +77,7 @@ export function LeadForm() {
         ) : null}
       </label>
       <label htmlFor="lead-phone" className="block">
-        <span className="mb-2 block text-sm font-medium text-zinc-300">Телефон</span>
+        <span className="mb-2 block text-sm font-medium text-[var(--text-primary)]/90">Телефон</span>
         <input
           id="lead-phone"
           name="phone"
@@ -88,7 +88,7 @@ export function LeadForm() {
           onChange={(event) => setPhone(event.target.value)}
           aria-invalid={Boolean(errors.phone)}
           aria-describedby={errors.phone ? "lead-phone-error" : undefined}
-          className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50"
+          className="w-full rounded-lg border border-[var(--line)] bg-[var(--bg-secondary)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/55 focus:border-[var(--accent-2)] focus:ring-1 focus:ring-[var(--accent-2)]/40"
           placeholder="+7 (___) ___-__-__"
         />
         {errors.phone ? (
@@ -98,13 +98,13 @@ export function LeadForm() {
         ) : null}
       </label>
       <label htmlFor="lead-service" className="block">
-        <span className="mb-2 block text-sm font-medium text-zinc-300">Услуга</span>
+        <span className="mb-2 block text-sm font-medium text-[var(--text-primary)]/90">Услуга</span>
         <select
           id="lead-service"
           name="service"
           value={service}
           onChange={(event) => setService(event.target.value)}
-          className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 text-zinc-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50"
+          className="w-full rounded-lg border border-[var(--line)] bg-[var(--bg-secondary)] px-4 py-3 text-[var(--text-primary)] focus:border-[var(--accent-2)] focus:ring-1 focus:ring-[var(--accent-2)]/40"
         >
           {services.map((item) => (
             <option key={item.id} value={item.title}>
@@ -114,7 +114,7 @@ export function LeadForm() {
         </select>
       </label>
       <label htmlFor="lead-message" className="block">
-        <span className="mb-2 block text-sm font-medium text-zinc-300">Комментарий</span>
+        <span className="mb-2 block text-sm font-medium text-[var(--text-primary)]/90">Комментарий</span>
         <textarea
           id="lead-message"
           name="message"
@@ -122,19 +122,19 @@ export function LeadForm() {
           value={message}
           onChange={(event) => setMessage(event.target.value)}
           rows={4}
-          className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50"
+          className="w-full rounded-lg border border-[var(--line)] bg-[var(--bg-secondary)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/55 focus:border-[var(--accent-2)] focus:ring-1 focus:ring-[var(--accent-2)]/40"
           placeholder="Кратко опишите задачу"
         />
       </label>
       <button
         type="submit"
         disabled={formState === "loading"}
-        className="w-full rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-all duration-200 hover:bg-blue-500 disabled:opacity-75"
+        className="w-full rounded-lg bg-[var(--accent)] px-6 py-3 font-medium text-[var(--bg-primary)] shadow-[0_0_22px_rgba(204,255,0,0.25)] transition-all duration-200 hover:bg-[var(--accent)]/90 hover:shadow-[0_0_32px_rgba(204,255,0,0.35)] disabled:opacity-75"
       >
         {formState === "loading" ? "Отправка..." : "Отправить заявку"}
       </button>
       {formState === "success" ? (
-        <p className="text-sm leading-normal text-emerald-500" role="status" aria-live="polite">
+        <p className="text-sm leading-normal text-[var(--accent)]" role="status" aria-live="polite">
           Заявка отправлена. Мы свяжемся с вами.
         </p>
       ) : null}
@@ -150,3 +150,4 @@ export function LeadForm() {
     </form>
   );
 }
+

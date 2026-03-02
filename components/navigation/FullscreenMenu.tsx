@@ -168,7 +168,7 @@ export function FullscreenMenu({ isOpen, onClose, children }: FullscreenMenuProp
   return createPortal(
     <div ref={overlayRef} className="fixed inset-0 z-[9999]" style={{ visibility: "hidden", opacity: 0 }}>
       <div
-        className="absolute inset-0 bg-[rgba(5,7,15,0.9)] backdrop-blur-xl"
+        className="absolute inset-0 bg-[rgba(5,10,20,0.9)] backdrop-blur-xl"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -180,15 +180,15 @@ export function FullscreenMenu({ isOpen, onClose, children }: FullscreenMenuProp
         aria-label="Закрыть меню"
         className="fixed right-5 top-2 z-[10002] flex h-11 w-11 items-center justify-center sm:right-6 sm:top-3"
       >
-        <span ref={closeLineARef} className="absolute h-[2px] -rotate-45 rounded-full bg-white" />
-        <span ref={closeLineBRef} className="absolute h-[2px] rotate-45 rounded-full bg-white" />
+        <span ref={closeLineARef} className="absolute h-[2px] -rotate-45 rounded-full bg-[var(--accent)]" />
+        <span ref={closeLineBRef} className="absolute h-[2px] rotate-45 rounded-full bg-[var(--accent)]" />
       </button>
 
       <aside
         ref={panelRef}
         className={cn(
           "absolute right-0 top-0 flex h-full w-full flex-col overflow-hidden",
-          "bg-[rgba(5,7,15,0.88)] backdrop-blur-2xl sm:w-[460px] sm:border-l sm:border-white/10",
+          "bg-[rgba(5,10,20,0.88)] backdrop-blur-2xl sm:w-[460px] sm:border-l sm:border-[var(--line)]",
           "shadow-[-10px_0_40px_rgba(0,0,0,0.55)]",
         )}
         role="dialog"
@@ -220,9 +220,9 @@ export function FullscreenMenu({ isOpen, onClose, children }: FullscreenMenuProp
           <a
             href={`tel:${siteConfig.phones[0]?.replace(/[^\d+]/g, "")}`}
             data-footer-el
-            className="mb-3 flex items-center gap-3 text-sm text-white/65 transition-colors duration-300 hover:text-[#00b894]"
+            className="mb-3 flex items-center gap-3 text-sm text-white/65 transition-colors duration-300 hover:text-[var(--accent)]"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#00b894]/15 text-[#00b894]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)]">
               <Phone className="h-4 w-4" />
             </div>
             {siteConfig.phones[0]}
@@ -246,7 +246,7 @@ export function FullscreenMenu({ isOpen, onClose, children }: FullscreenMenuProp
             href={siteConfig.social.whatsapp}
             onClick={onClose}
             data-footer-el
-            className="group/cta flex w-full items-center justify-center gap-2 rounded-2xl bg-[#00b894] px-6 py-4 text-sm font-bold text-[var(--bg-primary)] transition-all duration-300 hover:bg-[#00b894]/90 hover:shadow-[0_0_40px_rgba(0,184,148,0.2)] active:scale-[0.97]"
+            className="group/cta flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--accent)] px-6 py-4 text-sm font-bold text-[var(--bg-primary)] transition-all duration-300 hover:bg-[var(--accent)]/90 hover:shadow-[0_0_40px_rgba(204,255,0,0.28)] active:scale-[0.97]"
           >
             Записаться на диагностику
             <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />

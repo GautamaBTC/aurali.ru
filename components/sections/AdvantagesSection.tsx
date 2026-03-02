@@ -9,8 +9,8 @@ export function AdvantagesSection() {
           {advantages.map((advantage) => (
             <article key={advantage.id} className="card-surface rounded-xl p-6 md:p-8">
               <h3 className="text-2xl font-semibold leading-snug md:text-3xl">{advantage.title}</h3>
-              <p className="mt-4 text-base leading-relaxed text-zinc-400 md:text-lg">{advantage.description}</p>
-              {advantage.stat ? <p className="mt-4 font-mono text-base text-blue-400 md:text-lg">{advantage.stat}</p> : null}
+              <p className="mt-4 text-base leading-relaxed text-[var(--text-secondary)] md:text-lg">{advantage.description}</p>
+              {advantage.stat ? <p className="mt-4 font-mono text-base text-[var(--accent-2)] md:text-lg">{advantage.stat}</p> : null}
             </article>
           ))}
         </div>
@@ -18,3 +18,4 @@ export function AdvantagesSection() {
     </section>
   );
 }
+

@@ -52,7 +52,7 @@ export function ReverseParallaxBackground({
         className="absolute inset-[-12%]"
         style={{
           background:
-            "radial-gradient(600px 240px at 15% 20%, rgba(255,95,46,0.14), transparent 72%), radial-gradient(700px 300px at 85% 10%, rgba(215,23,23,0.16), transparent 74%), linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%)",
+            "radial-gradient(600px 240px at 15% 20%, rgba(0,240,255,0.14), transparent 72%), radial-gradient(700px 300px at 85% 10%, rgba(204,255,0,0.16), transparent 74%), linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%)",
           willChange: "transform",
         }}
       />

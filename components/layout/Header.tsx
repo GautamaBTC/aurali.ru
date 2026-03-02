@@ -43,7 +43,7 @@ export function Header() {
         "fixed left-0 right-0 top-0 z-[150] h-16 px-5 sm:h-[72px] sm:px-6 lg:px-8",
         "transition-all duration-500",
         scrolled
-          ? "border-b border-white/10 bg-[var(--bg-primary)]/80 shadow-[0_4px_30px_rgba(0,0,0,0.3)] backdrop-blur-2xl"
+          ? "border-b border-[var(--line)] bg-[var(--bg-primary)]/85 shadow-[0_4px_30px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
           : "border-b border-transparent bg-transparent",
       )}
     >
@@ -58,7 +58,7 @@ export function Header() {
             <a
               key={item.href}
               href={item.href}
-              className="rounded-xl px-4 py-2 text-sm text-white/55 transition-all duration-300 hover:bg-white/[0.04] hover:text-white/85"
+              className="rounded-xl px-4 py-2 text-sm text-white/55 transition-all duration-300 hover:bg-[var(--bg-elevated)]/45 hover:text-[var(--accent-2)]"
             >
               {item.label}
             </a>

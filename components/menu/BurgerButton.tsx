@@ -23,7 +23,7 @@ export function BurgerButton({ setLineTopRef, setLineMidRef, setLineBotRef }: Bu
       ref={setRef}
       type="button"
       className={cn(
-        "tap-none touch-manipulation relative z-[101] flex h-12 w-12 items-center justify-center rounded-xl bg-transparent outline-none transition-transform duration-150 active:scale-[0.92] focus-visible:ring-2 focus-visible:ring-[#dc2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#12151A] md:hidden",
+        "tap-none touch-manipulation relative z-[101] flex h-12 w-12 items-center justify-center rounded-xl bg-transparent outline-none transition-transform duration-150 active:scale-[0.92] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-secondary)] md:hidden",
       )}
       onClick={toggle}
       aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
@@ -31,9 +31,9 @@ export function BurgerButton({ setLineTopRef, setLineMidRef, setLineBotRef }: Bu
       aria-controls="mobile-menu"
     >
       <span className="pointer-events-none relative flex h-[18px] w-7 flex-col justify-between" aria-hidden="true">
-        <span ref={setLineTopRef} className="block h-0.5 w-full origin-center rounded-full bg-white will-change-transform" />
-        <span ref={setLineMidRef} className="block h-0.5 w-[70%] origin-center self-end rounded-full bg-white/80 will-change-transform" />
-        <span ref={setLineBotRef} className="block h-0.5 w-[55%] origin-center self-end rounded-full bg-white/70 will-change-transform" />
+        <span ref={setLineTopRef} className="block h-0.5 w-full origin-center rounded-full bg-[var(--text-primary)] will-change-transform" />
+        <span ref={setLineMidRef} className="block h-0.5 w-[70%] origin-center self-end rounded-full bg-[var(--accent-2)]/80 will-change-transform" />
+        <span ref={setLineBotRef} className="block h-0.5 w-[55%] origin-center self-end rounded-full bg-[var(--accent)]/75 will-change-transform" />
       </span>
     </button>
   );

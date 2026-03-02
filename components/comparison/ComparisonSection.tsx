@@ -217,12 +217,12 @@ export function ComparisonSection() {
       <div
         aria-hidden
         className="pointer-events-none absolute left-1/3 top-1/2 h-[400px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]"
-        style={{ background: "radial-gradient(ellipse, rgba(231,76,60,0.07) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse, rgba(0,240,255,0.08) 0%, transparent 70%)" }}
       />
       <div
         aria-hidden
         className="pointer-events-none absolute right-1/3 top-1/2 h-[400px] w-[500px] translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]"
-        style={{ background: "radial-gradient(ellipse, rgba(0,184,148,0.09) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse, rgba(204,255,0,0.1) 0%, transparent 70%)" }}
       />
 
       <div ref={headerRef} className="relative z-10 mb-10 text-center sm:mb-14">
@@ -232,9 +232,9 @@ export function ComparisonSection() {
         </div>
 
         <h2 className="text-[clamp(24px,5vw,44px)] font-bold leading-tight tracking-tight text-gray-100">
-          <span className="text-[#e74c3c]/75">Обычный гараж</span>{" "}
+          <span className="text-[var(--text-secondary)]">Обычный гараж</span>{" "}
           <span className="mx-1 text-white/20 sm:mx-2">vs</span>{" "}
-          <span className="bg-gradient-to-br from-[#00b894] to-emerald-300 bg-clip-text text-transparent">VIPАвто</span>
+          <span className="bg-gradient-to-br from-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent">VIPАвто</span>
         </h2>
 
         <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-white/40 sm:text-[15px]">
@@ -287,3 +287,4 @@ export function ComparisonSection() {
     </section>
   );
 }
+

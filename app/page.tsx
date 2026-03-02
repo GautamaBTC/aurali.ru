@@ -37,7 +37,7 @@ export default function Home() {
               z: 0,
               style: {
                 background:
-                  "radial-gradient(circle at 50% 50%, rgba(215,23,23,0.11) 0%, rgba(255,95,46,0.08) 42%, transparent 72%)",
+                  "radial-gradient(circle at 50% 50%, rgba(0,240,255,0.12) 0%, rgba(204,255,0,0.08) 42%, transparent 72%)",
                 filter: "blur(80px)",
                 transform: "translateZ(0)",
               },
@@ -68,7 +68,7 @@ export default function Home() {
               z: 0,
               style: {
                 background:
-                  "radial-gradient(ellipse at 20% 50%, rgba(231,76,60,0.09) 0%, transparent 70%), radial-gradient(ellipse at 80% 50%, rgba(0,184,148,0.1) 0%, transparent 70%)",
+                  "radial-gradient(ellipse at 20% 50%, rgba(0,240,255,0.09) 0%, transparent 70%), radial-gradient(ellipse at 80% 50%, rgba(204,255,0,0.1) 0%, transparent 70%)",
               },
             },
             {

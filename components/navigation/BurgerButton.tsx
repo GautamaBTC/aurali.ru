@@ -70,7 +70,7 @@ export function BurgerButton({ isOpen, onToggle, className }: BurgerButtonProps)
         {
           rotation: 45,
           width: "32px",
-          backgroundColor: "#ffffff",
+          backgroundColor: "#ccff00",
           duration: 0.5,
           ease: "back.out(1.7)",
         },
@@ -82,7 +82,7 @@ export function BurgerButton({ isOpen, onToggle, className }: BurgerButtonProps)
           rotation: -45,
           width: "18px",
           x: -4,
-          backgroundColor: "#ffffff",
+          backgroundColor: "#ccff00",
           duration: 0.5,
           ease: "back.out(1.7)",
         },
@@ -92,8 +92,8 @@ export function BurgerButton({ isOpen, onToggle, className }: BurgerButtonProps)
         btn,
         {
           scale: 1.1,
-          boxShadow: "0 0 25px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255,255,255,0.1)",
-          borderColor: "rgba(255,255,255,0.3)",
+          boxShadow: "0 0 25px rgba(204,255,0,0.4), inset 0 0 10px rgba(0,240,255,0.18)",
+          borderColor: "rgba(204,255,0,0.45)",
           duration: 0.2,
           yoyo: true,
           repeat: 1,
@@ -104,7 +104,7 @@ export function BurgerButton({ isOpen, onToggle, className }: BurgerButtonProps)
       .to(
         btn,
         {
-          boxShadow: "0 0 15px rgba(255, 255, 255, 0.15)",
+          boxShadow: "0 0 15px rgba(0,240,255,0.25)",
           scale: 1.05,
           duration: 0.3,
         },
@@ -147,7 +147,7 @@ export function BurgerButton({ isOpen, onToggle, className }: BurgerButtonProps)
       onMouseLeave={handleMouseLeave}
       className={cn(
         "relative z-[10000] flex h-12 w-12 items-center justify-center rounded-full",
-        "border border-white/10 bg-white/5 backdrop-blur-xl transition-colors hover:bg-white/10",
+        "border border-[var(--line)] bg-[var(--bg-elevated)]/35 backdrop-blur-xl transition-colors hover:bg-[var(--bg-elevated)]/65",
         "shadow-[0_4px_10px_rgba(0,0,0,0.1)]",
         className,
       )}
@@ -157,15 +157,15 @@ export function BurgerButton({ isOpen, onToggle, className }: BurgerButtonProps)
       <div className="relative h-[16px] w-[24px]">
         <span
           ref={line1Ref}
-          className="absolute left-0 top-0 block h-[2px] w-full origin-center rounded-full bg-gradient-to-r from-white to-[#e0e7ff] shadow-[0_0_8px_rgba(255,255,255,0.2)]"
+          className="absolute left-0 top-0 block h-[2px] w-full origin-center rounded-full bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent-2)] shadow-[0_0_8px_rgba(0,240,255,0.25)]"
         />
         <span
           ref={line2Ref}
-          className="absolute left-0 top-1/2 mt-[-1px] block h-[2px] w-full origin-center rounded-full bg-gradient-to-r from-white to-[#e0e7ff] opacity-80"
+          className="absolute left-0 top-1/2 mt-[-1px] block h-[2px] w-full origin-center rounded-full bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent)] opacity-80"
         />
         <span
           ref={line3Ref}
-          className="absolute left-0 top-[14px] block h-[2px] w-full origin-center rounded-full bg-gradient-to-r from-white to-[#e0e7ff] shadow-[0_0_8px_rgba(255,255,255,0.2)]"
+          className="absolute left-0 top-[14px] block h-[2px] w-full origin-center rounded-full bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent-2)] shadow-[0_0_8px_rgba(0,240,255,0.25)]"
         />
       </div>
     </button>
