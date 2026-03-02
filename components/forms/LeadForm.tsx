@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { FormEvent, useMemo, useState } from "react";
 import { services } from "@/data/services";
@@ -23,8 +23,8 @@ export function LeadForm() {
 
   const validate = (): boolean => {
     const next: Errors = {};
-    if (name.trim().length < 2) next.name = "Р’РІРµРґРёС‚Рµ РёРјСЏ (РјРёРЅРёРјСѓРј 2 СЃРёРјРІРѕР»Р°).";
-    if (!/^\+?\d{11,15}$/.test(phoneRaw)) next.phone = "Р’РІРµРґРёС‚Рµ С‚РµР»РµС„РѕРЅ РІ РјРµР¶РґСѓРЅР°СЂРѕРґРЅРѕРј С„РѕСЂРјР°С‚Рµ.";
+    if (name.trim().length < 2) next.name = "Введите имя (минимум 2 символа).";
+    if (!/^\+?\d{11,15}$/.test(phoneRaw)) next.phone = "Введите телефон в международном формате.";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -57,7 +57,7 @@ export function LeadForm() {
   return (
     <form onSubmit={submit} className="space-y-4 md:space-y-6" noValidate>
       <label htmlFor="lead-name" className="block">
-        <span className="mb-2 block text-sm font-medium text-[var(--text-primary)]/90">РРјСЏ</span>
+        <span className="mb-2 block text-sm font-medium text-[var(--text-primary)]/90">Имя</span>
         <input
           id="lead-name"
           name="name"
@@ -68,7 +68,7 @@ export function LeadForm() {
           aria-invalid={Boolean(errors.name)}
           aria-describedby={errors.name ? "lead-name-error" : undefined}
           className="w-full rounded-lg border border-[var(--line)] bg-[var(--bg-secondary)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/55 focus:border-[var(--accent-2)] focus:ring-1 focus:ring-[var(--accent-2)]/40"
-          placeholder="РљР°Рє Рє РІР°Рј РѕР±СЂР°С‰Р°С‚СЊСЃСЏ"
+          placeholder="Как к вам обращаться"
         />
         {errors.name ? (
           <span id="lead-name-error" className="mt-2 block text-sm leading-normal text-red-500">
@@ -77,7 +77,7 @@ export function LeadForm() {
         ) : null}
       </label>
       <label htmlFor="lead-phone" className="block">
-        <span className="mb-2 block text-sm font-medium text-[var(--text-primary)]/90">РўРµР»РµС„РѕРЅ</span>
+        <span className="mb-2 block text-sm font-medium text-[var(--text-primary)]/90">Телефон</span>
         <input
           id="lead-phone"
           name="phone"
@@ -98,7 +98,7 @@ export function LeadForm() {
         ) : null}
       </label>
       <label htmlFor="lead-service" className="block">
-        <span className="mb-2 block text-sm font-medium text-[var(--text-primary)]/90">РЈСЃР»СѓРіР°</span>
+        <span className="mb-2 block text-sm font-medium text-[var(--text-primary)]/90">Услуга</span>
         <select
           id="lead-service"
           name="service"
@@ -114,7 +114,7 @@ export function LeadForm() {
         </select>
       </label>
       <label htmlFor="lead-message" className="block">
-        <span className="mb-2 block text-sm font-medium text-[var(--text-primary)]/90">РљРѕРјРјРµРЅС‚Р°СЂРёР№</span>
+        <span className="mb-2 block text-sm font-medium text-[var(--text-primary)]/90">Комментарий</span>
         <textarea
           id="lead-message"
           name="message"
@@ -123,24 +123,24 @@ export function LeadForm() {
           onChange={(event) => setMessage(event.target.value)}
           rows={4}
           className="w-full rounded-lg border border-[var(--line)] bg-[var(--bg-secondary)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/55 focus:border-[var(--accent-2)] focus:ring-1 focus:ring-[var(--accent-2)]/40"
-          placeholder="РљСЂР°С‚РєРѕ РѕРїРёС€РёС‚Рµ Р·Р°РґР°С‡Сѓ"
+          placeholder="Кратко опишите задачу"
         />
       </label>
       <button
         type="submit"
         disabled={formState === "loading"}
-        className="w-full rounded-lg bg-[var(--accent)] px-6 py-3 font-medium text-[#0a0f18] shadow-[0_0_22px_rgba(204,255,0,0.25)] transition-all duration-200 hover:bg-[var(--accent)]/90 hover:shadow-[0_0_32px_rgba(204,255,0,0.35)] disabled:opacity-75"
+        className="w-full rounded-lg bg-[var(--accent)] px-6 py-3 font-medium text-[var(--bg-primary)] shadow-[0_0_22px_rgba(204,255,0,0.25)] transition-all duration-200 hover:bg-[var(--accent)]/90 hover:shadow-[0_0_32px_rgba(204,255,0,0.35)] disabled:opacity-75"
       >
-        {formState === "loading" ? "РћС‚РїСЂР°РІРєР°..." : "РћС‚РїСЂР°РІРёС‚СЊ Р·Р°СЏРІРєСѓ"}
+        {formState === "loading" ? "Отправка..." : "Отправить заявку"}
       </button>
       {formState === "success" ? (
         <p className="text-sm leading-normal text-[var(--accent)]" role="status" aria-live="polite">
-          Р—Р°СЏРІРєР° РѕС‚РїСЂР°РІР»РµРЅР°. РњС‹ СЃРІСЏР¶РµРјСЃСЏ СЃ РІР°РјРё.
+          Заявка отправлена. Мы свяжемся с вами.
         </p>
       ) : null}
       {formState === "error" ? (
         <p className="text-sm leading-normal text-amber-500" role="alert">
-          РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РїСЂР°РІРёС‚СЊ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё. РќР°РїРёС€РёС‚Рµ РЅР°Рј РІ{" "}
+          Не удалось отправить автоматически. Напишите нам в{" "}
           <a href={siteConfig.social.whatsapp} className="underline">
             WhatsApp
           </a>
@@ -150,6 +150,4 @@ export function LeadForm() {
     </form>
   );
 }
-
-
 

@@ -1,4 +1,4 @@
-﻿import { Magnetic } from "@/components/effects/Magnetic";
+import { Magnetic } from "@/components/effects/Magnetic";
 import { TypeWriter } from "@/components/effects/TypeWriter";
 import { siteConfig } from "@/lib/siteConfig";
 
@@ -11,28 +11,28 @@ export function HeroSection() {
             <div>
               <p className="text-xs font-medium uppercase tracking-widest text-[var(--text-secondary)]/75">
                 <span className="accent-dot" />
-                РЁР°С…С‚С‹ вЂў СЃ 2016 РіРѕРґР° вЂў СЂРµР№С‚РёРЅРі {siteConfig.rating}
+                Шахты • с 2016 года • рейтинг {siteConfig.rating}
               </p>
               <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
                 {siteConfig.brand}: {siteConfig.specialization}
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--text-secondary)] md:text-lg">
-                РџСЂРµРјРёР°Р»СЊРЅС‹Р№ С†РµРЅС‚СЂ Р°РІС‚РѕСЌР»РµРєС‚СЂРёРєРё. Р”РёР°РіРЅРѕСЃС‚РёРєР°, StarLine, Р°РІС‚РѕСЃРІРµС‚, РєРѕРґРёСЂРѕРІР°РЅРёРµ Р±Р»РѕРєРѕРІ Рё СЃР»РѕР¶РЅС‹Рµ
-                СЌР»РµРєС‚СЂРёС‡РµСЃРєРёРµ СЃР»СѓС‡Р°Рё.
+                Премиальный центр автоэлектрики. Диагностика, StarLine, автосвет, кодирование блоков и сложные
+                электрические случаи.
               </p>
               <div className="mt-4 inline-flex items-center rounded-full border border-[var(--accent-2)]/25 bg-[var(--accent-2)]/10 px-3 py-1 text-xs font-medium uppercase tracking-widest text-[var(--accent-2)]">
-                РћС„РёС†РёР°Р»СЊРЅС‹Р№ РґРёР»РµСЂ StarLine
+                Официальный дилер StarLine
               </div>
               <p className="mt-4 text-sm leading-normal text-[var(--text-secondary)]/75">
-                <TypeWriter words={["Р·Р°СЂСЏР¶Р°РµРј РІР°С€ Р°РІС‚РѕРјРѕР±РёР»СЊ", "РґРµР»Р°РµРј СЃР»РѕР¶РЅСѓСЋ СЌР»РµРєС‚СЂРёРєСѓ РїРѕРЅСЏС‚РЅРѕР№", "СЂР°Р±РѕС‚Р°РµРј С‚РѕС‡РЅРѕ Рё Р°РєРєСѓСЂР°С‚РЅРѕ"]} />
+                <TypeWriter words={["заряжаем ваш автомобиль", "делаем сложную электрику понятной", "работаем точно и аккуратно"]} />
               </p>
               <div className="mt-8 flex flex-wrap gap-3 md:gap-4">
                 <Magnetic>
                   <a
                     href={siteConfig.social.whatsapp}
-                    className="rounded-lg bg-[var(--accent)] px-6 py-3 font-medium text-[#0a0f18] shadow-[0_0_24px_rgba(204,255,0,0.28)] transition-all duration-200 hover:bg-[var(--accent)]/90 hover:shadow-[0_0_36px_rgba(204,255,0,0.35)]"
+                    className="rounded-lg bg-[var(--accent)] px-6 py-3 font-medium text-[var(--bg-primary)] shadow-[0_0_24px_rgba(204,255,0,0.28)] transition-all duration-200 hover:bg-[var(--accent)]/90 hover:shadow-[0_0_36px_rgba(204,255,0,0.35)]"
                   >
-                    Р—Р°РїРёСЃР°С‚СЊСЃСЏ РІ WhatsApp
+                    Записаться в WhatsApp
                   </a>
                 </Magnetic>
                 <Magnetic>
@@ -40,7 +40,7 @@ export function HeroSection() {
                     href={siteConfig.social.telegram}
                     className="rounded-lg border border-[var(--line)] bg-[var(--bg-elevated)]/70 px-6 py-3 font-medium text-[var(--text-primary)] transition-all duration-200 hover:border-[var(--accent-2)]/45 hover:bg-[var(--bg-elevated)]"
                   >
-                    РќР°РїРёСЃР°С‚СЊ РІ Telegram
+                    Написать в Telegram
                   </a>
                 </Magnetic>
               </div>
@@ -51,5 +51,3 @@ export function HeroSection() {
     </section>
   );
 }
-
-
