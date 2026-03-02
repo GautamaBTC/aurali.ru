@@ -49,7 +49,7 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
           ))}
         </ul>
         <div className="mt-4 grid grid-cols-2 gap-2">
-          <a href={siteConfig.social.whatsapp} className="rounded-xl bg-[var(--accent)] px-4 py-3 text-center font-semibold">
+          <a href={siteConfig.social.whatsapp} className="rounded-xl bg-[var(--accent)] px-4 py-3 text-center font-semibold text-[var(--bg-primary)]">
             WhatsApp
           </a>
           <a href={siteConfig.social.telegram} className="rounded-xl border border-white/20 px-4 py-3 text-center font-semibold">

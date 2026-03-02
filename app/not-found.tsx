@@ -12,7 +12,7 @@ export default function NotFound() {
             Возможно, ссылка устарела или адрес введен с ошибкой. Вернитесь на главную или свяжитесь с нами.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/" className="rounded-xl bg-[var(--accent)] px-5 py-3 font-semibold">
+            <Link href="/" className="rounded-xl bg-[var(--accent)] px-5 py-3 font-semibold text-[var(--bg-primary)]">
               На главную
             </Link>
             <a href={`tel:${siteConfig.phones[0].replace(/[^\d+]/g, "")}`} className="rounded-xl border border-white/20 px-5 py-3 font-semibold">
@@ -24,3 +24,4 @@ export default function NotFound() {
     </main>
   );
 }
+
