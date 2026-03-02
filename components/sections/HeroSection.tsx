@@ -7,6 +7,25 @@ export function HeroSection() {
     <section id="top" className="section-padding pt-24 md:pt-28">
       <div className="container-shell">
         <div className="card-surface relative overflow-hidden p-6 md:p-8">
+          <div className="pointer-events-none absolute inset-0">
+            <video
+              className="h-full w-full object-cover object-center opacity-[0.42]"
+              src="/uploads/videos/hader.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(5,10,20,0.9)_0%,rgba(5,10,20,0.75)_42%,rgba(5,10,20,0.55)_100%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_25%,rgba(0,240,255,0.2),transparent_42%),radial-gradient(circle_at_72%_82%,rgba(204,255,0,0.18),transparent_42%)]" />
+          </div>
+
+          <div className="pointer-events-none absolute right-3 top-3 z-[1] hidden items-center gap-2 rounded-full border border-[var(--accent-2)]/30 bg-[rgba(5,10,20,0.45)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent-2)] backdrop-blur md:inline-flex">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--accent)]" />
+            LIVE FEED
+          </div>
+
           <div className="relative grid gap-6 md:gap-8 lg:items-center">
             <div>
               <p className="text-xs font-medium uppercase tracking-widest text-[var(--text-secondary)]/75">
