@@ -1,5 +1,4 @@
-﻿import Multimeter from "@/components/multimeter/Multimeter";
-import { StickyMobileActions } from "@/components/effects/StickyMobileActions";
+﻿import { StickyMobileActions } from "@/components/effects/StickyMobileActions";
 import { ParallaxSection } from "@/components/parallax/ParallaxSection";
 import { Reveal } from "@/components/effects/Reveal";
 import { Footer } from "@/components/layout/Footer";
@@ -13,6 +12,7 @@ import { ProcessSection } from "@/components/sections/ProcessSection";
 import { ReviewsSection } from "@/components/sections/ReviewsSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { StatsSection } from "@/components/sections/StatsSection";
+import { MultimeterSpoiler } from "@/components/sections/MultimeterSpoiler";
 
 export default function Home() {
   return (
@@ -106,11 +106,13 @@ export default function Home() {
         <Reveal>
           <ContactSection />
         </Reveal>
-        <Multimeter autoAnimate animationInterval={3200} />
+        <MultimeterSpoiler />
       </main>
       <StickyMobileActions />
       <Footer />
     </>
   );
 }
+
+
 
