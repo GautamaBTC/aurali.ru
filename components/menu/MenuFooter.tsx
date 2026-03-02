@@ -35,7 +35,7 @@ export const MenuFooter = forwardRef<HTMLDivElement, MenuFooterProps>(function M
         href="#contacts"
         onClick={onCtaClick}
         className={cn(
-          "group relative mt-3 inline-flex w-full max-w-[260px] items-center justify-center gap-2 overflow-hidden rounded-2xl bg-[var(--accent)] px-8 py-4 text-[0.9rem] font-semibold uppercase tracking-[0.12em] text-[var(--bg-primary)] shadow-[0_4px_20px_rgba(204,255,0,0.34),inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.04] hover:shadow-[0_8px_35px_rgba(204,255,0,0.48),inset_0_1px_0_rgba(255,255,255,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-2)] active:scale-[0.97]",
+          "group relative mt-3 inline-flex w-full max-w-[260px] items-center justify-center gap-2 overflow-hidden rounded-2xl bg-[var(--accent)] px-8 py-4 text-[0.9rem] font-semibold uppercase tracking-[0.12em] text-[#0a0f18] shadow-[0_4px_20px_rgba(204,255,0,0.34),inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.04] hover:shadow-[0_8px_35px_rgba(204,255,0,0.48),inset_0_1px_0_rgba(255,255,255,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-2)] active:scale-[0.97]",
         )}
         role="button"
       >
@@ -52,3 +52,5 @@ export const MenuFooter = forwardRef<HTMLDivElement, MenuFooterProps>(function M
 });
 
 MenuFooter.displayName = "MenuFooter";
+
+

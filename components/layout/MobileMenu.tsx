@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { siteConfig } from "@/lib/siteConfig";
 import { cn } from "@/lib/cn";
@@ -30,9 +30,9 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
         onClick={(event) => event.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <p className="font-semibold">Навигация</p>
+          <p className="font-semibold">РќР°РІРёРіР°С†РёСЏ</p>
           <button type="button" onClick={onClose} className="h-11 w-11 rounded-xl border border-white/20">
-            ✕
+            вњ•
           </button>
         </div>
         <ul className="space-y-2">
@@ -49,7 +49,7 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
           ))}
         </ul>
         <div className="mt-4 grid grid-cols-2 gap-2">
-          <a href={siteConfig.social.whatsapp} className="rounded-xl bg-[var(--accent)] px-4 py-3 text-center font-semibold text-[var(--bg-primary)]">
+          <a href={siteConfig.social.whatsapp} className="rounded-xl bg-[var(--accent)] px-4 py-3 text-center font-semibold text-[#0a0f18]">
             WhatsApp
           </a>
           <a href={siteConfig.social.telegram} className="rounded-xl border border-white/20 px-4 py-3 text-center font-semibold">
@@ -60,3 +60,5 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
     </div>
   );
 }
+
+
