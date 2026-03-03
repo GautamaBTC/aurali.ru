@@ -21,8 +21,8 @@ export function StickyMobileActions() {
 
   return (
     <div
-      className={`fixed bottom-3 left-0 right-0 z-[1200] px-3 transition md:hidden ${
-        visible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+      className={`fixed bottom-3 left-0 right-0 z-[1200] px-3 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform md:hidden ${
+        visible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
       }`}
     >
       <div className="mx-auto max-w-md rounded-2xl border border-[var(--line)] bg-[rgba(5,10,20,0.95)] p-2 shadow-[0_10px_34px_rgba(0,0,0,0.45)] backdrop-blur-xl">
@@ -36,9 +36,10 @@ export function StickyMobileActions() {
           </a>
           <a
             href={siteConfig.social.whatsapp}
-            className="group inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-3 py-3 font-semibold text-black shadow-[0_0_18px_rgba(204,255,0,0.28)] transition-all duration-200 hover:bg-[var(--accent)]/92 hover:shadow-[0_0_30px_rgba(204,255,0,0.38)]"
+            className="group inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-3 py-3 font-semibold text-black shadow-[0_0_18px_rgba(204,255,0,0.28)] transition-all duration-200 hover:bg-[var(--accent)]/92 hover:text-black hover:shadow-[0_0_30px_rgba(204,255,0,0.38)]"
+            style={{ color: "#0b0b0b", WebkitTextFillColor: "#0b0b0b" }}
           >
-            <CalendarCheck2 className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5" />
+            <CalendarCheck2 className="h-4 w-4 text-black transition-transform duration-200 group-hover:-translate-y-0.5" />
             {bookLabel}
           </a>
         </div>

@@ -4,7 +4,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-[var(--line)] py-16 md:py-24">
+    <footer className="border-t border-[var(--line)] pb-28 pt-16 md:py-24">
       <div className="container-shell grid gap-6 text-sm leading-normal text-[var(--text-secondary)]/75 md:grid-cols-2 md:gap-8">
         <div className="space-y-3 md:space-y-4">
           <p className="text-sm font-medium text-[var(--text-primary)]/90">{siteConfig.brand}</p>
