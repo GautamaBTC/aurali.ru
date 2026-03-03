@@ -30,9 +30,9 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
         onClick={(event) => event.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <p className="font-semibold">Навигация</p>
-          <button type="button" onClick={onClose} className="h-11 w-11 rounded-xl border border-white/20" aria-label="Закрыть меню">
-            ✕
+          <p className="font-semibold">РќР°РІРёРіР°С†РёСЏ</p>
+          <button type="button" onClick={onClose} className="h-11 w-11 rounded-xl border border-white/20">
+            вњ•
           </button>
         </div>
         <ul className="space-y-2">
@@ -60,3 +60,4 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
     </div>
   );
 }
+

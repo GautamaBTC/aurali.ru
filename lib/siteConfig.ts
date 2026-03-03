@@ -1,4 +1,4 @@
-﻿export const siteConfig = {
+export const siteConfig = {
   brand: "VIPАвто",
   legalBrand: "VIPAUTO161",
   specialization: "Автоэлектрика и автоэлектроника",
