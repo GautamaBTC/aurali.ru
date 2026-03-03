@@ -6,7 +6,6 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import { siteConfig } from "@/lib/siteConfig";
 import { useLockScroll } from "@/hooks/useLockScroll";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 type MenuItem = {
   id: string;
@@ -25,7 +24,6 @@ const MENU_ITEMS: readonly MenuItem[] = [
 const HEADER_HEIGHT = 80;
 
 export function MobileMenu() {
-  const reduced = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const [activeId, setActiveId] = useState<string>("services");
 
@@ -34,6 +32,9 @@ export function MobileMenu() {
   const footerRef = useRef<HTMLDivElement>(null);
   const burgerRef = useRef<HTMLButtonElement>(null);
   const firstItemRef = useRef<HTMLAnchorElement | null>(null);
+  const lineTopRef = useRef<HTMLSpanElement>(null);
+  const lineMidRef = useRef<HTMLSpanElement>(null);
+  const lineBotRef = useRef<HTMLSpanElement>(null);
 
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const dividerRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -128,6 +129,66 @@ export function MobileMenu() {
   }, [closeMenu, isOpen, trapFocus]);
 
   useEffect(() => {
+    const top = lineTopRef.current;
+    const mid = lineMidRef.current;
+    const bot = lineBotRef.current;
+    if (!top || !mid || !bot) return;
+
+    gsap.killTweensOf([top, mid, bot]);
+
+    if (isOpen) {
+      gsap.to(top, {
+        y: 7.5,
+        rotate: 45,
+        boxShadow: "0 0 14px rgba(204,255,0,0.5)",
+        duration: 0.38,
+        ease: "power3.out",
+      });
+      gsap.to(mid, {
+        opacity: 0,
+        scaleX: 0,
+        duration: 0.25,
+        ease: "power2.out",
+      });
+      gsap.to(bot, {
+        y: -7.5,
+        rotate: -45,
+        width: 28,
+        marginLeft: 0,
+        background: "#00f0ff",
+        boxShadow: "0 0 14px rgba(0,240,255,0.5)",
+        duration: 0.38,
+        ease: "power3.out",
+      });
+      return;
+    }
+
+    gsap.to(top, {
+      y: 0,
+      rotate: 0,
+      boxShadow: "0 0 8px rgba(204,255,0,0.25)",
+      duration: 0.36,
+      ease: "power3.out",
+    });
+    gsap.to(mid, {
+      opacity: 1,
+      scaleX: 1,
+      duration: 0.25,
+      ease: "power2.out",
+    });
+    gsap.to(bot, {
+      y: 0,
+      rotate: 0,
+      width: 14,
+      marginLeft: 14,
+      background: "linear-gradient(90deg, #ccff00, #00f0ff)",
+      boxShadow: "0 0 8px rgba(0,240,255,0.2)",
+      duration: 0.36,
+      ease: "power3.out",
+    });
+  }, [isOpen]);
+
+  useEffect(() => {
     const overlay = overlayRef.current;
     const panel = panelRef.current;
     const footer = footerRef.current;
@@ -146,76 +207,41 @@ export function MobileMenu() {
         pointerEvents: "auto",
       });
 
-      if (reduced) {
-        gsap.set(panel, { y: 0, autoAlpha: 0 });
-        gsap.set(items, { x: 0, autoAlpha: 0 });
-        gsap.set(dividers, { scaleX: 0 });
-        gsap.set(footer, { autoAlpha: 0, y: 0 });
-
-        gsap
-          .timeline()
-          .to(panel, { autoAlpha: 1, duration: 0.18, ease: "power2.out" }, 0)
-          .to(items, { autoAlpha: 1, duration: 0.14, stagger: 0, ease: "power2.out" }, 0.04)
-          .to(dividers, { scaleX: 1, duration: 0.14, ease: "power2.out" }, 0.04)
-          .to(footer, { autoAlpha: 1, duration: 0.14, ease: "power2.out" }, 0.08);
-      } else {
-        gsap.set(panel, { yPercent: -100, autoAlpha: 1 });
-        gsap.set(items, {
-          x: (index: number) => (index % 2 === 0 ? -100 : 100),
-          autoAlpha: 0,
-        });
-        gsap.set(dividers, { scaleX: 0, transformOrigin: "left center" });
-        gsap.set(footer, { autoAlpha: 0, y: 24 });
-
-        gsap
-          .timeline()
-          .to(panel, { yPercent: 0, duration: 0.55, ease: "power4.out" }, 0)
-          .to(
-            items,
-            {
-              x: 0,
-              autoAlpha: 1,
-              duration: 0.45,
-              stagger: 0.1,
-              ease: "power3.out",
-            },
-            0.18,
-          )
-          .to(
-            dividers,
-            {
-              scaleX: 1,
-              duration: 0.35,
-              stagger: 0.1,
-              ease: "power2.out",
-            },
-            0.28,
-          )
-          .to(footer, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power3.out" }, 0.4);
-      }
-
-      window.setTimeout(() => firstItemRef.current?.focus(), reduced ? 70 : 200);
-      return;
-    }
-
-    if (reduced) {
-      const closeTl = gsap.timeline({
-        onComplete: () => {
-          gsap.set(overlay, {
-            autoAlpha: 0,
-            visibility: "hidden",
-            pointerEvents: "none",
-          });
-          burgerRef.current?.focus();
-          runPendingScroll();
-        },
+      gsap.set(panel, { yPercent: -100, autoAlpha: 1 });
+      gsap.set(items, {
+        x: (index: number) => (index % 2 === 0 ? -140 : 140),
+        autoAlpha: 0,
       });
+      gsap.set(dividers, { scaleX: 0, transformOrigin: "left center" });
+      gsap.set(footer, { autoAlpha: 0, y: 24 });
 
-      closeTl
-        .to([...items, ...dividers, footer], { autoAlpha: 0, duration: 0.12, ease: "power2.in" }, 0)
-        .to(panel, { autoAlpha: 0, duration: 0.14, ease: "power2.in" }, 0.02);
+      gsap
+        .timeline()
+        .to(panel, { yPercent: 0, duration: 0.55, ease: "power4.out" }, 0)
+        .to(
+          items,
+          {
+            x: 0,
+            autoAlpha: 1,
+            duration: 0.48,
+            stagger: 0.1,
+            ease: "power3.out",
+          },
+          0.18,
+        )
+        .to(
+          dividers,
+          {
+            scaleX: 1,
+            duration: 0.35,
+            stagger: 0.1,
+            ease: "power2.out",
+          },
+          0.3,
+        )
+        .to(footer, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power3.out" }, 0.42);
 
-      closeTlRef.current = closeTl;
+      window.setTimeout(() => firstItemRef.current?.focus(), 200);
       return;
     }
 
@@ -257,7 +283,7 @@ export function MobileMenu() {
       .to(panel, { yPercent: -100, duration: 0.35, ease: "power3.in" }, 0.12);
 
     closeTlRef.current = closeTl;
-  }, [isOpen, reduced, runPendingScroll]);
+  }, [isOpen, runPendingScroll]);
 
   const phoneHref = useMemo(() => `tel:${siteConfig.phones[0].replace(/[^\d+]/g, "")}`, []);
 
@@ -295,37 +321,37 @@ export function MobileMenu() {
       >
         <div className="relative h-[18px] w-[28px]">
           <span
+            ref={lineTopRef}
             className="absolute left-0 top-0 block h-[2.5px] rounded-full"
             style={{
               width: "100%",
               background: "#ccff00",
-              boxShadow: isOpen ? "0 0 14px rgba(204,255,0,0.5)" : "0 0 8px rgba(204,255,0,0.25)",
-              transform: isOpen ? "translateY(7.5px) rotate(45deg)" : "translateY(0) rotate(0)",
-              transition: "transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease",
+              boxShadow: "0 0 8px rgba(204,255,0,0.25)",
+              transform: "translateY(0) rotate(0)",
             }}
           />
           <span
+            ref={lineMidRef}
             className="absolute left-0 top-[7.5px] block h-[2.5px] rounded-full"
             style={{
               width: "70%",
               marginLeft: "auto",
               background: "#00f0ff",
               boxShadow: "0 0 8px rgba(0,240,255,0.25)",
-              opacity: isOpen ? 0 : 1,
-              transform: isOpen ? "scaleX(0)" : "scaleX(1)",
-              transition: "opacity 0.25s ease, transform 0.3s cubic-bezier(0.23,1,0.32,1)",
+              opacity: 1,
+              transform: "scaleX(1)",
+              transformOrigin: "right center",
             }}
           />
           <span
+            ref={lineBotRef}
             className="absolute bottom-0 left-0 block h-[2.5px] rounded-full"
             style={{
-              width: isOpen ? "100%" : "50%",
-              marginLeft: isOpen ? "0" : "auto",
-              background: isOpen ? "#00f0ff" : "linear-gradient(90deg, #ccff00, #00f0ff)",
-              boxShadow: isOpen ? "0 0 14px rgba(0,240,255,0.5)" : "0 0 8px rgba(0,240,255,0.2)",
-              transform: isOpen ? "translateY(-7.5px) rotate(-45deg)" : "translateY(0) rotate(0)",
-              transition:
-                "transform 0.4s cubic-bezier(0.23,1,0.32,1), width 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, margin-left 0.3s ease",
+              width: "50%",
+              marginLeft: "auto",
+              background: "linear-gradient(90deg, #ccff00, #00f0ff)",
+              boxShadow: "0 0 8px rgba(0,240,255,0.2)",
+              transform: "translateY(0) rotate(0)",
             }}
           />
         </div>
