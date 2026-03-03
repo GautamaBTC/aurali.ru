@@ -23,11 +23,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.4,
     },
-    {
-      url: `${siteConfig.siteUrl}/vipauto161-landing.html`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
   ];
 }
