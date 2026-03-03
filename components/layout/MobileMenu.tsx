@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -14,11 +14,11 @@ type MenuItem = {
 };
 
 const MENU_ITEMS: readonly MenuItem[] = [
-  { id: "services", href: "#services", label: "\u0423\u0441\u043B\u0443\u0433\u0438" },
-  { id: "advantages", href: "#advantages", label: "\u041F\u0440\u0435\u0438\u043C\u0443\u0449\u0435\u0441\u0442\u0432\u0430" },
-  { id: "process", href: "#process", label: "\u041F\u0440\u043E\u0446\u0435\u0441\u0441" },
-  { id: "reviews", href: "#reviews", label: "\u041E\u0442\u0437\u044B\u0432\u044B" },
-  { id: "contacts", href: "#contacts", label: "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B" },
+  { id: "services", href: "#services", label: "Услуги" },
+  { id: "advantages", href: "#advantages", label: "Преимущества" },
+  { id: "process", href: "#process", label: "Процесс" },
+  { id: "reviews", href: "#reviews", label: "Отзывы" },
+  { id: "contacts", href: "#contacts", label: "Контакты" },
 ] as const;
 
 const HEADER_HEIGHT = 72;
@@ -270,10 +270,10 @@ export function MobileMenu() {
           WebkitBackdropFilter: "blur(20px) saturate(180%)",
         }}
       >
-        <Link href="/" className="relative z-[1201] select-none" aria-label="VIPAuto161 \u0413\u043B\u0430\u0432\u043D\u0430\u044F">
+        <Link href="/" className="relative z-[1201] select-none" aria-label="VIPAuto161 Главная">
           <Image
             src="/images/plate-logo.svg"
-            alt="VIP\u0410\u0432\u0442\u043E 161"
+            alt="VIPАвто 161"
             width={189}
             height={51}
             className="h-[42px] w-auto"
@@ -286,7 +286,7 @@ export function MobileMenu() {
         ref={burgerRef}
         type="button"
         onClick={isOpen ? () => closeMenu() : openMenu}
-        aria-label={isOpen ? "\u0417\u0430\u043A\u0440\u044B\u0442\u044C \u043C\u0435\u043D\u044E" : "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u043C\u0435\u043D\u044E"}
+        aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
         aria-expanded={isOpen}
         aria-controls="mobile-nav-dialog"
         className="tap-none touch-manipulation fixed right-5 top-5 z-[10000] flex h-11 w-11 items-center justify-center md:hidden"
@@ -336,7 +336,7 @@ export function MobileMenu() {
           ref={panelRef}
           role="dialog"
           aria-modal="true"
-          aria-label="\u041C\u043E\u0431\u0438\u043B\u044C\u043D\u0430\u044F \u043D\u0430\u0432\u0438\u0433\u0430\u0446\u0438\u044F"
+          aria-label="Мобильная навигация"
           className="absolute inset-0 overflow-y-auto bg-[#050a14]"
           onClick={(event) => {
             if (event.target === event.currentTarget) closeMenu();
@@ -464,7 +464,7 @@ export function MobileMenu() {
                   >
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                   </svg>
-                  <span className="text-[0.72rem] font-medium text-[#9fadbc]">\u041F\u043E\u0437\u0432\u043E\u043D\u0438\u0442\u044C</span>
+                  <span className="text-[0.72rem] font-medium text-[#9fadbc]">Позвонить</span>
                 </a>
               </div>
             </div>
@@ -475,3 +475,4 @@ export function MobileMenu() {
     </>
   );
 }
+

@@ -30,7 +30,7 @@ export function AdvantagesSection() {
   return (
     <section ref={sectionRef} id="advantages" className="reveal-section section-padding">
       <div className="container-shell">
-        <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl">\u041F\u043E\u0447\u0435\u043C\u0443 \u0432\u044B\u0431\u0438\u0440\u0430\u044E\u0442 VIP\u0410\u0432\u0442\u043E</h2>
+        <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl">Почему выбирают VIPАвто</h2>
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8">
           {advantages.map((advantage) => (
             <article key={advantage.id} className="adv-card card-surface rounded-xl p-6 md:p-8">
@@ -44,3 +44,4 @@ export function AdvantagesSection() {
     </section>
   );
 }
+

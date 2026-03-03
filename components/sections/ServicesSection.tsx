@@ -33,7 +33,7 @@ export function ServicesSection() {
   return (
     <section ref={sectionRef} id="services" className="reveal-section section-padding">
       <div className="container-shell">
-        <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl">\u041E\u0441\u043D\u043E\u0432\u043D\u044B\u0435 \u0443\u0441\u043B\u0443\u0433\u0438</h2>
+        <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl">Основные услуги</h2>
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
           {services.map((service) => (
             <article key={service.id} className="service-card card-surface rounded-xl p-6 md:p-8">
@@ -41,7 +41,7 @@ export function ServicesSection() {
                 <p className="text-xs font-medium uppercase tracking-widest text-[var(--text-secondary)]/75">{service.leadTime}</p>
                 {service.popular ? (
                   <span className="rounded-full bg-[var(--accent-2)]/10 px-3 py-1 text-xs font-medium uppercase tracking-widest text-[var(--accent-2)]">
-                    {"\u041F\u043E\u043F\u0443\u043B\u044F\u0440\u043D\u043E"}
+                    {"Популярно"}
                   </span>
                 ) : null}
               </div>
@@ -62,3 +62,4 @@ export function ServicesSection() {
     </section>
   );
 }
+

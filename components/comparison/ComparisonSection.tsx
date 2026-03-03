@@ -11,30 +11,30 @@ import { ComparisonItem } from "@/components/comparison/ComparisonItem";
 const garageItems = [
   {
     icon: <Wrench className="h-[18px] w-[18px] sm:h-5 sm:w-5" />,
-    text: "\u0417\u0430\u043C\u0435\u043D\u0430 \u0434\u0435\u0442\u0430\u043B\u0435\u0439 \u0431\u0435\u0437 \u043F\u043E\u0438\u0441\u043A\u0430 \u043F\u0435\u0440\u0432\u043E\u043F\u0440\u0438\u0447\u0438\u043D\u044B",
+    text: "Замена деталей без поиска первопричины",
   },
   {
     icon: <CircleDollarSign className="h-[18px] w-[18px] sm:h-5 sm:w-5" />,
-    text: "\u041D\u0435\u044F\u0441\u043D\u044B\u0435 \u0441\u0440\u043E\u043A\u0438 \u0438 \u0441\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u043F\u043E \u0444\u0430\u043A\u0442\u0443",
+    text: "Неясные сроки и стоимость по факту",
   },
   {
     icon: <Zap className="h-[18px] w-[18px] sm:h-5 sm:w-5" />,
-    text: "\u041D\u0435\u0441\u0442\u0430\u0431\u0438\u043B\u044C\u043D\u044B\u0439 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442 \u043D\u0430 \u0441\u043B\u043E\u0436\u043D\u043E\u0439 \u044D\u043B\u0435\u043A\u0442\u0440\u0438\u043A\u0435",
+    text: "Нестабильный результат на сложной электрике",
   },
 ] as const;
 
 const vipItems = [
   {
     icon: <ScanLine className="h-[18px] w-[18px] sm:h-5 sm:w-5" />,
-    text: "\u0414\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u043A\u0430 \u0446\u0435\u043F\u0435\u0439 \u0438 \u0431\u043B\u043E\u043A\u043E\u0432 \u043F\u043E\u0434 \u043D\u0430\u0433\u0440\u0443\u0437\u043A\u043E\u0439",
+    text: "Диагностика цепей и блоков под нагрузкой",
   },
   {
     icon: <Handshake className="h-[18px] w-[18px] sm:h-5 sm:w-5" />,
-    text: "\u041F\u0440\u043E\u0437\u0440\u0430\u0447\u043D\u043E\u0435 \u0441\u043E\u0433\u043B\u0430\u0441\u043E\u0432\u0430\u043D\u0438\u0435 \u0434\u043E \u0441\u0442\u0430\u0440\u0442\u0430 \u0440\u0435\u043C\u043E\u043D\u0442\u0430",
+    text: "Прозрачное согласование до старта ремонта",
   },
   {
     icon: <ClipboardCheck className="h-[18px] w-[18px] sm:h-5 sm:w-5" />,
-    text: "\u041A\u043E\u043D\u0442\u0440\u043E\u043B\u044C\u043D\u0430\u044F \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0430 \u043F\u0435\u0440\u0435\u0434 \u0432\u044B\u0434\u0430\u0447\u0435\u0439 \u0430\u0432\u0442\u043E\u043C\u043E\u0431\u0438\u043B\u044F",
+    text: "Контрольная проверка перед выдачей автомобиля",
   },
 ] as const;
 
@@ -107,17 +107,17 @@ export function ComparisonSection() {
       <div className="relative z-10 mb-8 text-center sm:mb-14">
         <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/15 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-[var(--accent-2)] sm:mb-5 sm:px-5 sm:py-2 sm:text-[13px]">
           <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-badge-pulse" />
-          {"\u0421\u0440\u0430\u0432\u043D\u0435\u043D\u0438\u0435"}
+          {"Сравнение"}
         </div>
 
         <h2 className="text-[clamp(22px,5vw,44px)] font-bold leading-tight tracking-tight text-gray-100">
-          <span className="text-[var(--text-secondary)]">{"\u041E\u0431\u044B\u0447\u043D\u044B\u0439 \u0433\u0430\u0440\u0430\u0436"}</span>{" "}
+          <span className="text-[var(--text-secondary)]">{"Обычный гараж"}</span>{" "}
           <span className="mx-1 text-white/20 sm:mx-2">vs</span>{" "}
-          <span className="bg-gradient-to-br from-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent">VIP\u0410\u0432\u0442\u043E</span>
+          <span className="bg-gradient-to-br from-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent">VIPАвто</span>
         </h2>
 
         <p className="mx-auto mt-3 max-w-lg text-[13px] leading-relaxed text-white/40 sm:mt-4 sm:text-[15px]">
-          {"\u0427\u0435\u043C \u043F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0439 \u043F\u043E\u0434\u0445\u043E\u0434 \u043E\u0442\u043B\u0438\u0447\u0430\u0435\u0442\u0441\u044F \u043E\u0442 \u043F\u0440\u0438\u0432\u044B\u0447\u043D\u043E\u0433\u043E \u0440\u0435\u043C\u043E\u043D\u0442\u0430 \u0431\u0435\u0437 \u0434\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u043A\u0438."}
+          {"Чем профессиональный подход отличается от привычного ремонта без диагностики."}
         </p>
       </div>
 
@@ -125,8 +125,8 @@ export function ComparisonSection() {
         <div className="grid grid-cols-1 items-stretch gap-4 sm:gap-5 lg:grid-cols-[1fr_auto_1fr]">
           <ComparisonCard
             variant="garage"
-            badge={"\u0413\u0430\u0440\u0430\u0436\u043D\u044B\u0439 \u043F\u043E\u0434\u0445\u043E\u0434"}
-            title={"\u041E\u0431\u044B\u0447\u043D\u044B\u0439 \u0433\u0430\u0440\u0430\u0436"}
+            badge={"Гаражный подход"}
+            title={"Обычный гараж"}
             titleIcon={<Warehouse className="h-5 w-5" />}
             className="comparison-garage"
           >
@@ -149,8 +149,8 @@ export function ComparisonSection() {
 
           <ComparisonCard
             variant="vip"
-            badge={"\u041F\u043E\u0434\u0445\u043E\u0434 VIP\u0410\u0432\u0442\u043E"}
-            title={"VIP\u0410\u0432\u0442\u043E"}
+            badge={"Подход VIPАвто"}
+            title={"VIPАвто"}
             titleIcon={<Crown className="h-5 w-5" />}
             className="comparison-vip"
           >
@@ -163,3 +163,4 @@ export function ComparisonSection() {
     </section>
   );
 }
+

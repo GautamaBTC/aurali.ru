@@ -32,9 +32,9 @@ export function ReviewsSection() {
     <section ref={sectionRef} id="reviews" className="reveal-section section-padding">
       <div className="container-shell">
         <div className="flex flex-wrap items-end justify-between gap-3 md:gap-4">
-          <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl">\u041E\u0442\u0437\u044B\u0432\u044B \u043A\u043B\u0438\u0435\u043D\u0442\u043E\u0432</h2>
+          <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl">Отзывы клиентов</h2>
           <p className="text-sm leading-normal text-[var(--text-secondary)]/75">
-            {"\u042F\u043D\u0434\u0435\u043A\u0441 \u041A\u0430\u0440\u0442\u044B:"} {siteConfig.rating} ({siteConfig.ratingVotes} {"\u043E\u0446\u0435\u043D\u043E\u043A"})
+            {"Яндекс Карты:"} {siteConfig.rating} ({siteConfig.ratingVotes} {"оценок"})
           </p>
         </div>
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
@@ -55,3 +55,4 @@ export function ReviewsSection() {
     </section>
   );
 }
+
