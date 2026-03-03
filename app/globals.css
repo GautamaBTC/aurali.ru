@@ -57,6 +57,11 @@ select:focus-visible {
   outline-offset: 2px;
 }
 
+#mobile-nav-dialog a:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .container-shell {
   max-width: 80rem;
   margin-inline: auto;

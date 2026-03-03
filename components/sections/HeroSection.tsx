@@ -36,6 +36,7 @@ export function HeroSection() {
                   <a
                     href={siteConfig.social.whatsapp}
                     className="rounded-lg bg-[var(--accent)] px-6 py-3 font-medium text-[#0b0b0b] shadow-[0_0_24px_rgba(204,255,0,0.28)] transition-all duration-200 hover:bg-[var(--accent)]/90 hover:text-[#0b0b0b] hover:shadow-[0_0_36px_rgba(204,255,0,0.35)]"
+                    style={{ color: "#0b0b0b", WebkitTextFillColor: "#0b0b0b" }}
                   >
                     Записаться в WhatsApp
                   </a>
