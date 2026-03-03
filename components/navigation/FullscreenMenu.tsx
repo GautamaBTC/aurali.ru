@@ -177,7 +177,7 @@ export function FullscreenMenu({ isOpen, onClose, children }: FullscreenMenuProp
         ref={closeWrapRef}
         type="button"
         onClick={onClose}
-        aria-label="Р—Р°РєСЂС‹С‚СЊ РјРµРЅСЋ"
+        aria-label="Закрыть меню"
         className="fixed right-5 top-2 z-[10002] flex h-11 w-11 items-center justify-center sm:right-6 sm:top-3"
       >
         <span ref={closeLineARef} className="absolute h-[2px] -rotate-45 rounded-full bg-[var(--accent)]" />
@@ -207,7 +207,7 @@ export function FullscreenMenu({ isOpen, onClose, children }: FullscreenMenuProp
 
         <div className="relative z-10 flex items-center justify-between px-6 pb-6 pt-14 sm:pt-16">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/30">РќР°РІРёРіР°С†РёСЏ</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/30">Навигация</p>
             <div className="mt-2 h-px w-12 bg-gradient-to-r from-[var(--accent)] to-transparent" />
           </div>
         </div>
@@ -248,7 +248,7 @@ export function FullscreenMenu({ isOpen, onClose, children }: FullscreenMenuProp
             data-footer-el
             className="group/cta flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--accent)] px-6 py-4 text-sm font-bold text-[#050A14] transition-all duration-300 hover:bg-[var(--accent)]/90 hover:shadow-[0_0_40px_rgba(204,255,0,0.28)] active:scale-[0.97]"
           >
-            Р—Р°РїРёСЃР°С‚СЊСЃСЏ РЅР° РґРёР°РіРЅРѕСЃС‚РёРєСѓ
+            Записаться на диагностику
             <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
           </a>
         </div>
