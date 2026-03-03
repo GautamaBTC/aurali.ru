@@ -1,7 +1,7 @@
-import type { Metadata, Viewport } from "next";
+﻿import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { JetBrains_Mono, Manrope } from "next/font/google";
-import { MobileMenu } from "@/components/menu";
+import { MobileMenu } from "@/components/layout/MobileMenu";
 import ParallaxBackground from "@/components/parallax/ParallaxBackground";
 import { siteConfig } from "@/lib/siteConfig";
 import "./globals.css";
@@ -19,33 +19,33 @@ const jetBrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: {
-    default: "VIPAuto — Автоэлектрика и автоэлектроника в Шахтах | Официальный дилер StarLine",
-    template: "%s | VIPАвто",
+    default: "VIPAuto вЂ” РђРІС‚РѕСЌР»РµРєС‚СЂРёРєР° Рё Р°РІС‚РѕСЌР»РµРєС‚СЂРѕРЅРёРєР° РІ РЁР°С…С‚Р°С… | РћС„РёС†РёР°Р»СЊРЅС‹Р№ РґРёР»РµСЂ StarLine",
+    template: "%s | VIPРђРІС‚Рѕ",
   },
   description:
-    "Профессиональная автоэлектрика в г. Шахты. Установка сигнализаций StarLine, LED/Bi-LED оптика, автозвук, камеры, кодирование. Рейтинг 4.6 на Яндекс.Картах.",
+    "РџСЂРѕС„РµСЃСЃРёРѕРЅР°Р»СЊРЅР°СЏ Р°РІС‚РѕСЌР»РµРєС‚СЂРёРєР° РІ Рі. РЁР°С…С‚С‹. РЈСЃС‚Р°РЅРѕРІРєР° СЃРёРіРЅР°Р»РёР·Р°С†РёР№ StarLine, LED/Bi-LED РѕРїС‚РёРєР°, Р°РІС‚РѕР·РІСѓРє, РєР°РјРµСЂС‹, РєРѕРґРёСЂРѕРІР°РЅРёРµ. Р РµР№С‚РёРЅРі 4.6 РЅР° РЇРЅРґРµРєСЃ.РљР°СЂС‚Р°С….",
   alternates: {
     canonical: "/",
   },
   category: "autos",
   keywords: [
-    "автоэлектрика шахты",
-    "автоэлектрик шахты",
-    "автоэлектроника",
-    "установка starline",
-    "сигнализация starline шахты",
-    "установка led линз",
-    "автозвук",
-    "диагностика автоэлектрики",
+    "Р°РІС‚РѕСЌР»РµРєС‚СЂРёРєР° С€Р°С…С‚С‹",
+    "Р°РІС‚РѕСЌР»РµРєС‚СЂРёРє С€Р°С…С‚С‹",
+    "Р°РІС‚РѕСЌР»РµРєС‚СЂРѕРЅРёРєР°",
+    "СѓСЃС‚Р°РЅРѕРІРєР° starline",
+    "СЃРёРіРЅР°Р»РёР·Р°С†РёСЏ starline С€Р°С…С‚С‹",
+    "СѓСЃС‚Р°РЅРѕРІРєР° led Р»РёРЅР·",
+    "Р°РІС‚РѕР·РІСѓРє",
+    "РґРёР°РіРЅРѕСЃС‚РёРєР° Р°РІС‚РѕСЌР»РµРєС‚СЂРёРєРё",
     "vipauto161",
   ],
   openGraph: {
-    title: "VIPАвто",
-    description: "Премиальная автоэлектрика и автоэлектроника в г. Шахты.",
+    title: "VIPРђРІС‚Рѕ",
+    description: "РџСЂРµРјРёР°Р»СЊРЅР°СЏ Р°РІС‚РѕСЌР»РµРєС‚СЂРёРєР° Рё Р°РІС‚РѕСЌР»РµРєС‚СЂРѕРЅРёРєР° РІ Рі. РЁР°С…С‚С‹.",
     type: "website",
     locale: "ru_RU",
     url: siteConfig.siteUrl,
-    siteName: "VIPАвто",
+    siteName: "VIPРђРІС‚Рѕ",
     images: [
       {
         url: "/images/plate-logo.svg",
@@ -54,8 +54,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "VIPАвто",
-    description: "Премиальная автоэлектрика и автоэлектроника в г. Шахты.",
+    title: "VIPРђРІС‚Рѕ",
+    description: "РџСЂРµРјРёР°Р»СЊРЅР°СЏ Р°РІС‚РѕСЌР»РµРєС‚СЂРёРєР° Рё Р°РІС‚РѕСЌР»РµРєС‚СЂРѕРЅРёРєР° РІ Рі. РЁР°С…С‚С‹.",
     images: ["/images/plate-logo.svg"],
   },
   robots: {
@@ -75,7 +75,7 @@ const localBusinessJsonLd = {
   "@type": "AutoRepair",
   name: siteConfig.brand,
   image: `${siteConfig.siteUrl}/images/plate-logo.svg`,
-  priceRange: "₽₽",
+  priceRange: "в‚Ѕв‚Ѕ",
   address: {
     "@type": "PostalAddress",
     streetAddress: siteConfig.address,
@@ -84,7 +84,7 @@ const localBusinessJsonLd = {
     addressCountry: "RU",
   },
   telephone: siteConfig.phones[0],
-  areaServed: "Ростовская область",
+  areaServed: "Р РѕСЃС‚РѕРІСЃРєР°СЏ РѕР±Р»Р°СЃС‚СЊ",
   url: siteConfig.siteUrl,
   openingHoursSpecification: [
     {
@@ -125,3 +125,4 @@ export default function RootLayout({
     </html>
   );
 }
+
