@@ -21,9 +21,13 @@ export function StickyMobileActions() {
 
   return (
     <div
-      className={`fixed bottom-3 left-0 right-0 z-[1200] px-3 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform md:hidden ${
-        visible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
-      }`}
+      className="fixed bottom-3 left-0 right-0 z-[1200] px-3 will-change-transform md:hidden"
+      style={{
+        transform: `translateY(${visible ? 0 : 64}px)`,
+        opacity: visible ? 1 : 0,
+        transition: "transform 460ms cubic-bezier(0.22,1,0.36,1), opacity 320ms ease",
+        pointerEvents: visible ? "auto" : "none",
+      }}
     >
       <div className="mx-auto max-w-md rounded-2xl border border-[var(--line)] bg-[rgba(5,10,20,0.95)] p-2 shadow-[0_10px_34px_rgba(0,0,0,0.45)] backdrop-blur-xl">
         <div className="grid grid-cols-2 gap-2">
