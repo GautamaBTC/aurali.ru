@@ -1,4 +1,4 @@
-import { siteConfig } from "@/lib/siteConfig";
+﻿import { siteConfig } from "@/lib/siteConfig";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -31,4 +31,3 @@ export function Footer() {
     </footer>
   );
 }
-

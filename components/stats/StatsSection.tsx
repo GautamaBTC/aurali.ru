@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef } from "react";
 import { Clock, LayoutGrid, Star, Users } from "lucide-react";
@@ -91,4 +91,3 @@ export function StatsSection() {
     </section>
   );
 }
-
