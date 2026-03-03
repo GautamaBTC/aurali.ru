@@ -26,6 +26,7 @@ const HEADER_HEIGHT = 72;
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeId, setActiveId] = useState<string>("services");
+  const [glitchId, setGlitchId] = useState<string | null>(null);
 
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -124,6 +125,22 @@ export function MobileMenu() {
   }, [closeMenu, isOpen, trapFocus]);
 
   useEffect(() => {
+    if (!isOpen) {
+      setGlitchId(null);
+      return;
+    }
+
+    const glitchTimer = window.setInterval(() => {
+      const randomItem = MENU_ITEMS[Math.floor(Math.random() * MENU_ITEMS.length)];
+      if (!randomItem) return;
+      setGlitchId(randomItem.id);
+      window.setTimeout(() => setGlitchId((prev) => (prev === randomItem.id ? null : prev)), 260);
+    }, 3600);
+
+    return () => window.clearInterval(glitchTimer);
+  }, [isOpen]);
+
+  useEffect(() => {
     const top = lineTopRef.current;
     const mid = lineMidRef.current;
     const bot = lineBotRef.current;
@@ -135,9 +152,9 @@ export function MobileMenu() {
       gsap.to(top, {
         y: 7.2,
         x: 1.2,
-        rotate: 43,
-        background: "#e0e6ed",
-        boxShadow: "0 0 10px rgba(224,230,237,0.35)",
+        rotate: 36,
+        background: "#ccff00",
+        boxShadow: "0 0 12px rgba(204,255,0,0.4)",
         duration: 0.5,
         ease: "back.out(1.4)",
       });
@@ -153,10 +170,10 @@ export function MobileMenu() {
       gsap.to(bot, {
         y: -7.2,
         x: -1.2,
-        rotate: -47,
-        width: 28,
-        background: "#e0e6ed",
-        boxShadow: "0 0 10px rgba(224,230,237,0.35)",
+        rotate: -52,
+        width: 34,
+        background: "#00f0ff",
+        boxShadow: "0 0 12px rgba(0,240,255,0.35)",
         duration: 0.5,
         ease: "back.out(1.4)",
       });
@@ -190,7 +207,7 @@ export function MobileMenu() {
       y: 0,
       x: 0,
       rotate: 0,
-      width: 14,
+      width: 17,
       background: "#00f0ff",
       boxShadow: "0 0 8px rgba(0,240,255,0.25)",
       duration: 0.46,
@@ -247,11 +264,7 @@ export function MobileMenu() {
           },
           0.1,
         )
-        .to(
-          footer,
-          { autoAlpha: 1, y: 0, duration: 0.36, ease: "back.out(1.35)" },
-          0.28,
-        );
+        .to(footer, { autoAlpha: 1, y: 0, duration: 0.36, ease: "back.out(1.35)" }, 0.28);
 
       window.setTimeout(() => firstItemRef.current?.focus(), 200);
       return;
@@ -300,14 +313,7 @@ export function MobileMenu() {
         }}
       >
         <Link href="/" className="relative z-[1201] select-none" aria-label="VIPAuto161 Главная">
-          <Image
-            src="/images/plate-logo.svg"
-            alt="VIPАвто 161"
-            width={189}
-            height={51}
-            className="h-[42px] w-auto"
-            priority
-          />
+          <Image src="/images/plate-logo.svg" alt="VIPАвто 161" width={189} height={51} className="h-[42px] w-auto" priority />
         </Link>
       </header>
 
@@ -321,10 +327,10 @@ export function MobileMenu() {
         className="tap-none touch-manipulation fixed right-5 top-5 z-[10000] flex h-11 w-11 items-center justify-center md:hidden"
         style={{ background: "none", border: "none", outline: "none" }}
       >
-        <div className="relative h-[18px] w-[28px]">
+        <div className="relative h-[20px] w-[34px]">
           <span
             ref={lineTopRef}
-            className="absolute left-0 top-0 block h-[2.5px] rounded-full"
+            className="absolute left-0 top-0 block h-[1.25px] rounded-[2px]"
             style={{
               width: "100%",
               background: "#ccff00",
@@ -335,10 +341,10 @@ export function MobileMenu() {
           />
           <span
             ref={lineMidRef}
-            className="absolute left-0 top-[7.5px] block h-[2.5px] rounded-full"
+            className="absolute left-0 top-[9px] block h-[1.25px] rounded-[2px]"
             style={{
-              width: "70%",
-              background: "#e0e6ed",
+              width: "72%",
+              background: "linear-gradient(90deg, #ccff00 0%, #00f0ff 100%)",
               boxShadow: "0 0 8px rgba(224,230,237,0.25)",
               opacity: 1,
               transform: "scaleX(1)",
@@ -347,7 +353,7 @@ export function MobileMenu() {
           />
           <span
             ref={lineBotRef}
-            className="absolute bottom-0 left-0 block h-[2.5px] rounded-full"
+            className="absolute bottom-0 left-0 block h-[1.25px] rounded-[2px]"
             style={{
               width: "50%",
               background: "#00f0ff",
@@ -372,24 +378,21 @@ export function MobileMenu() {
           }}
         >
           <div className="pointer-events-none absolute inset-0">
-            <video
-              className="h-full w-full object-cover object-center"
-              src="/uploads/videos/hader.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,12,18,0.74)_0%,rgba(8,12,18,0.58)_40%,rgba(8,12,18,0.74)_100%)] backdrop-blur-[15px]" />
+            <video className="h-full w-full object-cover object-center" autoPlay muted loop playsInline preload="metadata">
+              <source src="/uploads/videos/menu-bg.webm" type="video/webm" />
+              <source src="/uploads/videos/menu-bg.mp4" type="video/mp4" />
+              <source src="/uploads/videos/hader.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,17,22,0.85)_0%,rgba(11,17,22,0.72)_42%,rgba(11,17,22,0.86)_100%)] backdrop-blur-[20px]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(0,240,255,0.12),transparent_40%),radial-gradient(circle_at_86%_90%,rgba(204,255,0,0.12),transparent_44%)]" />
           </div>
 
-          <div className="relative z-10 flex min-h-dvh flex-col justify-between px-6 pb-10 pt-28">
-            <nav className="flex flex-1 items-center justify-center">
+          <div className="relative z-10 flex min-h-dvh flex-col justify-between px-6 pb-10 pt-24">
+            <nav className="flex flex-1 items-start justify-center pt-4">
               <ul className="w-full max-w-md">
                 {MENU_ITEMS.map((item, index) => {
                   const isActive = activeId === item.id;
+                  const isGlitching = glitchId === item.id;
                   return (
                     <li key={item.id}>
                       <a
@@ -402,26 +405,18 @@ export function MobileMenu() {
                         className="tap-none touch-manipulation group flex items-baseline justify-center py-5 text-center focus-visible:outline-none"
                       >
                         <span
+                          className={`menu-item ${isGlitching ? "glitch-active" : ""}`}
                           style={{
-                            fontSize: "clamp(1.8rem, 7.5vw, 3.2rem)",
-                            fontWeight: 700,
+                            fontSize: "clamp(1.7rem, 7vw, 3rem)",
+                            fontWeight: 300,
                             lineHeight: 1.1,
-                            letterSpacing: "-0.02em",
-                            color: "#e0e6ed",
+                            letterSpacing: "-0.01em",
+                            color: isActive ? "#ffffff" : "#f4f7fb",
                             transition: "opacity 0.3s",
                             opacity: isActive ? 1 : 0.92,
                           }}
                         >
-                          <span
-                            className="inline-block bg-clip-text"
-                            style={{
-                              backgroundImage: "none",
-                              WebkitBackgroundClip: "unset",
-                              WebkitTextFillColor: "inherit",
-                            }}
-                          >
-                            {item.label}
-                          </span>
+                          <span className="inline-block">{item.label}</span>
                         </span>
                       </a>
                     </li>
@@ -452,17 +447,7 @@ export function MobileMenu() {
                   aria-label="WhatsApp"
                   className="tap-none touch-manipulation flex h-10 items-center justify-center gap-2 rounded-full border border-[#ccff0026] bg-[#ccff0014] px-4 transition-all duration-300 hover:border-[#ccff0059] hover:bg-[#ccff0026] hover:shadow-[0_0_20px_rgba(204,255,0,0.15)]"
                 >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#ccff00"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden
-                  >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                   </svg>
                   <span className="text-[0.72rem] font-semibold tracking-[0.06em] text-[#ccff00]">WhatsApp</span>
@@ -473,17 +458,7 @@ export function MobileMenu() {
                   aria-label="Telegram"
                   className="tap-none touch-manipulation flex h-10 items-center justify-center gap-2 rounded-full border border-[#00f0ff26] bg-[#00f0ff0f] px-4 transition-all duration-300 hover:border-[#00f0ff59] hover:bg-[#00f0ff1f] hover:shadow-[0_0_20px_rgba(0,240,255,0.15)]"
                 >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#00f0ff"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden
-                  >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <line x1="22" y1="2" x2="11" y2="13" />
                     <polygon points="22 2 15 22 11 13 2 9 22 2" />
                   </svg>
@@ -494,17 +469,7 @@ export function MobileMenu() {
                   href={phoneHref}
                   className="tap-none touch-manipulation flex h-10 items-center justify-center gap-1.5 rounded-full border border-[#e0e6ed14] bg-[#e0e6ed0a] px-4 transition-all duration-300 hover:border-[#e0e6ed26] hover:bg-[#e0e6ed14] sm:ml-1"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#9fadbc"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden
-                  >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9fadbc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                   </svg>
                   <span className="text-[0.72rem] font-medium text-[#9fadbc]">Позвонить</span>
@@ -514,8 +479,6 @@ export function MobileMenu() {
           </div>
         </div>
       </div>
-
     </>
   );
 }
-

@@ -391,6 +391,44 @@ select:focus-visible {
   transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1), ease !important;
 }
 
+@keyframes menu-glitch {
+  0%,
+  88%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    text-shadow: none;
+    opacity: 1;
+  }
+  90% {
+    transform: translate3d(-1px, 1px, 0);
+    text-shadow:
+      1px 0 #ccff00,
+      -1px 0 #00f0ff;
+    opacity: 0.96;
+  }
+  93% {
+    transform: translate3d(1px, -1px, 0);
+    text-shadow:
+      -1px 0 #ccff00,
+      1px 0 #00f0ff;
+    opacity: 0.92;
+  }
+  96% {
+    transform: translate3d(0, 0, 0);
+    text-shadow: none;
+    opacity: 1;
+  }
+}
+
+.menu-item {
+  display: inline-block;
+  will-change: transform, opacity, text-shadow;
+}
+
+.menu-item.glitch-active {
+  animation: menu-glitch 260ms linear 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
