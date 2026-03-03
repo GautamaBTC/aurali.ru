@@ -25,7 +25,7 @@ export default function Home() {
       </a>
       <ScrollProgress />
       <main id="main-content">
-        <Reveal>
+        <Reveal direction="left">
           <HeroSection />
         </Reveal>
         <ParallaxSection
@@ -55,7 +55,7 @@ export default function Home() {
             },
           ]}
         >
-          <Reveal>
+          <Reveal direction="right">
             <StatsSection />
           </Reveal>
         </ParallaxSection>
@@ -84,26 +84,26 @@ export default function Home() {
             },
           ]}
         >
-          <Reveal>
+          <Reveal direction="left">
             <CompareSection />
           </Reveal>
         </ParallaxSection>
-        <Reveal>
+        <Reveal direction="right">
           <ServicesSection />
         </Reveal>
-        <Reveal>
+        <Reveal direction="left">
           <AdvantagesSection />
         </Reveal>
-        <Reveal>
+        <Reveal direction="right">
           <ProcessSection />
         </Reveal>
-        <Reveal>
+        <Reveal direction="left">
           <BrandsSection />
         </Reveal>
-        <Reveal>
+        <Reveal direction="right">
           <ReviewsSection />
         </Reveal>
-        <Reveal>
+        <Reveal direction="left">
           <ContactSection />
         </Reveal>
         <MultimeterSpoiler />

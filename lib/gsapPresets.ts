@@ -1,9 +1,18 @@
 import { gsap } from "gsap";
 
-export function runRevealAnimation(target: Element): gsap.core.Tween {
+export type RevealDirection = "up" | "left" | "right";
+
+export function runRevealAnimation(target: Element, direction: RevealDirection = "up"): gsap.core.Tween {
+  const fromVars =
+    direction === "left"
+      ? { autoAlpha: 0, x: -44, y: 0 }
+      : direction === "right"
+        ? { autoAlpha: 0, x: 44, y: 0 }
+        : { autoAlpha: 0, y: 22, x: 0 };
+
   return gsap.fromTo(
     target,
-    { autoAlpha: 0, y: 22 },
-    { autoAlpha: 1, y: 0, duration: 0.72, ease: "power2.out", overwrite: true },
+    fromVars,
+    { autoAlpha: 1, y: 0, x: 0, duration: 0.72, ease: "power2.out", overwrite: true },
   );
 }

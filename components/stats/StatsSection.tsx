@@ -8,7 +8,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { stats } from "@/data/stats";
 import { StatCard, type AccentKey } from "@/components/stats/StatCard";
 
-const accentOrder: AccentKey[] = ["red", "orange", "blue", "green"];
+const accentOrder: readonly AccentKey[] = ["red", "orange", "blue", "green", "orange"] as const;
 
 export function StatsSection() {
   const gsap = useGSAP();
@@ -74,9 +74,9 @@ export function StatsSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {stats.map((item, index) => {
-            const accent = accentOrder[index] ?? "purple";
+            const accent = accentOrder[index % accentOrder.length];
             const icon =
               item.id === "experience" ? (
                 <Clock className="h-[22px] w-[22px] stroke-[var(--accent-2)]" strokeWidth={2} />
@@ -84,6 +84,8 @@ export function StatsSection() {
                 <Star className="h-[22px] w-[22px] stroke-[var(--accent)]" strokeWidth={2} />
               ) : item.id === "reviews" ? (
                 <Users className="h-[22px] w-[22px] stroke-[var(--accent-2)]" strokeWidth={2} />
+              ) : item.id === "satisfied" ? (
+                <Users className="h-[22px] w-[22px] stroke-[var(--accent)]" strokeWidth={2} />
               ) : (
                 <LayoutGrid className="h-[22px] w-[22px] stroke-[var(--accent)]" strokeWidth={2} />
               );
