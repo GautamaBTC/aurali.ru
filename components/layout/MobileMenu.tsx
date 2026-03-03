@@ -21,7 +21,7 @@ const MENU_ITEMS: readonly MenuItem[] = [
   { id: "contacts", href: "#contacts", label: "Контакты" },
 ] as const;
 
-const HEADER_HEIGHT = 80;
+const HEADER_HEIGHT = 72;
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -263,7 +263,7 @@ export function MobileMenu() {
   return (
     <>
       <header
-        className="fixed left-0 right-0 top-0 z-[1200] flex h-20 items-center justify-between px-5 md:hidden"
+        className="fixed left-0 right-0 top-0 z-[1200] flex h-[72px] items-center justify-between px-5 md:hidden"
         style={{
           background: "rgba(5,10,20,0.8)",
           backdropFilter: "blur(20px) saturate(180%)",
@@ -274,9 +274,9 @@ export function MobileMenu() {
           <Image
             src="/images/plate-logo.svg"
             alt="VIPАвто 161"
-            width={164}
-            height={44}
-            className="h-9 w-auto"
+            width={189}
+            height={51}
+            className="h-[42px] w-auto"
             priority
           />
         </Link>
