@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
-import { runRevealAnimation } from "@/lib/gsapPresets";
-import type { RevealDirection } from "@/lib/gsapPresets";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@/hooks/useGSAP";
 import { cn } from "@/lib/cn";
-import { useInView } from "@/hooks/useInView";
+import type { RevealDirection } from "@/lib/gsapPresets";
 
 type RevealProps = {
   children: ReactNode;
@@ -14,33 +14,46 @@ type RevealProps = {
 };
 
 export function Reveal({ children, className, direction = "up" }: RevealProps) {
-  const [ref, inView] = useInView({ threshold: 0.28, once: true, rootMargin: "0px 0px -12% 0px" });
+  const gsap = useGSAP();
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const node = ref.current;
-    if (!node || !inView) return;
-    const tween = runRevealAnimation(node, direction);
+    if (!node) return;
+
+    const fromVars =
+      direction === "left"
+        ? { autoAlpha: 0, x: -90, y: 0 }
+        : direction === "right"
+          ? { autoAlpha: 0, x: 90, y: 0 }
+          : { autoAlpha: 0, y: 30, x: 0 };
+
+    gsap.set(node, fromVars);
+
+    const tween = gsap.to(node, {
+      autoAlpha: 1,
+      x: 0,
+      y: 0,
+      duration: 0.9,
+      ease: "power3.out",
+      paused: true,
+    });
+
+    const trigger = ScrollTrigger.create({
+      trigger: node,
+      start: "top 88%",
+      once: true,
+      onEnter: () => tween.play(),
+    });
+
     return () => {
+      trigger.kill();
       tween.kill();
     };
-  }, [direction, inView, ref]);
-
-  const hiddenClass =
-    direction === "left"
-      ? "translate-x-11 opacity-0"
-      : direction === "right"
-        ? "-translate-x-11 opacity-0"
-        : "translate-y-5 opacity-0";
+  }, [direction, gsap]);
 
   return (
-    <div
-      ref={ref}
-      className={cn(
-        "will-change-transform",
-        !inView ? hiddenClass : "translate-x-0 translate-y-0 opacity-100",
-        className,
-      )}
-    >
+    <div ref={ref} className={cn("will-change-transform", className)}>
       {children}
     </div>
   );
