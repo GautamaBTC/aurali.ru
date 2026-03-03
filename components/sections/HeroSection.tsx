@@ -16,11 +16,14 @@ export function HeroSection() {
             <div>
               <p className="text-xs font-medium uppercase tracking-widest text-[var(--text-secondary)]/75">
                 <span className="accent-dot" />
-                Шахты • с 2016 года • рейтинг {siteConfig.rating}
+                Шахты • с 2009 года • рейтинг {siteConfig.rating}
               </p>
               <h1 className="mt-4 max-w-4xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
                 {siteConfig.brand}: {siteConfig.specialization}
               </h1>
+              <p className="mt-3 max-w-2xl text-sm font-light leading-relaxed text-[var(--text-secondary)]/82 sm:text-[15px]">
+                Один из старейших сервисов автоэлектрики в Шахтах.
+              </p>
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base md:text-lg">
                 Премиальный центр автоэлектрики. Диагностика, StarLine, автосвет, кодирование блоков и сложные
                 электрические случаи.

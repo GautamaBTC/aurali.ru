@@ -9,9 +9,9 @@ export const advantages: AdvantageItem[] = [
   },
   {
     id: "experience",
-    title: "Опыт с 2016 года",
+    title: "Опыт с 2009 года",
     description: "Сфокусированы на автоэлектрике и автоэлектронике, а не на всем сразу.",
-    stat: "9 лет практики",
+    stat: "17 лет практики",
   },
   {
     id: "diagnostic",

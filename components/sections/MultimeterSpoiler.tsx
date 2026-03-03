@@ -11,7 +11,7 @@ export function MultimeterSpoiler() {
     "Показать/скрыть демо-стенд диагностики";
 
   return (
-    <section className="section-padding pt-8 md:pt-10">
+    <section id="products" className="section-padding pt-8 md:pt-10">
       <div className="container-shell">
         <div className="card-surface overflow-hidden rounded-2xl">
           <button

@@ -15,6 +15,7 @@ type MenuItem = {
 
 const MENU_ITEMS: readonly MenuItem[] = [
   { id: "services", href: "#services", label: "Услуги" },
+  { id: "products", href: "#products", label: "Товары" },
   { id: "advantages", href: "#advantages", label: "Преимущества" },
   { id: "process", href: "#process", label: "Процесс" },
   { id: "reviews", href: "#reviews", label: "Отзывы" },
@@ -25,6 +26,7 @@ const HEADER_HEIGHT = 72;
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isBurgerVisible, setIsBurgerVisible] = useState(false);
   const [activeId, setActiveId] = useState<string>("services");
   const [glitchId, setGlitchId] = useState<string | null>(null);
   const [phoneGlitch, setPhoneGlitch] = useState(false);
@@ -38,12 +40,32 @@ export function MobileMenu() {
   const lineTopRef = useRef<HTMLSpanElement>(null);
   const lineMidRef = useRef<HTMLSpanElement>(null);
   const lineBotRef = useRef<HTMLSpanElement>(null);
+  const burgerEntryPlayedRef = useRef(false);
 
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const pendingAnchorRef = useRef<string | null>(null);
   const closeTlRef = useRef<gsap.core.Timeline | null>(null);
 
   useLockScroll(isOpen);
+
+  useEffect(() => {
+    let timeoutId: number | undefined;
+
+    const showBurger = () => {
+      timeoutId = window.setTimeout(() => setIsBurgerVisible(true), 3000);
+    };
+
+    if (document.readyState === "complete") {
+      showBurger();
+    } else {
+      window.addEventListener("load", showBurger, { once: true });
+    }
+
+    return () => {
+      if (timeoutId) window.clearTimeout(timeoutId);
+      window.removeEventListener("load", showBurger);
+    };
+  }, []);
 
   const setItemRef = useCallback((index: number, el: HTMLAnchorElement | null) => {
     itemRefs.current[index] = el;
@@ -211,7 +233,7 @@ export function MobileMenu() {
         y: -7.2,
         x: -1.2,
         rotate: -52,
-        width: 34,
+        width: 38,
         background: "#00f0ff",
         boxShadow: "0 0 12px rgba(0,240,255,0.35)",
         duration: 0.5,
@@ -247,13 +269,44 @@ export function MobileMenu() {
       y: 0,
       x: 0,
       rotate: 0,
-      width: 17,
+      width: 19,
       background: "#00f0ff",
       boxShadow: "0 0 8px rgba(0,240,255,0.25)",
       duration: 0.46,
       ease: "back.out(1.35)",
     });
   }, [isOpen]);
+
+  useEffect(() => {
+    const top = lineTopRef.current;
+    const mid = lineMidRef.current;
+    const bot = lineBotRef.current;
+    if (!isBurgerVisible || !top || !mid || !bot || burgerEntryPlayedRef.current) return;
+
+    burgerEntryPlayedRef.current = true;
+    gsap.set([top, mid, bot], { opacity: 0 });
+
+    const entryTl = gsap.timeline();
+    entryTl
+      .fromTo(
+        top,
+        { x: -50, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.55, ease: "back.out(2)" },
+        0,
+      )
+      .fromTo(
+        bot,
+        { x: 50, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.55, ease: "back.out(2)" },
+        0.06,
+      )
+      .fromTo(
+        mid,
+        { y: -30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.62, ease: "back.out(2.2)" },
+        0.12,
+      );
+  }, [isBurgerVisible]);
 
   useEffect(() => {
     const overlay = overlayRef.current;
@@ -368,10 +421,10 @@ export function MobileMenu() {
         aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
         aria-expanded={isOpen}
         aria-controls="mobile-nav-dialog"
-        className="tap-none touch-manipulation fixed left-1/2 top-0 z-[10000] flex h-[72px] w-[72px] -translate-x-1/2 items-center justify-center md:hidden"
+        className={`tap-none touch-manipulation fixed right-5 top-0 z-[10000] flex h-[80px] w-[80px] items-center justify-center transition-opacity duration-300 md:hidden ${isBurgerVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
         style={{ background: "none", border: "none", outline: "none" }}
       >
-        <div className="relative h-[20px] w-[34px]">
+        <div className="relative h-[22px] w-[38px]">
           <span
             ref={lineTopRef}
             className="absolute left-0 top-0 block h-[1.25px] rounded-[2px]"
@@ -385,7 +438,7 @@ export function MobileMenu() {
           />
           <span
             ref={lineMidRef}
-            className="absolute left-0 top-[9px] block h-[1.25px] rounded-[2px]"
+            className="absolute left-0 top-[10px] block h-[1.25px] rounded-[2px]"
             style={{
               width: "72%",
               background: "linear-gradient(90deg, #ccff00 0%, #00f0ff 100%)",
@@ -471,6 +524,10 @@ export function MobileMenu() {
             </nav>
 
             <div ref={footerRef} className="mt-8">
+              <p className="mx-auto mb-4 max-w-[34ch] text-center text-xs leading-relaxed tracking-[0.04em] text-[var(--text-secondary)]/82">
+                Премиальный центр автоэлектрики. Диагностика, StarLine, автосвет, кодирование блоков и сложные
+                электрические случаи.
+              </p>
               <a
                 href={phoneHref}
                 className={`phone-number tap-none block text-center ${phoneGlitch ? "phone-glitch-active" : ""}`}

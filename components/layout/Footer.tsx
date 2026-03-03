@@ -11,7 +11,9 @@ export function Footer() {
           <p>{siteConfig.specialization}</p>
           <p>{siteConfig.address}</p>
           <p>Email: {siteConfig.email}</p>
-          <p>© 2016-{year} VIPAuto · ИП · ОГРНИП {siteConfig.ogrnip}</p>
+          <p>
+            © {siteConfig.founded}-{year} VIPAuto · ИП · ОГРНИП {siteConfig.ogrnip}
+          </p>
         </div>
         <div className="space-y-3 md:space-y-4 md:text-right">
           <p>ОГРНИП: {siteConfig.ogrnip}</p>

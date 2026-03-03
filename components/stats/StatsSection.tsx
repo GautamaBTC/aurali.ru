@@ -17,7 +17,7 @@ export function StatsSection() {
     ...REVEAL_PRESETS.FADE_UP,
     from: { ...REVEAL_PRESETS.FADE_UP.from, y: 120 },
     duration: 0.8,
-    threshold: 0.15,
+    threshold: 0.3,
   });
 
   useStaggerReveal(sectionRef, {

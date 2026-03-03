@@ -154,6 +154,49 @@ select:focus-visible {
   box-shadow: 0 0 22px var(--accent-glow);
 }
 
+.typewriter-container {
+  position: relative;
+  display: inline-block;
+  vertical-align: bottom;
+  width: min(100%, calc(var(--typewriter-ch, 28) * 1ch));
+  min-height: 1.5em;
+  max-width: 100%;
+}
+
+.typewriter-sizer {
+  visibility: hidden;
+  white-space: nowrap;
+  padding-right: 0.2em;
+}
+
+.typewriter-text {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 0;
+  margin-left: 2px;
+  border-right: 2px solid var(--accent);
+  animation: typewriter-cursor-blink 0.9s step-end infinite;
+}
+
+@keyframes typewriter-cursor-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
 .glass-card {
   position: relative;
   overflow: hidden;

@@ -12,10 +12,15 @@ export function TypeWriter({ words }: TypeWriterProps) {
   const [wordIndex, setWordIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [deleting, setDeleting] = useState(false);
+  const longestWord = words.reduce((max, word) => (word.length > max.length ? word : max), words[0] ?? "");
+  const maxChars = Math.max(longestWord.length, 28);
 
   useEffect(() => {
     if (reduced) return;
     const word = words[wordIndex] ?? "";
+    const delay =
+      !deleting && charIndex === word.length ? 950 : deleting && charIndex === 0 ? 380 : deleting ? 38 : 72;
+
     const timeout = setTimeout(
       () => {
         if (!deleting && charIndex < word.length) {
@@ -35,7 +40,7 @@ export function TypeWriter({ words }: TypeWriterProps) {
           setWordIndex((prev) => (prev + 1) % words.length);
         }
       },
-      deleting ? 40 : 70,
+      delay,
     );
 
     return () => clearTimeout(timeout);
@@ -43,5 +48,15 @@ export function TypeWriter({ words }: TypeWriterProps) {
 
   const current = reduced ? words[0] ?? "" : (words[wordIndex] ?? "").slice(0, charIndex);
 
-  return <span className="font-mono text-[var(--accent-2)]">{current}</span>;
+  return (
+    <span className="typewriter-container font-mono text-[var(--accent-2)]" style={{ ["--typewriter-ch" as string]: String(maxChars) }}>
+      <span className="typewriter-sizer" aria-hidden>
+        {longestWord}
+      </span>
+      <span className="typewriter-text">
+        {current}
+        <span className="typewriter-cursor" aria-hidden />
+      </span>
+    </span>
+  );
 }

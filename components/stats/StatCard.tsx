@@ -61,7 +61,8 @@ export function StatCard({
   const { ref: valueRef, start, stop, setImmediate } = useCountUp({
     target,
     decimals,
-    duration: 2,
+    duration: 2.8,
+    ease: "power2.out",
   });
 
   const a = accentMap[accent];
@@ -108,7 +109,7 @@ export function StatCard({
     start();
     const timeoutId = window.setTimeout(() => {
       valueRef.current?.classList.remove("shimmer-text");
-    }, 2100);
+    }, 3000);
 
     return () => {
       window.clearTimeout(timeoutId);
