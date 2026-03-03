@@ -37,7 +37,6 @@ export function MobileMenu() {
   const lineBotRef = useRef<HTMLSpanElement>(null);
 
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
-  const dividerRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const pendingAnchorRef = useRef<string | null>(null);
   const closeTlRef = useRef<gsap.core.Timeline | null>(null);
 
@@ -46,10 +45,6 @@ export function MobileMenu() {
   const setItemRef = useCallback((index: number, el: HTMLAnchorElement | null) => {
     itemRefs.current[index] = el;
     if (index === 0) firstItemRef.current = el;
-  }, []);
-
-  const setDividerRef = useCallback((index: number, el: HTMLSpanElement | null) => {
-    dividerRefs.current[index] = el;
   }, []);
 
   const runPendingScroll = useCallback(() => {
@@ -154,7 +149,6 @@ export function MobileMenu() {
         y: -7.5,
         rotate: -45,
         width: 28,
-        marginLeft: 0,
         background: "#00f0ff",
         boxShadow: "0 0 14px rgba(0,240,255,0.5)",
         duration: 0.38,
@@ -180,7 +174,6 @@ export function MobileMenu() {
       y: 0,
       rotate: 0,
       width: 14,
-      marginLeft: 14,
       background: "linear-gradient(90deg, #ccff00, #00f0ff)",
       boxShadow: "0 0 8px rgba(0,240,255,0.2)",
       duration: 0.36,
@@ -193,12 +186,11 @@ export function MobileMenu() {
     const panel = panelRef.current;
     const footer = footerRef.current;
     const items = itemRefs.current.filter(Boolean) as HTMLAnchorElement[];
-    const dividers = dividerRefs.current.filter(Boolean) as HTMLSpanElement[];
 
     if (!overlay || !panel || !footer || !items.length) return;
 
     closeTlRef.current?.kill();
-    gsap.killTweensOf([overlay, panel, footer, ...items, ...dividers]);
+    gsap.killTweensOf([overlay, panel, footer, ...items]);
 
     if (isOpen) {
       gsap.set(overlay, {
@@ -212,7 +204,6 @@ export function MobileMenu() {
         x: (index: number) => (index % 2 === 0 ? -140 : 140),
         autoAlpha: 0,
       });
-      gsap.set(dividers, { scaleX: 0, transformOrigin: "left center" });
       gsap.set(footer, { autoAlpha: 0, y: 24 });
 
       gsap
@@ -228,16 +219,6 @@ export function MobileMenu() {
             ease: "power3.out",
           },
           0.18,
-        )
-        .to(
-          dividers,
-          {
-            scaleX: 1,
-            duration: 0.35,
-            stagger: 0.1,
-            ease: "power2.out",
-          },
-          0.3,
         )
         .to(footer, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power3.out" }, 0.42);
 
@@ -265,16 +246,6 @@ export function MobileMenu() {
           autoAlpha: 0,
           duration: 0.2,
           stagger: { each: 0.04, from: "end" },
-          ease: "power2.in",
-        },
-        0,
-      )
-      .to(
-        dividers,
-        {
-          scaleX: 0,
-          duration: 0.15,
-          stagger: { each: 0.03, from: "end" },
           ease: "power2.in",
         },
         0,
@@ -322,7 +293,7 @@ export function MobileMenu() {
         <div className="relative h-[18px] w-[28px]">
           <span
             ref={lineTopRef}
-            className="absolute left-0 top-0 block h-[2.5px] rounded-full"
+            className="absolute right-0 top-0 block h-[2.5px] rounded-full"
             style={{
               width: "100%",
               background: "#ccff00",
@@ -332,12 +303,11 @@ export function MobileMenu() {
           />
           <span
             ref={lineMidRef}
-            className="absolute left-0 top-[7.5px] block h-[2.5px] rounded-full"
+            className="absolute right-0 top-[7.5px] block h-[2.5px] rounded-full"
             style={{
               width: "70%",
-              marginLeft: "auto",
-              background: "#00f0ff",
-              boxShadow: "0 0 8px rgba(0,240,255,0.25)",
+              background: "#e0e6ed",
+              boxShadow: "0 0 8px rgba(224,230,237,0.25)",
               opacity: 1,
               transform: "scaleX(1)",
               transformOrigin: "right center",
@@ -345,12 +315,11 @@ export function MobileMenu() {
           />
           <span
             ref={lineBotRef}
-            className="absolute bottom-0 left-0 block h-[2.5px] rounded-full"
+            className="absolute bottom-0 right-0 block h-[2.5px] rounded-full"
             style={{
               width: "50%",
-              marginLeft: "auto",
-              background: "linear-gradient(90deg, #ccff00, #00f0ff)",
-              boxShadow: "0 0 8px rgba(0,240,255,0.2)",
+              background: "#00f0ff",
+              boxShadow: "0 0 8px rgba(0,240,255,0.25)",
               transform: "translateY(0) rotate(0)",
             }}
           />
@@ -372,7 +341,7 @@ export function MobileMenu() {
           <div className="flex min-h-dvh flex-col justify-between px-6 pb-10 pt-28">
             <nav className="flex flex-1 items-center justify-center">
               <ul className="w-full max-w-md">
-                {MENU_ITEMS.map((item, index) => {
+                {MENU_ITEMS.map((item) => {
                   const isActive = activeId === item.id;
                   return (
                     <li key={item.id}>
@@ -408,16 +377,6 @@ export function MobileMenu() {
                           </span>
                         </span>
                       </a>
-                      {index < MENU_ITEMS.length - 1 ? (
-                        <span
-                          ref={(el) => setDividerRef(index, el)}
-                          className="block h-px w-full"
-                          style={{
-                            background:
-                              "linear-gradient(90deg, transparent, rgba(34,50,76,0.4) 20%, rgba(34,50,76,0.4) 80%, transparent)",
-                          }}
-                        />
-                      ) : null}
                     </li>
                   );
                 })}
