@@ -1,12 +1,10 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { gsap } from "gsap";
-import { MessageCircle, Send } from "lucide-react";
 import { siteConfig } from "@/lib/siteConfig";
-import { cn } from "@/lib/cn";
 import { useLockScroll } from "@/hooks/useLockScroll";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -36,11 +34,9 @@ export function MobileMenu() {
   const footerRef = useRef<HTMLDivElement>(null);
   const burgerRef = useRef<HTMLButtonElement>(null);
   const firstItemRef = useRef<HTMLAnchorElement | null>(null);
-  const lineTopRef = useRef<HTMLSpanElement>(null);
-  const lineMidRef = useRef<HTMLSpanElement>(null);
-  const lineBotRef = useRef<HTMLSpanElement>(null);
 
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const dividerRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const pendingAnchorRef = useRef<string | null>(null);
   const closeTlRef = useRef<gsap.core.Timeline | null>(null);
 
@@ -51,6 +47,10 @@ export function MobileMenu() {
     if (index === 0) firstItemRef.current = el;
   }, []);
 
+  const setDividerRef = useCallback((index: number, el: HTMLSpanElement | null) => {
+    dividerRefs.current[index] = el;
+  }, []);
+
   const runPendingScroll = useCallback(() => {
     const pending = pendingAnchorRef.current;
     if (!pending) return;
@@ -59,7 +59,9 @@ export function MobileMenu() {
     const id = pending.replace("#", "");
     const node = document.getElementById(id);
     if (!node) return;
-    node.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    const y = node.getBoundingClientRect().top + window.scrollY - HEADER_HEIGHT;
+    window.scrollTo({ top: y, behavior: "smooth" });
   }, []);
 
   const closeMenu = useCallback((href?: string) => {
@@ -67,14 +69,11 @@ export function MobileMenu() {
     setIsOpen(false);
   }, []);
 
-  const openMenu = useCallback(() => {
-    setIsOpen(true);
-  }, []);
+  const openMenu = useCallback(() => setIsOpen(true), []);
 
   const trapFocus = useCallback(
     (event: KeyboardEvent) => {
       if (event.key !== "Tab" || !isOpen || !panelRef.current) return;
-
       const focusable = panelRef.current.querySelectorAll<HTMLElement>(
         'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
       );
@@ -107,10 +106,7 @@ export function MobileMenu() {
 
         if (visible?.target?.id) setActiveId(visible.target.id);
       },
-      {
-        rootMargin: "-45% 0px -45% 0px",
-        threshold: [0.2, 0.4, 0.7],
-      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: [0.2, 0.4, 0.7] },
     );
 
     sections.forEach((section) => observer.observe(section));
@@ -136,64 +132,87 @@ export function MobileMenu() {
     const panel = panelRef.current;
     const footer = footerRef.current;
     const items = itemRefs.current.filter(Boolean) as HTMLAnchorElement[];
+    const dividers = dividerRefs.current.filter(Boolean) as HTMLSpanElement[];
+
     if (!overlay || !panel || !footer || !items.length) return;
 
     closeTlRef.current?.kill();
-    gsap.killTweensOf([overlay, panel, footer, ...items]);
+    gsap.killTweensOf([overlay, panel, footer, ...items, ...dividers]);
 
     if (isOpen) {
-      gsap.set(overlay, { autoAlpha: 1, visibility: "visible", pointerEvents: "auto" });
+      gsap.set(overlay, {
+        autoAlpha: 1,
+        visibility: "visible",
+        pointerEvents: "auto",
+      });
 
       if (reduced) {
         gsap.set(panel, { y: 0, autoAlpha: 0 });
         gsap.set(items, { x: 0, autoAlpha: 0 });
+        gsap.set(dividers, { scaleX: 0 });
         gsap.set(footer, { autoAlpha: 0, y: 0 });
 
         gsap
           .timeline()
           .to(panel, { autoAlpha: 1, duration: 0.18, ease: "power2.out" }, 0)
           .to(items, { autoAlpha: 1, duration: 0.14, stagger: 0, ease: "power2.out" }, 0.04)
+          .to(dividers, { scaleX: 1, duration: 0.14, ease: "power2.out" }, 0.04)
           .to(footer, { autoAlpha: 1, duration: 0.14, ease: "power2.out" }, 0.08);
       } else {
         gsap.set(panel, { yPercent: -100, autoAlpha: 1 });
         gsap.set(items, {
-          x: (index: number) => (index % 2 === 0 ? -80 : 80),
+          x: (index: number) => (index % 2 === 0 ? -100 : 100),
           autoAlpha: 0,
         });
-        gsap.set(footer, { autoAlpha: 0, y: 18 });
+        gsap.set(dividers, { scaleX: 0, transformOrigin: "left center" });
+        gsap.set(footer, { autoAlpha: 0, y: 24 });
 
         gsap
           .timeline()
-          .to(panel, { yPercent: 0, duration: 0.5, ease: "power3.out" }, 0)
+          .to(panel, { yPercent: 0, duration: 0.55, ease: "power4.out" }, 0)
           .to(
             items,
             {
               x: 0,
               autoAlpha: 1,
-              duration: 0.36,
+              duration: 0.45,
               stagger: 0.1,
               ease: "power3.out",
             },
-            0.15,
+            0.18,
           )
-          .to(footer, { autoAlpha: 1, y: 0, duration: 0.24, ease: "power3.out" }, 0.34);
+          .to(
+            dividers,
+            {
+              scaleX: 1,
+              duration: 0.35,
+              stagger: 0.1,
+              ease: "power2.out",
+            },
+            0.28,
+          )
+          .to(footer, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power3.out" }, 0.4);
       }
 
-      window.setTimeout(() => firstItemRef.current?.focus(), reduced ? 70 : 180);
+      window.setTimeout(() => firstItemRef.current?.focus(), reduced ? 70 : 200);
       return;
     }
 
     if (reduced) {
       const closeTl = gsap.timeline({
         onComplete: () => {
-          gsap.set(overlay, { autoAlpha: 0, visibility: "hidden", pointerEvents: "none" });
+          gsap.set(overlay, {
+            autoAlpha: 0,
+            visibility: "hidden",
+            pointerEvents: "none",
+          });
           burgerRef.current?.focus();
           runPendingScroll();
         },
       });
 
       closeTl
-        .to([items, footer], { autoAlpha: 0, duration: 0.12, ease: "power2.in" }, 0)
+        .to([...items, ...dividers, footer], { autoAlpha: 0, duration: 0.12, ease: "power2.in" }, 0)
         .to(panel, { autoAlpha: 0, duration: 0.14, ease: "power2.in" }, 0.02);
 
       closeTlRef.current = closeTl;
@@ -202,7 +221,11 @@ export function MobileMenu() {
 
     const closeTl = gsap.timeline({
       onComplete: () => {
-        gsap.set(overlay, { autoAlpha: 0, visibility: "hidden", pointerEvents: "none" });
+        gsap.set(overlay, {
+          autoAlpha: 0,
+          visibility: "hidden",
+          pointerEvents: "none",
+        });
         burgerRef.current?.focus();
         runPendingScroll();
       },
@@ -212,16 +235,26 @@ export function MobileMenu() {
       .to(
         items,
         {
-          x: (index: number) => (index % 2 === 0 ? -64 : 64),
+          x: (index: number) => (index % 2 === 0 ? -80 : 80),
           autoAlpha: 0,
-          duration: 0.18,
-          stagger: { each: 0.05, from: "end" },
+          duration: 0.2,
+          stagger: { each: 0.04, from: "end" },
           ease: "power2.in",
         },
         0,
       )
-      .to(footer, { autoAlpha: 0, y: 14, duration: 0.14, ease: "power2.in" }, 0)
-      .to(panel, { yPercent: -100, duration: 0.3, ease: "power3.in" }, 0.1);
+      .to(
+        dividers,
+        {
+          scaleX: 0,
+          duration: 0.15,
+          stagger: { each: 0.03, from: "end" },
+          ease: "power2.in",
+        },
+        0,
+      )
+      .to(footer, { autoAlpha: 0, y: 16, duration: 0.15, ease: "power2.in" }, 0)
+      .to(panel, { yPercent: -100, duration: 0.35, ease: "power3.in" }, 0.12);
 
     closeTlRef.current = closeTl;
   }, [isOpen, reduced, runPendingScroll]);
@@ -230,9 +263,23 @@ export function MobileMenu() {
 
   return (
     <>
-      <header className="fixed left-0 right-0 top-0 z-[1200] flex h-20 items-center bg-[rgba(5,10,20,0.75)] px-5 backdrop-blur-[20px] backdrop-saturate-[180%] md:hidden">
+      <header
+        className="fixed left-0 right-0 top-0 z-[1200] flex h-20 items-center justify-between px-5 md:hidden"
+        style={{
+          background: "rgba(5,10,20,0.8)",
+          backdropFilter: "blur(20px) saturate(180%)",
+          WebkitBackdropFilter: "blur(20px) saturate(180%)",
+        }}
+      >
         <Link href="/" className="relative z-[1201] select-none" aria-label="VIPAuto161 Главная">
-          <Image src="/images/plate-logo.svg" alt="VIPАвто 161" width={164} height={44} className="h-9 w-auto" priority />
+          <Image
+            src="/images/plate-logo.svg"
+            alt="VIPАвто 161"
+            width={164}
+            height={44}
+            className="h-9 w-auto"
+            priority
+          />
         </Link>
       </header>
 
@@ -240,55 +287,51 @@ export function MobileMenu() {
         ref={burgerRef}
         type="button"
         onClick={isOpen ? () => closeMenu() : openMenu}
-        aria-label={isOpen ? "Закрыть мобильное меню" : "Открыть мобильное меню"}
+        aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
         aria-expanded={isOpen}
         aria-controls="mobile-nav-dialog"
-        className="fixed right-5 top-4 z-[9999] flex h-12 w-12 items-center justify-center rounded-xl md:hidden"
+        className="tap-none touch-manipulation fixed right-5 top-5 z-[10000] flex h-11 w-11 items-center justify-center md:hidden"
+        style={{ background: "none", border: "none", outline: "none" }}
       >
-        <span className="relative flex h-5 w-8 flex-col justify-between">
+        <div className="relative h-[18px] w-[28px]">
           <span
-            ref={lineTopRef}
-            className={cn(
-              "block h-0.5 rounded-full transition-all duration-[400ms]",
-              isOpen ? "translate-y-[7px] rotate-[44deg]" : "translate-y-0 rotate-0",
-            )}
+            className="absolute left-0 top-0 block h-[2.5px] rounded-full"
             style={{
-              width: isOpen ? "108%" : "100%",
+              width: "100%",
               background: "#ccff00",
-              boxShadow: "0 0 12px rgba(204,255,0,0.35)",
+              boxShadow: isOpen ? "0 0 14px rgba(204,255,0,0.5)" : "0 0 8px rgba(204,255,0,0.25)",
+              transform: isOpen ? "translateY(7.5px) rotate(45deg)" : "translateY(0) rotate(0)",
+              transition: "transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease",
             }}
           />
           <span
-            ref={lineMidRef}
-            className={cn(
-              "ml-auto block h-0.5 rounded-full transition-all duration-[400ms]",
-              isOpen ? "-translate-y-[3px] -rotate-[56deg]" : "translate-y-0 rotate-0",
-            )}
+            className="absolute left-0 top-[7.5px] block h-[2.5px] rounded-full"
             style={{
-              width: isOpen ? "86%" : "72%",
+              width: "70%",
+              marginLeft: "auto",
               background: "#00f0ff",
-              boxShadow: "0 0 12px rgba(0,240,255,0.35)",
+              boxShadow: "0 0 8px rgba(0,240,255,0.25)",
+              opacity: isOpen ? 0 : 1,
+              transform: isOpen ? "scaleX(0)" : "scaleX(1)",
+              transition: "opacity 0.25s ease, transform 0.3s cubic-bezier(0.23,1,0.32,1)",
             }}
           />
           <span
-            ref={lineBotRef}
-            className={cn(
-              "ml-auto block h-0.5 rounded-full transition-all duration-[400ms]",
-              isOpen ? "translate-x-2 scale-x-0 opacity-0" : "translate-x-0 scale-x-100 opacity-100",
-            )}
+            className="absolute bottom-0 left-0 block h-[2.5px] rounded-full"
             style={{
-              width: "54%",
-              background: "linear-gradient(90deg, #ccff00, #00f0ff)",
+              width: isOpen ? "100%" : "50%",
+              marginLeft: isOpen ? "0" : "auto",
+              background: isOpen ? "#00f0ff" : "linear-gradient(90deg, #ccff00, #00f0ff)",
+              boxShadow: isOpen ? "0 0 14px rgba(0,240,255,0.5)" : "0 0 8px rgba(0,240,255,0.2)",
+              transform: isOpen ? "translateY(-7.5px) rotate(-45deg)" : "translateY(0) rotate(0)",
+              transition:
+                "transform 0.4s cubic-bezier(0.23,1,0.32,1), width 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, margin-left 0.3s ease",
             }}
           />
-        </span>
+        </div>
       </button>
 
-      <div
-        ref={overlayRef}
-        className="pointer-events-none invisible fixed inset-0 z-[9999] md:hidden"
-        aria-hidden={!isOpen}
-      >
+      <div ref={overlayRef} className="pointer-events-none invisible fixed inset-0 z-[9999] md:hidden" aria-hidden={!isOpen}>
         <div
           id="mobile-nav-dialog"
           ref={panelRef}
@@ -300,13 +343,13 @@ export function MobileMenu() {
             if (event.target === event.currentTarget) closeMenu();
           }}
         >
-          <div className="container-shell flex min-h-dvh flex-col pb-8 pt-[112px]">
-            <div className="flex flex-1 items-center">
-              <ul className="w-full space-y-8">
+          <div className="flex min-h-dvh flex-col justify-between px-6 pb-10 pt-28">
+            <nav className="flex flex-1 items-center">
+              <ul className="w-full">
                 {MENU_ITEMS.map((item, index) => {
                   const isActive = activeId === item.id;
                   return (
-                    <li key={item.id} className="relative pb-6">
+                    <li key={item.id}>
                       <a
                         ref={(el) => setItemRef(index, el)}
                         href={item.href}
@@ -314,52 +357,138 @@ export function MobileMenu() {
                           event.preventDefault();
                           closeMenu(item.href);
                         }}
-                        className="group flex items-baseline gap-4"
+                        className="tap-none touch-manipulation group flex items-baseline gap-5 py-5"
                       >
-                        <span className="font-[var(--font-jetbrains-mono)] text-xs tracking-[0.18em] text-[#00f0ff]">
+                        <span
+                          className="select-none tabular-nums"
+                          style={{
+                            fontFamily: "var(--font-jetbrains-mono), monospace",
+                            fontSize: "0.7rem",
+                            letterSpacing: "0.2em",
+                            color: isActive ? "#ccff00" : "#00f0ff",
+                            opacity: isActive ? 1 : 0.5,
+                            transition: "color 0.3s, opacity 0.3s",
+                          }}
+                        >
                           {String(index + 1).padStart(2, "0")}
                         </span>
                         <span
-                          className={cn("font-bold text-[#e0e6ed]", isActive ? "text-[#ccff00]" : "")}
                           style={{
-                            fontSize: "clamp(2rem, 8vw, 3.5rem)",
-                            lineHeight: 1,
-                            textShadow: isActive ? "0 0 16px rgba(204,255,0,0.18)" : "none",
+                            fontSize: "clamp(1.8rem, 7.5vw, 3.2rem)",
+                            fontWeight: 700,
+                            lineHeight: 1.1,
+                            letterSpacing: "-0.02em",
+                            color: isActive ? "#ccff00" : "#e0e6ed",
+                            textShadow: isActive ? "0 0 20px rgba(204,255,0,0.2)" : "none",
+                            transition: "color 0.3s, text-shadow 0.3s",
                           }}
                         >
-                          <span className="bg-gradient-to-r from-[#e0e6ed] to-[#e0e6ed] bg-clip-text text-transparent transition-all duration-200 group-hover:from-[#ccff00] group-hover:to-[#00f0ff]">
+                          <span
+                            className="inline-block bg-clip-text"
+                            style={{
+                              backgroundImage: isActive ? "linear-gradient(90deg, #ccff00, #00f0ff)" : "none",
+                              WebkitBackgroundClip: isActive ? "text" : "unset",
+                              WebkitTextFillColor: isActive ? "transparent" : "inherit",
+                              transition: "all 0.3s ease",
+                            }}
+                          >
                             {item.label}
                           </span>
                         </span>
                       </a>
-                      <span className="absolute bottom-0 left-0 right-0 h-px bg-[#22324c] opacity-30" />
+                      {index < MENU_ITEMS.length - 1 ? (
+                        <span
+                          ref={(el) => setDividerRef(index, el)}
+                          className="block h-px w-full"
+                          style={{
+                            background:
+                              "linear-gradient(90deg, transparent, rgba(34,50,76,0.4) 20%, rgba(34,50,76,0.4) 80%, transparent)",
+                          }}
+                        />
+                      ) : null}
                     </li>
                   );
                 })}
               </ul>
-            </div>
+            </nav>
 
-            <div ref={footerRef} className="pt-6">
-              <p className="font-[var(--font-jetbrains-mono)] text-xs tracking-[0.14em] text-[#9fadbc]">
-                +7 (928) 197-77-00
-              </p>
-              <div className="mt-3 flex items-center gap-2">
+            <div ref={footerRef} className="mt-8">
+              <a
+                href={phoneHref}
+                className="tap-none inline-block"
+                style={{
+                  fontFamily: "var(--font-jetbrains-mono), monospace",
+                  fontSize: "0.8rem",
+                  letterSpacing: "0.12em",
+                  color: "#9fadbc",
+                  transition: "color 0.2s",
+                }}
+              >
+                {siteConfig.phones[0]}
+              </a>
+
+              <div className="mt-4 flex items-center gap-3">
                 <a
                   href={siteConfig.social.whatsapp}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[#ccff00] text-[#050a14]"
                   aria-label="WhatsApp"
+                  className="tap-none touch-manipulation flex h-10 items-center gap-2 rounded-full border border-[#ccff0026] bg-[#ccff0014] px-4 transition-all duration-300 hover:border-[#ccff0059] hover:bg-[#ccff0026] hover:shadow-[0_0_20px_rgba(204,255,0,0.15)]"
                 >
-                  <MessageCircle className="h-4 w-4" />
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#ccff00"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden
+                  >
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                  </svg>
+                  <span className="text-[0.72rem] font-semibold tracking-[0.06em] text-[#ccff00]">WhatsApp</span>
                 </a>
+
                 <a
                   href={siteConfig.social.telegram}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[#ccff00] text-[#050a14]"
                   aria-label="Telegram"
+                  className="tap-none touch-manipulation flex h-10 items-center gap-2 rounded-full border border-[#00f0ff26] bg-[#00f0ff0f] px-4 transition-all duration-300 hover:border-[#00f0ff59] hover:bg-[#00f0ff1f] hover:shadow-[0_0_20px_rgba(0,240,255,0.15)]"
                 >
-                  <Send className="h-4 w-4" />
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#00f0ff"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden
+                  >
+                    <line x1="22" y1="2" x2="11" y2="13" />
+                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                  </svg>
+                  <span className="text-[0.72rem] font-semibold tracking-[0.06em] text-[#00f0ff]">Telegram</span>
                 </a>
-                <a href={phoneHref} className="ml-1 text-sm text-[#9fadbc]">
-                  Позвонить
+
+                <a
+                  href={phoneHref}
+                  className="tap-none touch-manipulation ml-1 flex h-10 items-center gap-1.5 rounded-full border border-[#e0e6ed14] bg-[#e0e6ed0a] px-4 transition-all duration-300 hover:border-[#e0e6ed26] hover:bg-[#e0e6ed14]"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#9fadbc"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden
+                  >
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                  <span className="text-[0.72rem] font-medium text-[#9fadbc]">Позвонить</span>
                 </a>
               </div>
             </div>
