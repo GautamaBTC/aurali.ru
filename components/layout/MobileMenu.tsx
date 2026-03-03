@@ -133,53 +133,68 @@ export function MobileMenu() {
 
     if (isOpen) {
       gsap.to(top, {
-        y: 7.5,
-        rotate: 45,
+        y: 7.2,
+        x: 1.2,
+        rotate: 43,
         background: "#e0e6ed",
         boxShadow: "0 0 10px rgba(224,230,237,0.35)",
-        duration: 0.38,
-        ease: "power3.out",
+        duration: 0.5,
+        ease: "back.out(1.4)",
       });
       gsap.to(mid, {
+        x: -34,
+        y: -1.5,
+        rotate: -14,
         opacity: 0,
-        scaleX: 0,
-        duration: 0.25,
-        ease: "power2.out",
+        scaleX: 0.15,
+        duration: 0.36,
+        ease: "power2.in",
       });
       gsap.to(bot, {
-        y: -7.5,
-        rotate: -45,
+        y: -7.2,
+        x: -1.2,
+        rotate: -47,
         width: 28,
         background: "#e0e6ed",
         boxShadow: "0 0 10px rgba(224,230,237,0.35)",
-        duration: 0.38,
-        ease: "power3.out",
+        duration: 0.5,
+        ease: "back.out(1.4)",
       });
       return;
     }
 
     gsap.to(top, {
       y: 0,
+      x: 0,
       rotate: 0,
       background: "#ccff00",
       boxShadow: "0 0 8px rgba(204,255,0,0.25)",
-      duration: 0.36,
-      ease: "power3.out",
+      duration: 0.46,
+      ease: "back.out(1.35)",
     });
-    gsap.to(mid, {
-      opacity: 1,
-      scaleX: 1,
-      duration: 0.25,
-      ease: "power2.out",
-    });
+    gsap.fromTo(
+      mid,
+      { x: 16, y: 0, rotate: 0, opacity: 0, scaleX: 0.45 },
+      {
+        x: 0,
+        y: 0,
+        rotate: 0,
+        opacity: 1,
+        scaleX: 1,
+        duration: 0.44,
+        delay: 0.06,
+        ease: "back.out(1.35)",
+      },
+    );
     gsap.to(bot, {
       y: 0,
+      x: 0,
       rotate: 0,
       width: 14,
       background: "#00f0ff",
       boxShadow: "0 0 8px rgba(0,240,255,0.25)",
-      duration: 0.36,
-      ease: "power3.out",
+      duration: 0.46,
+      ease: "back.out(1.35)",
     });
   }, [isOpen]);
 
@@ -201,28 +216,42 @@ export function MobileMenu() {
         pointerEvents: "auto",
       });
 
-      gsap.set(panel, { yPercent: -100, autoAlpha: 1 });
+      gsap.set(panel, { y: 36, scale: 0.985, autoAlpha: 0 });
       gsap.set(items, {
-        x: (index: number) => (index % 2 === 0 ? -140 : 140),
+        y: 46,
         autoAlpha: 0,
       });
       gsap.set(footer, { autoAlpha: 0, y: 24 });
 
       gsap
         .timeline()
-        .to(panel, { yPercent: 0, duration: 0.55, ease: "power4.out" }, 0)
+        .to(
+          panel,
+          {
+            y: 0,
+            scale: 1,
+            autoAlpha: 1,
+            duration: 0.62,
+            ease: "back.out(1.45)",
+          },
+          0,
+        )
         .to(
           items,
           {
-            x: 0,
+            y: 0,
             autoAlpha: 1,
             duration: 0.48,
-            stagger: 0.1,
-            ease: "power3.out",
+            stagger: 0.08,
+            ease: "back.out(1.45)",
           },
-          0.18,
+          0.1,
         )
-        .to(footer, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power3.out" }, 0.42);
+        .to(
+          footer,
+          { autoAlpha: 1, y: 0, duration: 0.36, ease: "back.out(1.35)" },
+          0.28,
+        );
 
       window.setTimeout(() => firstItemRef.current?.focus(), 200);
       return;
@@ -244,16 +273,16 @@ export function MobileMenu() {
       .to(
         items,
         {
-          x: (index: number) => (index % 2 === 0 ? -80 : 80),
+          y: 22,
           autoAlpha: 0,
           duration: 0.2,
           stagger: { each: 0.04, from: "end" },
-          ease: "power2.in",
+          ease: "power2.inOut",
         },
         0,
       )
       .to(footer, { autoAlpha: 0, y: 16, duration: 0.15, ease: "power2.in" }, 0)
-      .to(panel, { yPercent: -100, duration: 0.35, ease: "power3.in" }, 0.12);
+      .to(panel, { y: 26, autoAlpha: 0, scale: 0.985, duration: 0.34, ease: "power3.in" }, 0.06);
 
     closeTlRef.current = closeTl;
   }, [isOpen, runPendingScroll]);
@@ -337,12 +366,26 @@ export function MobileMenu() {
           role="dialog"
           aria-modal="true"
           aria-label="Мобильная навигация"
-          className="absolute inset-0 overflow-y-auto bg-[#050a14]"
+          className="absolute inset-0 overflow-y-auto"
           onClick={(event) => {
             if (event.target === event.currentTarget) closeMenu();
           }}
         >
-          <div className="flex min-h-dvh flex-col justify-between px-6 pb-10 pt-28">
+          <div className="pointer-events-none absolute inset-0">
+            <video
+              className="h-full w-full object-cover object-center"
+              src="/uploads/videos/hader.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,12,18,0.74)_0%,rgba(8,12,18,0.58)_40%,rgba(8,12,18,0.74)_100%)] backdrop-blur-[15px]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(0,240,255,0.12),transparent_40%),radial-gradient(circle_at_86%_90%,rgba(204,255,0,0.12),transparent_44%)]" />
+          </div>
+
+          <div className="relative z-10 flex min-h-dvh flex-col justify-between px-6 pb-10 pt-28">
             <nav className="flex flex-1 items-center justify-center">
               <ul className="w-full max-w-md">
                 {MENU_ITEMS.map((item, index) => {
