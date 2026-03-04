@@ -18,8 +18,10 @@ html {
   color-scheme: dark;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: auto;
-  overflow-x: clip;
-  touch-action: pan-y;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-x: none;
+  touch-action: auto;
 }
 
 .boot-ui {
@@ -38,13 +40,8 @@ html:not(.ui-ready) .boot-ui {
   filter: blur(5px);
 }
 
-html.menu-locked {
-  overflow: hidden;
-  touch-action: none;
-}
-
 body {
-  min-height: 100dvh;
+  min-height: 100svh;
   background:
     radial-gradient(circle at 18% 16%, rgba(0, 240, 255, 0.06) 0%, transparent 40%),
     radial-gradient(circle at 82% 0%, rgba(204, 255, 0, 0.05) 0%, transparent 34%),
@@ -52,9 +49,9 @@ body {
   color: var(--text-primary);
   font-family: var(--font-manrope), sans-serif;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: visible;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
+  touch-action: auto;
 }
 
 * {

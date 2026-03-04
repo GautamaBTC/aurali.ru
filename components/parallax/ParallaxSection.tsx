@@ -4,6 +4,7 @@ import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/cn";
+import { getIsMobile } from "@/hooks/useIsMobile";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,6 +45,8 @@ export function ParallaxSection({
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+    if (getIsMobile()) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const mm = gsap.matchMedia();
     const tweens: gsap.core.Tween[] = [];
@@ -51,12 +54,11 @@ export function ParallaxSection({
     mm.add(
       {
         isDesktop: "(min-width: 768px)",
-        isMobile: "(max-width: 767px)",
         reduceMotion: "(prefers-reduced-motion: reduce)",
       },
       (context) => {
-        const conditions = context.conditions as { isMobile: boolean; reduceMotion: boolean };
-        const speedMultiplier = conditions.reduceMotion ? 0 : conditions.isMobile ? 0.5 : 1;
+        const conditions = context.conditions as { reduceMotion: boolean };
+        const speedMultiplier = conditions.reduceMotion ? 0 : 1;
 
         layers.forEach((layer, i) => {
           const el = layerRefs.current[i];

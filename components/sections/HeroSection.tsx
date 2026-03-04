@@ -6,7 +6,8 @@ export function HeroSection() {
   return (
     <section
       id="top"
-      className="overflow-visible py-8 min-h-[90dvh] h-auto flex items-center md:py-16 md:min-h-[80vh]"
+      className="relative overflow-visible py-8 min-h-[100svh] h-auto flex items-center md:py-16 md:min-h-[80vh]"
+      style={{ touchAction: "auto" }}
     >
       <div className="container-shell">
         <div className="card-surface relative overflow-hidden bg-[rgba(5,10,20,0.62)] p-6 md:p-8">

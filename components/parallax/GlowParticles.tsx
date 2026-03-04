@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { getIsMobile } from "@/hooks/useIsMobile";
 
 type Particle = {
   x: number;
@@ -13,23 +14,21 @@ type Particle = {
   hue: number;
 };
 
-const PARTICLE_COUNT_DESKTOP = 45;
-const PARTICLE_COUNT_MOBILE = 15;
+const PARTICLE_COUNT_DESKTOP = 40;
 
 export function GlowParticles() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
+    if (getIsMobile()) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const count = isMobile ? PARTICLE_COUNT_MOBILE : PARTICLE_COUNT_DESKTOP;
-
-    const particles: Particle[] = Array.from({ length: count }, () => ({
+    const particles: Particle[] = Array.from({ length: PARTICLE_COUNT_DESKTOP }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
       vx: (Math.random() - 0.5) * 0.3,

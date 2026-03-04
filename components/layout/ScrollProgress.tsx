@@ -1,34 +1,37 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@/hooks/useGSAP";
-import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 
 export function ScrollProgress() {
-  const gsap = useGSAP();
   const barRef = useRef<HTMLDivElement>(null);
 
-  const createTrigger = useCallback((): ScrollTrigger | null => {
+  useEffect(() => {
     const node = barRef.current;
-    if (!node) return null;
+    if (!node) return;
 
-    gsap.set(node, { scaleX: 0, transformOrigin: "left center" });
+    gsap.registerPlugin(ScrollTrigger);
+    node.style.transformOrigin = "left center";
+    node.style.transform = "scaleX(0)";
 
-    return ScrollTrigger.create({
-      start: 0,
-      end: "max",
+    const trigger = ScrollTrigger.create({
+      trigger: document.documentElement,
+      start: "top top",
+      end: "bottom bottom",
       onUpdate: (self) => {
-        gsap.set(node, { scaleX: self.progress });
+        node.style.transform = `scaleX(${self.progress})`;
       },
     });
-  }, [gsap]);
 
-  useScrollTrigger({ create: createTrigger });
+    return () => {
+      trigger.kill();
+    };
+  }, []);
 
   return (
     <div className="fixed inset-x-0 top-0 z-40 h-1 bg-transparent">
-      <div ref={barRef} className="h-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent-2)]" />
+      <div ref={barRef} className="h-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent-2)] will-change-transform" />
     </div>
   );
 }

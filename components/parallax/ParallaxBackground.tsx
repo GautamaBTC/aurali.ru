@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GlowParticles } from "@/components/parallax/GlowParticles";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor;
 
@@ -14,6 +15,7 @@ interface Layer {
   mouseSpeed: number;
   blur: number;
   breathe?: boolean;
+  showOnMobile: boolean;
 }
 
 const LAYERS: readonly Layer[] = [
@@ -23,6 +25,7 @@ const LAYERS: readonly Layer[] = [
     scrollSpeed: 0.08,
     mouseSpeed: 0.003,
     blur: 0,
+    showOnMobile: true,
   },
   {
     id: "aurora-1",
@@ -31,6 +34,7 @@ const LAYERS: readonly Layer[] = [
     mouseSpeed: 0.015,
     blur: 80,
     breathe: true,
+    showOnMobile: true,
   },
   {
     id: "aurora-2",
@@ -39,6 +43,7 @@ const LAYERS: readonly Layer[] = [
     mouseSpeed: 0.025,
     blur: 100,
     breathe: true,
+    showOnMobile: true,
   },
   {
     id: "aurora-3",
@@ -47,6 +52,7 @@ const LAYERS: readonly Layer[] = [
     mouseSpeed: 0.03,
     blur: 120,
     breathe: true,
+    showOnMobile: false,
   },
   {
     id: "light-streak",
@@ -54,6 +60,7 @@ const LAYERS: readonly Layer[] = [
     scrollSpeed: 0.6,
     mouseSpeed: 0.035,
     blur: 0,
+    showOnMobile: false,
   },
   {
     id: "vignette",
@@ -61,6 +68,7 @@ const LAYERS: readonly Layer[] = [
     scrollSpeed: 0,
     mouseSpeed: 0,
     blur: 0,
+    showOnMobile: true,
   },
 ];
 
@@ -97,7 +105,7 @@ export default function ParallaxBackground({ intensity = 1 }: Props) {
   const grainRef = useRef<HTMLDivElement | null>(null);
   const mouse = useRef({ x: 0, y: 0 });
   const smoothMouse = useRef({ x: 0, y: 0 });
-  const isMobile = useRef(false);
+  const isMobile = useIsMobile();
 
   const setLayerRef = useCallback(
     (i: number) => (el: HTMLDivElement | null) => {
@@ -116,66 +124,65 @@ export default function ParallaxBackground({ intensity = 1 }: Props) {
       return;
     }
 
-    isMobile.current = window.matchMedia("(max-width: 768px)").matches;
-    const mob = isMobile.current ? 0.4 : 1;
+    const mob = isMobile ? 0.4 : 1;
     const k = intensity * mob;
-
-    if (isMobile.current) {
-      gsap.set(containerRef.current, { opacity: 1 });
-      return;
-    }
+    const activeLayers = LAYERS.map((layer, index) => ({ layer, index })).filter((item) => (isMobile ? item.layer.showOnMobile : true));
 
     const ctx = gsap.context(() => {
       const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
       intro.fromTo(containerRef.current, { opacity: 0 }, { opacity: 1, duration: 2 });
 
-      LAYERS.forEach((layer, i) => {
-        const el = layerRefs.current[i];
+      activeLayers.forEach(({ index }, i) => {
+        const el = layerRefs.current[index];
         if (!el) return;
         intro.fromTo(el, { scale: 1.15, opacity: 0 }, { scale: 1, opacity: 1, duration: 2.2, ease: "power2.out" }, i * 0.1);
       });
 
-      LAYERS.forEach((layer, i) => {
-        const el = layerRefs.current[i];
-        if (!el || layer.scrollSpeed === 0) return;
-        gsap.to(el, {
-          y: () => layer.scrollSpeed * k * window.innerHeight * 0.7,
-          ease: "none",
-          scrollTrigger: {
-            trigger: document.documentElement,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 1.4,
-            invalidateOnRefresh: true,
-          },
+      if (!isMobile) {
+        activeLayers.forEach(({ layer, index }) => {
+          const el = layerRefs.current[index];
+          if (!el || layer.scrollSpeed === 0) return;
+          gsap.to(el, {
+            y: () => layer.scrollSpeed * k * window.innerHeight * 0.7,
+            ease: "none",
+            scrollTrigger: {
+              trigger: document.documentElement,
+              start: "top top",
+              end: "bottom bottom",
+              scrub: 1.4,
+              invalidateOnRefresh: true,
+            },
+          });
         });
-      });
+      }
 
-      LAYERS.forEach((layer, i) => {
-        const el = layerRefs.current[i];
+      activeLayers.forEach(({ layer, index }, i) => {
+        const el = layerRefs.current[index];
         if (!el || !layer.breathe) return;
 
         gsap.to(el, {
-          scale: 1.08 + i * 0.03,
-          rotation: 8 - i * 4,
-          duration: 8 + i * 2,
+          scale: 1.06 + i * 0.02,
+          rotation: isMobile ? 0 : 8 - i * 4,
+          duration: isMobile ? 12 + i * 2 : 8 + i * 2,
           repeat: -1,
           yoyo: true,
           ease: "sine.inOut",
         });
 
-        gsap.to(el, {
-          x: `+=${30 + i * 15}`,
-          y: `+=${20 - i * 10}`,
-          duration: 12 + i * 3,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: i * 1.5,
-        });
+        if (!isMobile) {
+          gsap.to(el, {
+            x: `+=${30 + i * 15}`,
+            y: `+=${20 - i * 10}`,
+            duration: 12 + i * 3,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+            delay: i * 1.5,
+          });
+        }
       });
 
-      if (grainRef.current) {
+      if (!isMobile && grainRef.current) {
         gsap.to(grainRef.current, {
           backgroundPosition: "100% 100%",
           duration: 0.4,
@@ -210,25 +217,26 @@ export default function ParallaxBackground({ intensity = 1 }: Props) {
       animId = window.requestAnimationFrame(tick);
     };
 
-    if (!isMobile.current) {
+    if (!isMobile) {
       window.addEventListener("mousemove", onMouseMove, { passive: true });
       animId = window.requestAnimationFrame(tick);
     }
 
     return () => {
       ctx.revert();
-      if (!isMobile.current) {
+      if (!isMobile) {
         window.removeEventListener("mousemove", onMouseMove);
         window.cancelAnimationFrame(animId);
       }
     };
-  }, [intensity]);
+  }, [intensity, isMobile]);
 
   useEffect(() => {
     const layer = videoLayerRef.current;
     if (!layer) return;
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (isMobile) return;
 
     const scrollState = { current: 0, target: 0 };
     let raf = 0;
@@ -252,7 +260,7 @@ export default function ParallaxBackground({ intensity = 1 }: Props) {
       window.cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <div ref={containerRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden opacity-0">
@@ -271,25 +279,25 @@ export default function ParallaxBackground({ intensity = 1 }: Props) {
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(rgba(224,230,237,0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(224,230,237,0.22) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
       </div>
 
-      <div className="hidden md:block opacity-85">
+      <div className={`${isMobile ? "opacity-85" : "hidden md:block opacity-85"}`}>
         {LAYERS.map((layer, i) => (
           <div
             key={layer.id}
             ref={setLayerRef(i)}
-            className={layer.className}
+            className={`${layer.className} ${layer.showOnMobile ? "" : "hidden md:block"}`}
             style={{
               ...layerStyleById[layer.id],
-              willChange: "transform",
+              willChange: isMobile ? "auto" : "transform",
               filter: layer.blur ? `blur(${layer.blur}px)` : undefined,
             }}
           />
         ))}
 
-        <GlowParticles />
+        {!isMobile ? <GlowParticles /> : null}
 
         <div
           ref={grainRef}
-          className="absolute inset-0 mix-blend-overlay opacity-[0.03]"
+          className="absolute inset-0 hidden mix-blend-overlay opacity-[0.03] md:block"
           style={{
             backgroundImage:
               "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
