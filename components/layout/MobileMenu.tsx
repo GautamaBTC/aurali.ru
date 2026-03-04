@@ -30,9 +30,11 @@ export function MobileMenu() {
   const [activeId, setActiveId] = useState<string>("services");
   const [glitchId, setGlitchId] = useState<string | null>(null);
   const [activePhoneCharIndex, setActivePhoneCharIndex] = useState<number>(-1);
+  const [menuScale, setMenuScale] = useState(1);
 
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
   const burgerRef = useRef<HTMLButtonElement>(null);
   const firstItemRef = useRef<HTMLAnchorElement | null>(null);
@@ -403,6 +405,33 @@ export function MobileMenu() {
 
   const phoneHref = useMemo(() => `tel:${preferredPhone.replace(/[^\d+]/g, "")}`, [preferredPhone]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      setMenuScale(1);
+      return;
+    }
+
+    const recalcScale = () => {
+      const content = contentRef.current;
+      if (!content) return;
+      const viewportHeight = window.innerHeight;
+      const contentHeight = content.scrollHeight;
+      if (contentHeight <= viewportHeight) {
+        setMenuScale(1);
+        return;
+      }
+      const ratio = viewportHeight / contentHeight;
+      setMenuScale(Math.max(0.85, Math.min(1, ratio * 0.99)));
+    };
+
+    const raf = window.requestAnimationFrame(recalcScale);
+    window.addEventListener("resize", recalcScale);
+    return () => {
+      window.cancelAnimationFrame(raf);
+      window.removeEventListener("resize", recalcScale);
+    };
+  }, [isOpen]);
+
   return (
     <>
       <header
@@ -425,7 +454,7 @@ export function MobileMenu() {
         aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
         aria-expanded={isOpen}
         aria-controls="mobile-nav-dialog"
-        className={`tap-none touch-manipulation fixed right-5 top-0 z-[10000] flex h-[80px] w-[80px] items-center justify-center transition-opacity duration-300 md:hidden ${isBurgerVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`tap-none touch-manipulation fixed right-5 top-0 z-[10000] flex h-[80px] w-[84px] items-center justify-end transition-opacity duration-300 md:hidden ${isBurgerVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
         style={{ background: "none", border: "none", outline: "none" }}
       >
         <div className="relative h-[22px] w-[38px]">
@@ -489,8 +518,15 @@ export function MobileMenu() {
             <div className="menu-film-grain absolute inset-0 opacity-[0.06]" />
           </div>
 
-          <div className="mobile-menu-content relative z-10 flex min-h-dvh max-h-dvh flex-col justify-between overflow-hidden px-5 pt-[calc(72px+env(safe-area-inset-top))] pb-[calc(16px+env(safe-area-inset-bottom))]">
-            <nav className="flex flex-1 items-start justify-center pt-1">
+          <div
+            ref={contentRef}
+            className="mobile-menu-content relative z-10 flex min-h-dvh max-h-dvh flex-col justify-between overflow-hidden px-5 pt-[calc(72px+env(safe-area-inset-top))] pb-[calc(12px+env(safe-area-inset-bottom))]"
+            style={{
+              transform: `scale(${menuScale})`,
+              transformOrigin: "top center",
+            }}
+          >
+            <nav className="flex flex-1 items-start justify-center pt-0">
               <ul className="w-full max-w-md">
                 {MENU_ITEMS.map((item, index) => {
                   const isActive = activeId === item.id;
@@ -504,12 +540,12 @@ export function MobileMenu() {
                           event.preventDefault();
                           closeMenu(item.href);
                         }}
-                        className="tap-none touch-manipulation group flex items-baseline justify-center py-[clamp(10px,2.3vh,20px)] text-center focus-visible:outline-none"
+                        className="tap-none touch-manipulation group flex items-baseline justify-center py-[clamp(6px,1.6vh,12px)] text-center focus-visible:outline-none"
                       >
                         <span
                           className={`menu-item ${isGlitching ? "glitch-active" : ""}`}
                           style={{
-                            fontSize: "clamp(1.7rem, 7vw, 3rem)",
+                            fontSize: "clamp(1rem, 3.5vw, 1.4rem)",
                             fontWeight: 300,
                             lineHeight: 1.1,
                             letterSpacing: "-0.01em",
@@ -527,19 +563,19 @@ export function MobileMenu() {
               </ul>
             </nav>
 
-            <div ref={footerRef} className="mt-8">
-              <p className="mx-auto mb-4 max-w-[34ch] text-center text-xs leading-relaxed tracking-[0.04em] text-[var(--text-secondary)]/82">
+            <div ref={footerRef} className="mt-3">
+              <p className="mb-2 max-w-[34ch] text-left text-[11px] leading-relaxed tracking-[0.04em] text-[var(--text-secondary)]/82">
                 Премиальный центр автоэлектрики. Диагностика, StarLine, автосвет, кодирование блоков и сложные
                 электрические случаи.
               </p>
               <a
                 href={phoneHref}
-                className="phone-number tap-none block text-center"
+                className="phone-number tap-none block text-left"
                 style={{
                   fontFamily: "var(--font-jetbrains-mono), monospace",
-                  fontSize: "1.08rem",
+                  fontSize: "clamp(0.86rem, 2.8vw, 1rem)",
                   fontWeight: 600,
-                  letterSpacing: "0.14em",
+                  letterSpacing: "0.1em",
                   color: "#9fadbc",
                   transition: "color 0.2s",
                 }}
@@ -555,38 +591,38 @@ export function MobileMenu() {
                 ))}
               </a>
 
-              <div className="mt-4 grid grid-cols-1 gap-2.5 sm:flex sm:items-center sm:gap-3">
+              <div className="mt-3 grid grid-cols-2 gap-2">
                 <a
                   href={siteConfig.social.whatsapp}
                   aria-label="WhatsApp"
-                  className="btn-shine tap-none touch-manipulation flex h-10 items-center justify-center gap-2 rounded-full border border-[#ccff0026] bg-[#ccff0014] px-4 transition-all duration-300 hover:border-[#ccff0059] hover:bg-[#ccff0026] hover:shadow-[0_0_20px_rgba(204,255,0,0.15)]"
+                  className="btn-shine tap-none touch-manipulation flex h-9 items-center justify-center gap-2 rounded-full border border-[#ccff0026] bg-[#ccff0014] px-3 transition-all duration-300 hover:border-[#ccff0059] hover:bg-[#ccff0026] hover:shadow-[0_0_20px_rgba(204,255,0,0.15)]"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                   </svg>
-                  <span className="text-[0.72rem] font-semibold tracking-[0.06em] text-[#ccff00]">WhatsApp</span>
+                  <span className="text-[0.65rem] font-semibold tracking-[0.04em] text-[#ccff00]">WhatsApp</span>
                 </a>
 
                 <a
                   href={siteConfig.social.telegram}
                   aria-label="Telegram"
-                  className="btn-shine tap-none touch-manipulation flex h-10 items-center justify-center gap-2 rounded-full border border-[#00f0ff26] bg-[#00f0ff0f] px-4 transition-all duration-300 hover:border-[#00f0ff59] hover:bg-[#00f0ff1f] hover:shadow-[0_0_20px_rgba(0,240,255,0.15)]"
+                  className="btn-shine tap-none touch-manipulation flex h-9 items-center justify-center gap-2 rounded-full border border-[#00f0ff26] bg-[#00f0ff0f] px-3 transition-all duration-300 hover:border-[#00f0ff59] hover:bg-[#00f0ff1f] hover:shadow-[0_0_20px_rgba(0,240,255,0.15)]"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <line x1="22" y1="2" x2="11" y2="13" />
                     <polygon points="22 2 15 22 11 13 2 9 22 2" />
                   </svg>
-                  <span className="text-[0.72rem] font-semibold tracking-[0.06em] text-[#00f0ff]">Telegram</span>
+                  <span className="text-[0.65rem] font-semibold tracking-[0.04em] text-[#00f0ff]">Telegram</span>
                 </a>
 
                 <a
                   href={phoneHref}
-                  className="btn-shine tap-none touch-manipulation flex h-10 items-center justify-center gap-1.5 rounded-full border border-[#e0e6ed14] bg-[#e0e6ed0a] px-4 transition-all duration-300 hover:border-[#e0e6ed26] hover:bg-[#e0e6ed14] sm:ml-1"
+                  className="btn-shine tap-none touch-manipulation col-span-2 flex h-9 items-center justify-center gap-1.5 rounded-full border border-[#e0e6ed14] bg-[#e0e6ed0a] px-3 transition-all duration-300 hover:border-[#e0e6ed26] hover:bg-[#e0e6ed14]"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9fadbc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                   </svg>
-                  <span className="text-[0.72rem] font-medium text-[#9fadbc]">Позвонить</span>
+                  <span className="text-[0.65rem] font-medium text-[#9fadbc]">Позвонить</span>
                 </a>
               </div>
             </div>
