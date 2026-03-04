@@ -434,7 +434,7 @@ export function MobileMenu() {
         return;
       }
       const ratio = viewportHeight / contentHeight;
-      setMenuScale(Math.max(0.85, Math.min(1, ratio * 0.99)));
+      setMenuScale(Math.max(0.72, Math.min(1, ratio * 0.99)));
     };
 
     const raf = window.requestAnimationFrame(recalcScale);
@@ -467,7 +467,7 @@ export function MobileMenu() {
         aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
         aria-expanded={isOpen}
         aria-controls="mobile-nav-dialog"
-        className={`tap-none touch-manipulation fixed top-0 z-[10001] flex h-[80px] w-[84px] items-center transition-all duration-300 md:hidden ${isOpen ? "left-5 justify-start" : "right-5 justify-end"} ${isBurgerVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`tap-none touch-manipulation fixed right-5 top-0 z-[10001] flex h-[80px] w-[84px] items-center justify-end transition-opacity duration-300 md:hidden ${isBurgerVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
         style={{ background: "none", border: "none", outline: "none" }}
       >
         <div className="relative h-[22px] w-[38px]">
@@ -542,7 +542,7 @@ export function MobileMenu() {
             <div className="mb-1 flex items-center justify-end pl-14">
               <a
                 href={phoneHref}
-                className="phone-number tap-none block text-[11px] font-medium tracking-[0.03em] text-[#c7d1dd]"
+                className="phone-number tap-none mr-auto block text-[12px] font-medium tracking-[0.03em] text-[#c7d1dd]"
                 style={{ fontFamily: "var(--font-jetbrains-mono), monospace" }}
                 aria-label={`Позвонить ${HEADER_PHONE}`}
               >
@@ -571,12 +571,12 @@ export function MobileMenu() {
                           event.preventDefault();
                           closeMenu(item.href);
                         }}
-                        className="tap-none touch-manipulation group flex items-baseline justify-center py-[clamp(10px,1.8vh,16px)] text-center focus-visible:outline-none"
+                        className="tap-none touch-manipulation group flex items-baseline justify-center py-[clamp(8px,1.5vh,14px)] text-center focus-visible:outline-none"
                       >
                         <span
                           className={`menu-item ${isGlitching ? "glitch-active" : ""}`}
                           style={{
-                            fontSize: "clamp(1.2rem, 4.4vw, 1.5rem)",
+                            fontSize: "clamp(2rem, 8vw, 2.8rem)",
                             fontWeight: 300,
                             lineHeight: 1.1,
                             letterSpacing: "-0.01em",
@@ -595,42 +595,42 @@ export function MobileMenu() {
             </nav>
 
             <div ref={footerRef} className="mt-3">
-              <p className="mb-2 max-w-[34ch] text-left text-[11px] leading-relaxed tracking-[0.04em] text-[var(--text-secondary)]/82">
+              <p className="mb-3 max-w-[38ch] text-left text-[12px] leading-relaxed tracking-[0.04em] text-[var(--text-secondary)]/84">
                 Премиальный центр автоэлектрики. Диагностика, StarLine, автосвет и сложные электрические случаи.
               </p>
 
-              <div className="mt-3 grid grid-cols-2 gap-2">
+              <div className="mt-3 grid grid-cols-2 gap-2.5">
                 <a
                   href={siteConfig.social.whatsapp}
                   aria-label="WhatsApp"
-                  className="btn-shine tap-none touch-manipulation flex h-9 items-center justify-center gap-2 rounded-full border border-[#ccff0026] bg-[#ccff0014] px-3 transition-all duration-300 hover:border-[#ccff0059] hover:bg-[#ccff0026] hover:shadow-[0_0_20px_rgba(204,255,0,0.15)]"
+                  className="btn-shine tap-none touch-manipulation flex h-11 items-center justify-center gap-2 rounded-full border border-[#ccff0026] bg-[#ccff0014] px-3.5 transition-all duration-300 hover:border-[#ccff0059] hover:bg-[#ccff0026] hover:shadow-[0_0_20px_rgba(204,255,0,0.15)]"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                   </svg>
-                  <span className="text-[0.65rem] font-semibold tracking-[0.04em] text-[#ccff00]">WhatsApp</span>
+                  <span className="text-[0.78rem] font-semibold tracking-[0.04em] text-[#ccff00]">WhatsApp</span>
                 </a>
 
                 <a
                   href={siteConfig.social.telegram}
                   aria-label="Telegram"
-                  className="btn-shine tap-none touch-manipulation flex h-9 items-center justify-center gap-2 rounded-full border border-[#00f0ff26] bg-[#00f0ff0f] px-3 transition-all duration-300 hover:border-[#00f0ff59] hover:bg-[#00f0ff1f] hover:shadow-[0_0_20px_rgba(0,240,255,0.15)]"
+                  className="btn-shine tap-none touch-manipulation flex h-11 items-center justify-center gap-2 rounded-full border border-[#00f0ff26] bg-[#00f0ff0f] px-3.5 transition-all duration-300 hover:border-[#00f0ff59] hover:bg-[#00f0ff1f] hover:shadow-[0_0_20px_rgba(0,240,255,0.15)]"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <line x1="22" y1="2" x2="11" y2="13" />
                     <polygon points="22 2 15 22 11 13 2 9 22 2" />
                   </svg>
-                  <span className="text-[0.65rem] font-semibold tracking-[0.04em] text-[#00f0ff]">Telegram</span>
+                  <span className="text-[0.78rem] font-semibold tracking-[0.04em] text-[#00f0ff]">Telegram</span>
                 </a>
 
                 <a
                   href={phoneHref}
-                  className="btn-shine tap-none touch-manipulation col-span-2 flex h-9 items-center justify-center gap-1.5 rounded-full border border-[#e0e6ed14] bg-[#e0e6ed0a] px-3 transition-all duration-300 hover:border-[#e0e6ed26] hover:bg-[#e0e6ed14]"
+                  className="btn-shine tap-none touch-manipulation col-span-2 flex h-11 items-center justify-center gap-1.5 rounded-full border border-[#e0e6ed14] bg-[#e0e6ed0a] px-3.5 transition-all duration-300 hover:border-[#e0e6ed26] hover:bg-[#e0e6ed14]"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9fadbc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                   </svg>
-                  <span className="text-[0.65rem] font-medium text-[#9fadbc]">Позвонить</span>
+                  <span className="text-[0.78rem] font-medium text-[#9fadbc]">Позвонить</span>
                 </a>
               </div>
             </div>
