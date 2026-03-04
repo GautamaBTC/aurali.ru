@@ -530,6 +530,90 @@ select:focus-visible {
   white-space: nowrap;
 }
 
+.vip-logo-monolith {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(10, 15, 20, 0.92);
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.vip-logo-monolith::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #ccff00 0%, #00d2ff 100%);
+}
+
+.logo-text {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.vip-part {
+  color: #fff;
+}
+
+.auto-part {
+  margin-left: 2px;
+  color: #ccff00;
+  text-shadow: 0 0 10px rgba(204, 255, 0, 0.22);
+}
+
+.logo-region {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  border-radius: 5px;
+  background: #fff;
+  color: #000;
+  padding: 2px 6px;
+}
+
+.region-code {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.region-flag {
+  margin-top: 1px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.region-flag::before {
+  content: "";
+  display: inline-block;
+  width: 11px;
+  height: 7px;
+  border: 1px solid #ccc;
+  background: linear-gradient(to bottom, #fff 33%, #0039a6 33%, #0039a6 66%, #d52b1e 66%);
+}
+
 .phone-char.fisheye-active {
   animation: beautiful-pulse 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   color: #ffffff;
@@ -634,5 +718,20 @@ select:focus-visible {
 
   .mobile-menu-content .phone-number {
     font-size: 0.95rem !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .vip-logo-monolith {
+    padding: 5px 9px;
+    gap: 7px;
+  }
+
+  .logo-text {
+    font-size: 17px;
+  }
+
+  .region-code {
+    font-size: 15px;
   }
 }

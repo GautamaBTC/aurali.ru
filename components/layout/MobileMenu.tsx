@@ -460,42 +460,16 @@ export function MobileMenu() {
           className="header-logo pointer-events-auto absolute left-1/2 top-1/2 z-[1201] -translate-x-1/2 -translate-y-1/2 select-none"
           aria-label="VIPAuto161 Главная"
         >
-          <svg viewBox="0 0 280 56" className="h-[44px] w-auto max-w-[190px]" role="img" aria-label="VIPАвто 161">
-            <defs>
-              <filter id="vipGlow" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="0" stdDeviation="2.2" floodColor="#9b111e" floodOpacity="0.8" />
-              </filter>
-              <linearGradient id="rubyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#680c12" />
-                <stop offset="100%" stopColor="#e0115f" />
-              </linearGradient>
-            </defs>
-            <g transform="translate(6 38)">
-              <text
-                x="0"
-                y="0"
-                fill="url(#rubyGrad)"
-                filter="url(#vipGlow)"
-                fontFamily="Arial Black, Impact, sans-serif"
-                fontSize="32"
-                fontWeight="900"
-                letterSpacing="0.8"
-              >
-                VIP
-              </text>
-              <text
-                x="88"
-                y="0"
-                fill="#ffffff"
-                fontFamily="Arial Black, Impact, sans-serif"
-                fontSize="30"
-                fontWeight="800"
-                letterSpacing="0.2"
-              >
-                Авто
-              </text>
-            </g>
-          </svg>
+          <span className="vip-logo-monolith" aria-label="VIPАВТО 161 RUS">
+            <span className="logo-text">
+              <span className="vip-part">VIP</span>
+              <span className="auto-part">АВТО</span>
+            </span>
+            <span className="logo-region">
+              <span className="region-code">161</span>
+              <span className="region-flag">RUS</span>
+            </span>
+          </span>
         </Link>
       </header>
 
