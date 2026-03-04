@@ -531,11 +531,11 @@ select:focus-visible {
 }
 
 .phone-char.fisheye-active {
-  animation: fisheye-wave 210ms ease-out forwards;
-  color: #dffffc;
+  animation: beautiful-pulse 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  color: #ffffff;
   text-shadow:
-    0 0 10px rgba(204, 255, 0, 0.55),
-    0 0 14px rgba(0, 240, 255, 0.4);
+    0 0 15px rgba(224, 17, 95, 0.8),
+    0 0 30px rgba(255, 255, 255, 0.6);
 }
 
 @keyframes phone-signal-pulse {
@@ -554,17 +554,25 @@ select:focus-visible {
   }
 }
 
-@keyframes fisheye-wave {
+@keyframes beautiful-pulse {
   0% {
     transform: scale(1) translateY(0);
+    color: #fff;
+    text-shadow: none;
     filter: blur(0);
   }
   50% {
-    transform: scale(1.32) translateY(-2px);
-    filter: blur(0.45px) brightness(1.18);
+    transform: scale(1.4) translateY(-2px);
+    color: #fff;
+    text-shadow:
+      0 0 15px rgba(224, 17, 95, 0.8),
+      0 0 30px rgba(255, 255, 255, 0.6);
+    filter: blur(0.3px) brightness(1.25);
   }
   100% {
     transform: scale(1) translateY(0);
+    color: #fff;
+    text-shadow: none;
     filter: blur(0);
   }
 }
@@ -616,7 +624,7 @@ select:focus-visible {
 
 @media (max-height: 500px) {
   .mobile-menu-content nav .menu-item {
-    font-size: clamp(1rem, 4.2vw, 1.25rem) !important;
+    font-size: clamp(1.45rem, 6vw, 2rem) !important;
   }
 
   .mobile-menu-content nav a {

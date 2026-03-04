@@ -233,6 +233,7 @@ export function MobileMenu() {
     gsap.killTweensOf([top, mid, bot]);
 
     if (isOpen) {
+      const flyDistance = -Math.max((window?.innerWidth ?? 420) - 100, 320);
       gsap.to(top, {
         y: 7.2,
         x: 1.2,
@@ -243,13 +244,13 @@ export function MobileMenu() {
         ease: "back.out(1.4)",
       });
       gsap.to(mid, {
-        x: -34,
+        x: flyDistance,
         y: -1.5,
         rotate: -14,
         opacity: 0,
-        scaleX: 0.15,
-        duration: 0.36,
-        ease: "power2.in",
+        scaleX: 0,
+        duration: 0.68,
+        ease: "expo.in",
       });
       gsap.to(bot, {
         y: -7.2,
@@ -462,30 +463,34 @@ export function MobileMenu() {
           <svg viewBox="0 0 280 56" className="h-[44px] w-auto max-w-[190px]" role="img" aria-label="VIPАвто 161">
             <defs>
               <filter id="vipGlow" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="0" stdDeviation="2.2" floodColor="#ff5500" floodOpacity="0.55" />
+                <feDropShadow dx="0" dy="0" stdDeviation="2.2" floodColor="#9b111e" floodOpacity="0.8" />
               </filter>
+              <linearGradient id="rubyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#680c12" />
+                <stop offset="100%" stopColor="#e0115f" />
+              </linearGradient>
             </defs>
-            <g transform="translate(8 38)">
+            <g transform="translate(6 38)">
               <text
                 x="0"
                 y="0"
-                fill="#ff5500"
+                fill="url(#rubyGrad)"
                 filter="url(#vipGlow)"
                 fontFamily="Arial Black, Impact, sans-serif"
                 fontSize="32"
                 fontWeight="900"
-                letterSpacing="1.2"
+                letterSpacing="0.8"
               >
                 VIP
               </text>
               <text
-                x="94"
+                x="88"
                 y="0"
                 fill="#ffffff"
                 fontFamily="Arial Black, Impact, sans-serif"
                 fontSize="30"
                 fontWeight="800"
-                letterSpacing="0.8"
+                letterSpacing="0.2"
               >
                 Авто
               </text>
@@ -587,12 +592,12 @@ export function MobileMenu() {
                           event.preventDefault();
                           closeMenu(item.href);
                         }}
-                        className="tap-none touch-manipulation group flex items-baseline justify-center py-[clamp(8px,1.5vh,14px)] text-center focus-visible:outline-none"
+                        className="tap-none touch-manipulation group flex items-baseline justify-center py-[clamp(12px,2.6vh,24px)] text-center focus-visible:outline-none"
                       >
                         <span
                           className={`menu-item ${isGlitching ? "glitch-active" : ""}`}
                           style={{
-                            fontSize: "clamp(1.25rem, 4.8vw, 1.5rem)",
+                            fontSize: "clamp(2rem, 7vw, 2.8rem)",
                             fontWeight: 300,
                             lineHeight: 1.1,
                             letterSpacing: "-0.01em",
