@@ -113,7 +113,7 @@ export default function RootLayout({
         <div className="boot-ui">
           <ParallaxBackground intensity={1} />
           <MobileMenu />
-          <div className="relative z-10 pt-20">{children}</div>
+          <div className="relative z-10 pt-[calc(80px+env(safe-area-inset-top))]">{children}</div>
         </div>
         <Script id="ui-boot" strategy="beforeInteractive">
           {`

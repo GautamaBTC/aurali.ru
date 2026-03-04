@@ -442,9 +442,8 @@ export function MobileMenu() {
   return (
     <>
       <header
-        className="fixed left-0 right-0 top-0 z-[1200] flex h-[80px] items-center justify-center px-5 md:hidden"
+        className="fixed left-0 right-0 top-0 z-[1200] flex h-[calc(80px+env(safe-area-inset-top))] items-center justify-center px-5 pt-[env(safe-area-inset-top)] md:hidden"
         style={{
-          top: "env(safe-area-inset-top)",
           background: "rgba(5,10,20,0.8)",
           backdropFilter: "blur(20px) saturate(180%)",
           WebkitBackdropFilter: "blur(20px) saturate(180%)",
@@ -475,8 +474,8 @@ export function MobileMenu() {
         aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
         aria-expanded={isOpen}
         aria-controls="mobile-nav-dialog"
-        className={`tap-none touch-manipulation fixed right-5 top-0 z-[10001] flex h-[80px] w-[84px] items-center justify-end transition-opacity duration-300 md:hidden ${isBurgerVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
-        style={{ top: "env(safe-area-inset-top)", background: "none", border: "none", outline: "none" }}
+        className={`tap-none touch-manipulation fixed right-5 top-0 z-[10001] flex h-[calc(80px+env(safe-area-inset-top))] w-[84px] items-center justify-end pt-[env(safe-area-inset-top)] transition-opacity duration-300 md:hidden ${isBurgerVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+        style={{ background: "none", border: "none", outline: "none" }}
       >
         <div className="relative h-[22px] w-[38px]">
           <span
