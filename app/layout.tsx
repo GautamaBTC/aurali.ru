@@ -110,11 +110,9 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={`${manrope.variable} ${jetBrainsMono.variable} bg-[var(--bg-primary)] antialiased text-[var(--text-primary)]`}>
-        <div className="boot-ui">
-          <ParallaxBackground intensity={1} />
-          <MobileMenu />
-          <div className="relative z-10 pt-[calc(80px+env(safe-area-inset-top))]">{children}</div>
-        </div>
+        <ParallaxBackground intensity={1} />
+        <MobileMenu />
+        <div className="boot-ui relative z-10 pt-[calc(80px+env(safe-area-inset-top))]">{children}</div>
         <Script id="ui-boot" strategy="beforeInteractive">
           {`
             (function () {

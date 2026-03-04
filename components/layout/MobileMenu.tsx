@@ -445,8 +445,10 @@ export function MobileMenu() {
         className="fixed left-0 right-0 top-0 z-[1200] flex h-[calc(80px+env(safe-area-inset-top))] items-center justify-center px-5 pt-[env(safe-area-inset-top)] md:hidden"
         style={{
           background: "rgba(5,10,20,0.8)",
-          backdropFilter: "blur(20px) saturate(180%)",
-          WebkitBackdropFilter: "blur(20px) saturate(180%)",
+          backdropFilter: "blur(10px) saturate(130%)",
+          WebkitBackdropFilter: "blur(10px) saturate(130%)",
+          willChange: "transform",
+          transform: "translateZ(0)",
         }}
       >
         <Link

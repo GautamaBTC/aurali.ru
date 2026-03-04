@@ -623,25 +623,16 @@ select:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  padding: 6px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(10, 15, 20, 0.92);
-  box-shadow:
-    0 4px 15px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  overflow: hidden;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
 }
 
 .vip-logo-monolith::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, #ccff00 0%, #00d2ff 100%);
+  content: none;
 }
 
 .logo-text {
@@ -814,8 +805,7 @@ select:focus-visible {
 
 @media (max-width: 380px) {
   .vip-logo-monolith {
-    padding: 5px 9px;
-    gap: 7px;
+    gap: 6px;
   }
 
   .logo-text {
