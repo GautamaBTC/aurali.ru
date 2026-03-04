@@ -448,16 +448,40 @@ export function MobileMenu() {
   return (
     <>
       <header
-        className="fixed left-0 right-0 top-0 z-[1200] flex h-[72px] items-center justify-start px-5 md:hidden"
+        className="fixed left-0 right-0 top-0 z-[1200] flex h-[80px] items-center px-5 md:hidden"
         style={{
           background: "rgba(5,10,20,0.8)",
           backdropFilter: "blur(20px) saturate(180%)",
           WebkitBackdropFilter: "blur(20px) saturate(180%)",
         }}
       >
-        <Link href="/" className="relative z-[1201] select-none" aria-label="VIPAuto161 Главная">
-          <Image src="/images/plate-logo.svg" alt="VIPАвто 161" width={189} height={51} className="h-[42px] w-auto" priority />
+        <div className="header-phone-wrapper flex flex-1 items-center justify-start">
+          <a
+            href={phoneHref}
+            className="phone-number header-phone tap-none relative z-[1201] flex items-center whitespace-nowrap text-white"
+            style={{ fontFamily: "var(--font-jetbrains-mono), monospace" }}
+            aria-label={`Позвонить ${HEADER_PHONE}`}
+          >
+            {HEADER_PHONE_CHARS.map((char, index) => (
+              <span
+                key={`${char}-${index}`}
+                className={char === " " ? "phone-char-space" : `phone-char digit ${index === activePhoneCharIndex ? "fisheye-active" : ""}`}
+              >
+                {char === " " ? "\u00A0" : char}
+              </span>
+            ))}
+          </a>
+        </div>
+
+        <Link
+          href="/"
+          className="header-logo pointer-events-auto absolute left-1/2 top-1/2 z-[1201] -translate-x-1/2 -translate-y-1/2 select-none"
+          aria-label="VIPAuto161 Главная"
+        >
+          <Image src="/images/plate-logo.svg" alt="VIPАвто 161" width={189} height={51} className="h-[34px] w-auto max-w-[120px]" priority />
         </Link>
+
+        <div className="header-burger-wrapper flex flex-1 items-center justify-end" />
       </header>
 
       <button
@@ -533,31 +557,13 @@ export function MobileMenu() {
 
           <div
             ref={contentRef}
-            className="mobile-menu-content relative z-10 flex min-h-dvh max-h-dvh flex-col justify-between overflow-hidden px-5 pt-[calc(72px+env(safe-area-inset-top))] pb-[calc(12px+env(safe-area-inset-bottom))]"
+            className="mobile-menu-content relative z-10 flex min-h-dvh max-h-dvh flex-col justify-between overflow-hidden px-5 pt-[calc(80px+env(safe-area-inset-top))] pb-[calc(12px+env(safe-area-inset-bottom))]"
             style={{
               transform: `scale(${menuScale})`,
               transformOrigin: "top center",
             }}
           >
-            <div className="-mt-1 mb-1 flex h-[80px] items-center justify-end pl-14">
-              <a
-                href={phoneHref}
-                className="phone-number tap-none mr-auto block text-[12px] font-medium tracking-[0.03em] text-[#c7d1dd]"
-                style={{ fontFamily: "var(--font-jetbrains-mono), monospace" }}
-                aria-label={`Позвонить ${HEADER_PHONE}`}
-              >
-                {HEADER_PHONE_CHARS.map((char, index) => (
-                  <span
-                    key={`${char}-${index}`}
-                    className={char === " " ? "phone-char-space" : `phone-char digit ${index === activePhoneCharIndex ? "fisheye-active" : ""}`}
-                  >
-                    {char === " " ? "\u00A0" : char}
-                  </span>
-                ))}
-              </a>
-            </div>
-
-            <nav className="flex flex-1 items-start justify-center pt-0.5">
+            <nav className="flex flex-1 items-start justify-center pt-2">
               <ul className="w-full max-w-md">
                 {MENU_ITEMS.map((item, index) => {
                   const isActive = activeId === item.id;

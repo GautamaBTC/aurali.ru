@@ -515,6 +515,13 @@ select:focus-visible {
   width: 0.45em;
 }
 
+.header-phone {
+  font-size: clamp(1.4rem, 5vw, 2.2rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+}
+
 .phone-char.fisheye-active {
   animation: fisheye-wave 210ms ease-out forwards;
   color: #dffffc;

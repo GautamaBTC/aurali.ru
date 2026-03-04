@@ -109,7 +109,7 @@ export default function RootLayout({
 
   return (
     <html lang="ru">
-      <body className={`${manrope.variable} ${jetBrainsMono.variable} bg-[var(--bg-primary)] pt-[72px] antialiased text-[var(--text-primary)]`}>
+      <body className={`${manrope.variable} ${jetBrainsMono.variable} bg-[var(--bg-primary)] pt-[80px] antialiased text-[var(--text-primary)]`}>
         <ParallaxBackground intensity={1} />
         <MobileMenu />
         <div className="relative z-10">{children}</div>
