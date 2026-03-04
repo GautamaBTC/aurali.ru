@@ -453,7 +453,8 @@ export function MobileMenu() {
       >
         <Link
           href="/"
-          className="header-logo pointer-events-auto absolute right-[110px] top-1/2 z-[1201] -translate-y-1/2 select-none"
+          className="header-logo pointer-events-auto absolute top-1/2 z-[1201] -translate-y-1/2 select-none"
+          style={{ left: "max(1.25rem, env(safe-area-inset-left))" }}
           aria-label="VIPAuto161 Главная"
         >
           <span className="vip-logo-monolith" aria-label="VIPАВТО 161 RUS">
