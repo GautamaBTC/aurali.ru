@@ -110,9 +110,29 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={`${manrope.variable} ${jetBrainsMono.variable} bg-[var(--bg-primary)] pt-[80px] antialiased text-[var(--text-primary)]`}>
-        <ParallaxBackground intensity={1} />
-        <MobileMenu />
-        <div className="relative z-10">{children}</div>
+        <div className="boot-ui">
+          <ParallaxBackground intensity={1} />
+          <MobileMenu />
+          <div className="relative z-10">{children}</div>
+        </div>
+        <Script id="ui-boot" strategy="beforeInteractive">
+          {`
+            (function () {
+              var root = document.documentElement;
+              root.classList.remove('ui-ready');
+              var show = function () {
+                window.setTimeout(function () {
+                  root.classList.add('ui-ready');
+                }, 110);
+              };
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', show, { once: true });
+              } else {
+                show();
+              }
+            })();
+          `}
+        </Script>
         <Script id="local-business-jsonld" type="application/ld+json">
           {JSON.stringify(localBusinessJsonLd)}
         </Script>

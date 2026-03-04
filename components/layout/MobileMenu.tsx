@@ -249,8 +249,8 @@ export function MobileMenu() {
         rotate: -14,
         opacity: 0,
         scaleX: 0,
-        duration: 0.68,
-        ease: "expo.in",
+        duration: 0.26,
+        ease: "power4.in",
       });
       gsap.to(bot, {
         y: -7.2,
