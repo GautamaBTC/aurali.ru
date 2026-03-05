@@ -665,18 +665,6 @@ select:focus-visible {
   width: 4px;
 }
 
-.menu-top-phone-glare {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 150%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.42) 50%, transparent 100%);
-  transform: skewX(-20deg) translateX(-150%);
-  pointer-events: none;
-  will-change: transform;
-}
-
 .vip-logo-monolith {
   position: relative;
   display: inline-flex;

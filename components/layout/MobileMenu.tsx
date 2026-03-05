@@ -224,28 +224,19 @@ export function MobileMenu() {
 
     const phoneNode = topPhoneRef.current;
     const chars = Array.from(phoneNode.querySelectorAll<HTMLElement>(".menu-top-phone-char:not(.space)"));
-    const glare = phoneNode.querySelector<HTMLElement>(".menu-top-phone-glare");
-    if (!chars.length || !glare) return;
+    if (!chars.length) return;
 
     const ctx = gsap.context(() => {
-      gsap.set(glare, { xPercent: -180 });
-      gsap.set(chars, { scale: 1, color: "#f4f4f5" });
+      gsap.set(chars, { scale: 1, color: "#f4f4f5", textShadow: "none" });
 
       const tl = gsap.timeline({ repeat: -1, repeatDelay: 3 });
       tl.to(
-        glare,
-        {
-          xPercent: 180,
-          duration: 0.85,
-          ease: "power2.inOut",
-        },
-        0,
-      ).to(
         chars,
         {
-          scale: 1.18,
+          scale: 1.22,
           color: "#ccff00",
-          duration: 0.14,
+          textShadow: "0 0 12px rgba(204,255,0,0.8)",
+          duration: 0.15,
           ease: "power2.out",
           stagger: {
             each: 0.05,
@@ -253,7 +244,7 @@ export function MobileMenu() {
             repeat: 1,
           },
         },
-        0.1,
+        0,
       );
     }, phoneNode);
 
@@ -680,7 +671,6 @@ export function MobileMenu() {
                 {char === " " ? "\u00A0" : char}
               </span>
             ))}
-            <span className="menu-top-phone-glare" aria-hidden />
           </a>
 
           <div
