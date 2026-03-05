@@ -45,11 +45,11 @@ const HEADER_PHONE_CHARS = [
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isBurgerVisible, setIsBurgerVisible] = useState(false);
   const [activeId, setActiveId] = useState<string>("services");
   const [glitchId, setGlitchId] = useState<string | null>(null);
-  const [activePhoneCharIndex, setActivePhoneCharIndex] = useState<number>(-1);
   const [menuScale, setMenuScale] = useState(1);
 
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -61,6 +61,7 @@ export function MobileMenu() {
   const lineTopRef = useRef<HTMLSpanElement>(null);
   const lineMidRef = useRef<HTMLSpanElement>(null);
   const lineBotRef = useRef<HTMLSpanElement>(null);
+  const topPhoneRef = useRef<HTMLAnchorElement | null>(null);
   const burgerEntryPlayedRef = useRef(false);
 
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
@@ -69,7 +70,7 @@ export function MobileMenu() {
   const glitchClearTimerRef = useRef<number | null>(null);
   const openFocusTimerRef = useRef<number | null>(null);
 
-  useLockScroll(isOpen);
+  useLockScroll(isLocked);
 
   useEffect(() => {
     let timeoutId: number | undefined;
@@ -120,6 +121,7 @@ export function MobileMenu() {
   const openMenu = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
+    setIsLocked(true);
     setIsOpen(true);
   }, [isAnimating]);
 
@@ -211,36 +213,45 @@ export function MobileMenu() {
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || !topPhoneRef.current) return;
 
-    let frameTimer: number | undefined;
-    let cycleTimer: number | undefined;
-    let cancelled = false;
+    const phoneNode = topPhoneRef.current;
+    const chars = Array.from(phoneNode.querySelectorAll<HTMLElement>(".menu-top-phone-char:not(.space)"));
+    const glare = phoneNode.querySelector<HTMLElement>(".menu-top-phone-glare");
+    if (!chars.length || !glare) return;
 
-    const activeIndices = HEADER_PHONE_CHARS.map((char, index) => ({ char, index })).filter((item) => item.char !== " ");
-    const waveDuration = 1500;
-    const step = Math.max(60, Math.floor(waveDuration / Math.max(activeIndices.length, 1)));
+    const ctx = gsap.context(() => {
+      gsap.set(glare, { xPercent: -180 });
+      gsap.set(chars, { scale: 1, color: "#f4f4f5" });
 
-    const runWave = () => {
-      let index = 0;
-      frameTimer = window.setInterval(() => {
-        if (cancelled) return;
-        setActivePhoneCharIndex(activeIndices[index]?.index ?? -1);
-        index += 1;
-        if (index >= activeIndices.length) {
-          if (frameTimer) window.clearInterval(frameTimer);
-          setActivePhoneCharIndex(-1);
-          cycleTimer = window.setTimeout(runWave, 3000);
-        }
-      }, step);
-    };
-
-    runWave();
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: 3 });
+      tl.to(
+        glare,
+        {
+          xPercent: 180,
+          duration: 0.85,
+          ease: "power2.inOut",
+        },
+        0,
+      ).to(
+        chars,
+        {
+          scale: 1.18,
+          color: "#ccff00",
+          duration: 0.14,
+          ease: "power2.out",
+          stagger: {
+            each: 0.05,
+            yoyo: true,
+            repeat: 1,
+          },
+        },
+        0.1,
+      );
+    }, phoneNode);
 
     return () => {
-      cancelled = true;
-      if (frameTimer) window.clearInterval(frameTimer);
-      if (cycleTimer) window.clearTimeout(cycleTimer);
+      ctx.revert();
     };
   }, [isOpen]);
 
@@ -434,6 +445,7 @@ export function MobileMenu() {
             pointerEvents: "none",
           });
           burgerRef.current?.focus();
+          setIsLocked(false);
           runPendingScroll();
           setIsAnimating(false);
         },
@@ -468,6 +480,7 @@ export function MobileMenu() {
   }, [isOpen, runPendingScroll]);
 
   const phoneHref = useMemo(() => `tel:${HEADER_PHONE.replace(/[^\d+]/g, "")}`, []);
+  const phoneChars = useMemo(() => HEADER_PHONE_CHARS, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -632,6 +645,21 @@ export function MobileMenu() {
               transformOrigin: "top center",
             }}
           >
+            <a
+              ref={topPhoneRef}
+              href={phoneHref}
+              className="menu-top-phone-wrapper absolute left-5 top-[calc(18px+env(safe-area-inset-top))] z-20 text-[1.02rem] font-medium tracking-[0.02em] text-zinc-100"
+              style={{ fontFamily: "var(--font-jetbrains-mono), monospace" }}
+              aria-label={`Позвонить ${HEADER_PHONE}`}
+            >
+              {phoneChars.map((char, index) => (
+                <span key={`phone-top-${index}-${char}`} className={`menu-top-phone-char ${char === " " ? "space" : ""}`}>
+                  {char === " " ? "\u00A0" : char}
+                </span>
+              ))}
+              <span className="menu-top-phone-glare" aria-hidden />
+            </a>
+
             <nav className="flex flex-1 items-start justify-center pt-2">
               <ul className="w-full max-w-md">
                 {MENU_ITEMS.map((item, index) => {
@@ -673,26 +701,6 @@ export function MobileMenu() {
               <p className="mb-3 max-w-[38ch] text-left text-[12px] leading-relaxed tracking-[0.04em] text-[var(--text-secondary)]/84">
                 Премиальный центр автоэлектрики. Диагностика, StarLine, автосвет и сложные электрические случаи.
               </p>
-
-              <a
-                href={phoneHref}
-                className="menu-phone phone-number tap-none mb-3 block text-left text-white"
-                style={{ fontFamily: "var(--font-jetbrains-mono), monospace" }}
-                aria-label={`Позвонить ${HEADER_PHONE}`}
-              >
-                {HEADER_PHONE_CHARS.map((char, index) => (
-                  <span
-                    key={`${char}-${index}`}
-                    className={
-                      char === " "
-                        ? "phone-char-space"
-                        : `phone-char digit ${isOpen && index === activePhoneCharIndex ? "fisheye-active" : ""}`
-                    }
-                  >
-                    {char === " " ? "\u00A0" : char}
-                  </span>
-                ))}
-              </a>
 
               <div className="mt-3 grid grid-cols-2 gap-2.5">
                 <a
