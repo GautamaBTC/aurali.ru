@@ -4,7 +4,7 @@ import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/cn";
-import { getIsMobile } from "@/hooks/useIsMobile";
+import { getIsMobile, useIsMobile } from "@/hooks/useIsMobile";
 
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
@@ -42,6 +42,7 @@ export function ParallaxSection({
 }: ParallaxSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const layerRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -108,23 +109,25 @@ export function ParallaxSection({
   }, [end, layers, pin, scrub, start]);
 
   return (
-    <section ref={sectionRef} className={cn("relative overflow-hidden", className)}>
-      {layers.map((layer, i) => (
-        <div
-          key={layer.id}
-          ref={(el) => {
-            layerRefs.current[i] = el;
-          }}
-          className={cn("absolute inset-0 will-change-transform", layer.className)}
-          style={{
-            zIndex: layer.z ?? i,
-            scale: layer.scale ?? 1,
-            ...layer.style,
-          }}
-        >
-          {layer.children}
-        </div>
-      ))}
+    <section ref={sectionRef} className={cn(isMobile ? "relative overflow-visible" : "relative overflow-hidden", className)}>
+      {!isMobile
+        ? layers.map((layer, i) => (
+            <div
+              key={layer.id}
+              ref={(el) => {
+                layerRefs.current[i] = el;
+              }}
+              className={cn("pointer-events-none absolute inset-0 will-change-transform", layer.className)}
+              style={{
+                zIndex: layer.z ?? i,
+                scale: layer.scale ?? 1,
+                ...layer.style,
+              }}
+            >
+              {layer.children}
+            </div>
+          ))
+        : null}
 
       <div className="relative z-50">{children}</div>
     </section>

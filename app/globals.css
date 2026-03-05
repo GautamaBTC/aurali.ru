@@ -49,7 +49,7 @@ body {
   color: var(--text-primary);
   font-family: var(--font-manrope), sans-serif;
   overflow-x: hidden;
-  overflow-y: visible;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   touch-action: auto;
 }
