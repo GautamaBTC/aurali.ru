@@ -224,11 +224,11 @@ export function MobileMenu() {
     if (!isOpen || !topPhoneRef.current) return;
 
     const phoneNode = topPhoneRef.current;
-    const chars = Array.from(phoneNode.querySelectorAll<HTMLElement>(".menu-top-phone-char:not(.space)"));
+    const chars = Array.from(phoneNode.querySelectorAll<HTMLElement>('[data-phone-char="digit"]'));
     if (!chars.length) return;
 
     const ctx = gsap.context(() => {
-      gsap.set(chars, { scale: 1, color: "#f4f4f5", textShadow: "none" });
+      gsap.set(chars, { scale: 1, color: "#f4f4f5", backgroundColor: "transparent", textShadow: "none" });
 
       const tl = gsap.timeline({ repeat: -1, repeatDelay: 3 });
       tl.to(
@@ -236,7 +236,6 @@ export function MobileMenu() {
         {
           scale: 1.22,
           color: "#ccff00",
-          textShadow: "0 0 12px rgba(204,255,0,0.8)",
           duration: 0.15,
           ease: "power2.out",
           stagger: {
@@ -637,7 +636,11 @@ export function MobileMenu() {
             aria-label={`Позвонить ${HEADER_PHONE}`}
           >
             {phoneChars.map((char, index) => (
-              <span key={`phone-top-${index}-${char}`} className={`menu-top-phone-char ${char === " " ? "space" : ""}`}>
+              <span
+                key={`phone-top-${index}-${char}`}
+                data-phone-char={char === " " ? "space" : "digit"}
+                className={`menu-top-phone-char ${char === " " ? "space" : ""}`}
+              >
                 {char === " " ? "\u00A0" : char}
               </span>
             ))}
