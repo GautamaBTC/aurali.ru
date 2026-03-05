@@ -68,6 +68,7 @@ export function MobileMenu() {
   const pendingAnchorRef = useRef<string | null>(null);
   const closeTlRef = useRef<gsap.core.Timeline | null>(null);
   const openTlRef = useRef<gsap.core.Timeline | null>(null);
+  const burgerTlRef = useRef<gsap.core.Timeline | null>(null);
   const glitchClearTimerRef = useRef<number | null>(null);
   const openFocusTimerRef = useRef<number | null>(null);
 
@@ -260,95 +261,63 @@ export function MobileMenu() {
     if (!top || !mid || !bot) return;
 
     gsap.killTweensOf([top, mid, bot]);
+    burgerTlRef.current?.kill();
 
-    if (isOpen) {
-      const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
-      tl.to(
-        top,
-        {
-          y: 7.6,
-          x: 0,
-          rotate: 45,
-          background: "#ccff00",
-          boxShadow: "0 0 12px rgba(204,255,0,0.4)",
-          duration: 0.42,
-        },
-        0,
-      )
-        .to(
-          bot,
-          {
-            y: -7.6,
-            x: 0,
-            rotate: -45,
-            width: "100%",
-            background: "#00f0ff",
-            boxShadow: "0 0 12px rgba(0,240,255,0.35)",
-            duration: 0.42,
-          },
-          0,
-        )
-        .to(
-          mid,
-          {
-            clipPath: "inset(0 100% 0 0)",
-            opacity: 0,
-            duration: 0.3,
-          },
-          0,
-        );
-      return;
-    }
+    // Base state for deterministic reverse/play behavior
+    gsap.set(mid, {
+      clipPath: "inset(0% 0% 0% 0%)",
+      WebkitClipPath: "inset(0% 0% 0% 0%)",
+      opacity: 1,
+    });
 
-    const tl = gsap.timeline();
+    const tl = gsap.timeline({ paused: true });
     tl.to(
-      [top, bot],
+      top,
       {
-        y: 0,
-        x: 0,
-        rotate: 0,
-        duration: 0.42,
-        ease: "expo.out",
+        y: 8,
+        rotate: 45,
+        duration: 0.4,
+        ease: "power3.inOut",
       },
       0,
     )
       .to(
         bot,
         {
-          width: "50%",
-          background: "#00f0ff",
-          boxShadow: "0 0 8px rgba(0,240,255,0.25)",
-          duration: 0.42,
-          ease: "expo.out",
+          y: -8,
+          rotate: -45,
+          width: "100%",
+          duration: 0.4,
+          ease: "power3.inOut",
         },
         0,
       )
       .to(
-        top,
-        {
-          background: "#ccff00",
-          boxShadow: "0 0 8px rgba(204,255,0,0.25)",
-          duration: 0.42,
-          ease: "expo.out",
-        },
-        0,
-      )
-      .fromTo(
         mid,
-        { clipPath: "inset(0 100% 0 0)", opacity: 0 },
         {
-          clipPath: "inset(0 0 0 0)",
-          opacity: 1,
-          duration: 0.5,
-          delay: 0.08,
-          ease: "expo.out",
+          clipPath: "inset(0% 0% 0% 100%)",
+          WebkitClipPath: "inset(0% 0% 0% 100%)",
+          duration: 0.3,
+          ease: "power2.inOut",
         },
         0,
       );
 
+    burgerTlRef.current = tl;
+
     return () => {
+      burgerTlRef.current?.kill();
       gsap.killTweensOf([top, mid, bot]);
     };
+  }, []);
+
+  useEffect(() => {
+    if (!burgerTlRef.current) return;
+    if (isOpen) {
+      burgerTlRef.current.play();
+    } else {
+      burgerTlRef.current.reverse();
+    }
   }, [isOpen]);
 
   useEffect(() => {
@@ -619,7 +588,8 @@ export function MobileMenu() {
               boxShadow: "0 0 8px rgba(224,230,237,0.25)",
               opacity: 1,
               clipPath: "inset(0 0 0 0)",
-              transformOrigin: "right center",
+              WebkitClipPath: "inset(0 0 0 0)",
+              transformOrigin: "center center",
             }}
           />
           <span
