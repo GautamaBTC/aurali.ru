@@ -658,9 +658,11 @@ select:focus-visible {
 .menu-top-phone-char {
   display: inline-block;
   transform: translateZ(0);
-  will-change: transform, color;
   background: transparent !important;
   -webkit-text-fill-color: currentColor;
+  isolation: isolate;
+  transition: none;
+  transform-origin: center center;
 }
 
 .menu-top-phone-char.space {

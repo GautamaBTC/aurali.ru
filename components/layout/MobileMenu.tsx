@@ -329,26 +329,12 @@ export function MobileMenu() {
     const ctx = gsap.context(() => {
       gsap.set([top, mid, bot], { opacity: 0 });
 
-      const entryTl = gsap.timeline();
-      entryTl
-        .fromTo(
-          top,
-          { x: -50, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.55, ease: "back.out(2)" },
-          0,
-        )
-        .fromTo(
-          bot,
-          { x: 50, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.55, ease: "back.out(2)" },
-          0.06,
-        )
-        .fromTo(
-          mid,
-          { y: -30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.62, ease: "back.out(2.2)" },
-          0.12,
-        );
+      gsap.to([top, mid, bot], {
+        opacity: 1,
+        duration: 0.3,
+        stagger: 0.06,
+        ease: "power2.out",
+      });
     });
 
     return () => {
@@ -576,6 +562,7 @@ export function MobileMenu() {
               boxShadow: "0 0 8px rgba(204,255,0,0.25)",
               transform: "translateY(0) rotate(0)",
               transformOrigin: "center center",
+              transition: "none",
             }}
           />
           <span
@@ -589,6 +576,7 @@ export function MobileMenu() {
               clipPath: "inset(0 0 0 0)",
               WebkitClipPath: "inset(0 0 0 0)",
               transformOrigin: "center center",
+              transition: "none",
             }}
           />
           <span
@@ -600,6 +588,7 @@ export function MobileMenu() {
               boxShadow: "0 0 8px rgba(0,240,255,0.25)",
               transform: "translateY(0) rotate(0)",
               transformOrigin: "center center",
+              transition: "none",
             }}
           />
         </div>
