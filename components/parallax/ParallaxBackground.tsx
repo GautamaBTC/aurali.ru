@@ -263,6 +263,8 @@ export default function ParallaxBackground({ intensity = 1 }: Props) {
     };
   }, [isMobile]);
 
+  if (typeof window !== "undefined" && isMobile) return null;
+
   return (
     <div ref={containerRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden opacity-0">
       <div ref={videoLayerRef} className="absolute inset-[-12%] will-change-transform">
@@ -280,21 +282,21 @@ export default function ParallaxBackground({ intensity = 1 }: Props) {
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(rgba(224,230,237,0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(224,230,237,0.22) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
       </div>
 
-      <div className={`${isMobile ? "opacity-85" : "hidden md:block opacity-85"}`}>
+      <div className="hidden md:block opacity-85">
         {LAYERS.map((layer, i) => (
           <div
             key={layer.id}
             ref={setLayerRef(i)}
-            className={`${layer.className} ${layer.showOnMobile ? "" : "hidden md:block"}`}
+            className={layer.className}
             style={{
               ...layerStyleById[layer.id],
-              willChange: isMobile ? "auto" : "transform",
+              willChange: "transform",
               filter: layer.blur ? `blur(${layer.blur}px)` : undefined,
             }}
           />
         ))}
 
-        {!isMobile ? <GlowParticles /> : null}
+        <GlowParticles />
 
         <div
           ref={grainRef}

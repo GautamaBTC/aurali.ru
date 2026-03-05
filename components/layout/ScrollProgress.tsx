@@ -9,7 +9,7 @@ export function ScrollProgress() {
   const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (getIsMobile()) return;
+    if (typeof window === "undefined" || getIsMobile()) return;
 
     const node = barRef.current;
     if (!node) return;
@@ -32,6 +32,8 @@ export function ScrollProgress() {
       trigger.kill();
     };
   }, []);
+
+  if (typeof window !== "undefined" && getIsMobile()) return null;
 
   return (
     <div className="fixed inset-x-0 top-0 z-40 h-1 bg-transparent">
