@@ -62,6 +62,8 @@ export function MobileMenu() {
   const lineMidRef = useRef<HTMLSpanElement>(null);
   const lineBotRef = useRef<HTMLSpanElement>(null);
   const topPhoneRef = useRef<HTMLAnchorElement | null>(null);
+  const callArrowRef = useRef<HTMLDivElement | null>(null);
+  const callLabelRef = useRef<HTMLSpanElement | null>(null);
   const burgerEntryPlayedRef = useRef(false);
 
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
@@ -225,27 +227,99 @@ export function MobileMenu() {
 
     const phoneNode = topPhoneRef.current;
     const chars = Array.from(phoneNode.querySelectorAll<HTMLElement>('[data-phone-char="digit"]'));
+    const arrow = callArrowRef.current;
+    const label = callLabelRef.current;
     if (!chars.length) return;
 
     const ctx = gsap.context(() => {
-      gsap.set(chars, { scale: 1, color: "#f4f4f5", backgroundColor: "transparent", textShadow: "none" });
+      gsap.set(chars, {
+        opacity: 0,
+        y: 20,
+        scale: 1,
+        color: "#ffffff",
+        backgroundColor: "transparent",
+        textShadow: "none",
+      });
+      if (arrow) gsap.set(arrow, { opacity: 0, y: 0 });
+      if (label) gsap.set(label, { opacity: 0, scale: 1, color: "#ffffff" });
 
-      const tl = gsap.timeline({ repeat: -1, repeatDelay: 3 });
-      tl.to(
+      const masterTl = gsap.timeline();
+
+      masterTl.to(chars, {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        ease: "power2.out",
+        stagger: 0.03,
+      });
+
+      if (label) {
+        masterTl.to(
+          label,
+          {
+            opacity: 1,
+            duration: 0.4,
+            ease: "power2.out",
+          },
+          "-=0.1",
+        );
+      }
+
+      if (arrow) {
+        masterTl.to(
+          arrow,
+          {
+            opacity: 1,
+            duration: 0.3,
+            ease: "power2.out",
+          },
+          "-=0.2",
+        );
+      }
+
+      const waveTl = gsap.timeline({ repeat: -1, repeatDelay: 3 });
+      waveTl.to(
         chars,
         {
-          scale: 1.22,
-          color: "#ccff00",
-          duration: 0.15,
-          ease: "power2.out",
-          stagger: {
-            each: 0.05,
-            yoyo: true,
-            repeat: 1,
-          },
+          keyframes: [
+            {
+              color: "#ccff00",
+              scale: 1.25,
+              duration: 0.25,
+              ease: "power2.out",
+            },
+            {
+              color: "#ffffff",
+              scale: 1,
+              duration: 0.4,
+              ease: "power2.inOut",
+            },
+          ],
+          stagger: { each: 0.06, from: "start" },
         },
         0,
       );
+
+      masterTl.add(waveTl, "+=0.5");
+
+      if (arrow) {
+        const arrowTl = gsap.timeline({ repeat: -1, repeatDelay: 1.5 });
+        arrowTl
+          .to(arrow, { y: -8, duration: 0.3, ease: "power2.out" })
+          .to(arrow, { y: 0, duration: 0.25, ease: "bounce.out" })
+          .to(arrow, { y: -5, duration: 0.2, ease: "power2.out" })
+          .to(arrow, { y: 0, duration: 0.2, ease: "bounce.out" });
+        masterTl.add(arrowTl, 1.5);
+      }
+
+      if (label) {
+        const labelTl = gsap.timeline({ repeat: -1, repeatDelay: 2 });
+        labelTl
+          .to(label, { color: "#ccff00", scale: 1.1, duration: 0.4, ease: "power2.out" })
+          .to(label, { color: "#00f0ff", scale: 1, duration: 0.5, ease: "power2.inOut" })
+          .to(label, { color: "#ffffff", duration: 0.3, ease: "power1.in" });
+        masterTl.add(labelTl, 2);
+      }
     }, phoneNode);
 
     return () => {
@@ -327,14 +401,17 @@ export function MobileMenu() {
 
     burgerEntryPlayedRef.current = true;
     const ctx = gsap.context(() => {
-      gsap.set([top, mid, bot], { opacity: 0 });
+      const lines = [top, mid, bot];
+      gsap.set(lines, { y: -60, opacity: 0, scaleX: 0.3 });
 
-      gsap.to([top, mid, bot], {
-        opacity: 1,
-        duration: 0.3,
-        stagger: 0.06,
-        ease: "power2.out",
-      });
+      const entryTl = gsap.timeline({ delay: 0.3 });
+      entryTl
+        .to(top, { y: 0, opacity: 1, scaleX: 1, duration: 0.6, ease: "bounce.out" }, 0)
+        .to(mid, { y: 0, opacity: 1, scaleX: 1, duration: 0.55, ease: "bounce.out" }, "-=0.4")
+        .to(bot, { y: 0, opacity: 1, scaleX: 1, duration: 0.5, ease: "bounce.out" }, "-=0.35")
+        .call(() => {
+          gsap.set(lines, { clearProps: "y,opacity,scaleX" });
+        });
     });
 
     return () => {
@@ -617,24 +694,6 @@ export function MobileMenu() {
             <div className="menu-film-grain absolute inset-0 opacity-[0.06]" />
           </div>
 
-          <a
-            ref={topPhoneRef}
-            href={phoneHref}
-            className="menu-top-phone-wrapper absolute left-5 top-[calc(18px+env(safe-area-inset-top))] z-20 text-[1.02rem] font-medium tracking-[0.02em] text-zinc-100"
-            style={{ fontFamily: "var(--font-jetbrains-mono), monospace" }}
-            aria-label={`Позвонить ${HEADER_PHONE}`}
-          >
-            {phoneChars.map((char, index) => (
-              <span
-                key={`phone-top-${index}-${char}`}
-                data-phone-char={char === " " ? "space" : "digit"}
-                className={`menu-top-phone-char ${char === " " ? "space" : ""}`}
-              >
-                {char === " " ? "\u00A0" : char}
-              </span>
-            ))}
-          </a>
-
           <div
             ref={contentRef}
             className="mobile-menu-content relative z-10 flex min-h-dvh max-h-dvh flex-col justify-between overflow-hidden px-5 pt-[calc(80px+env(safe-area-inset-top))] pb-[calc(12px+env(safe-area-inset-bottom))]"
@@ -686,6 +745,53 @@ export function MobileMenu() {
                 Премиальный центр автоэлектрики. Диагностика, StarLine, автосвет и сложные электрические случаи.
               </p>
 
+              <div className="mb-4 flex justify-center">
+                <div className="h-px w-16 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              </div>
+
+              <div className="mb-4 flex flex-col items-center gap-2">
+                <a
+                  ref={topPhoneRef}
+                  href={phoneHref}
+                  className="menu-top-phone-wrapper text-white"
+                  style={{
+                    fontFamily: "var(--font-jetbrains-mono), monospace",
+                    fontSize: "1.65rem",
+                    letterSpacing: "0.02em",
+                  }}
+                  aria-label={`Позвонить ${HEADER_PHONE}`}
+                >
+                  {phoneChars.map((char, index) => (
+                    <span
+                      key={`phone-top-${index}-${char}`}
+                      data-phone-char={char === " " ? "space" : "digit"}
+                      className={`menu-top-phone-char ${char === " " ? "space" : ""}`}
+                    >
+                      {char === " " ? "\u00A0" : char}
+                    </span>
+                  ))}
+                </a>
+
+                <div className="flex flex-col items-center gap-1">
+                  <div ref={callArrowRef} className="call-arrow" style={{ transformOrigin: "center center" }}>
+                    <svg width="24" height="32" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <line x1="12" y1="32" x2="12" y2="6" stroke="url(#arrowGrad)" strokeWidth="2" strokeLinecap="round" />
+                      <line x1="12" y1="6" x2="5" y2="13" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" />
+                      <line x1="12" y1="6" x2="19" y2="13" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" />
+                      <defs>
+                        <linearGradient id="arrowGrad" x1="12" y1="32" x2="12" y2="6">
+                          <stop offset="0%" stopColor="#00f0ff" stopOpacity="0.3" />
+                          <stop offset="100%" stopColor="#ccff00" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+                  <span ref={callLabelRef} className="call-label inline-block text-xs font-bold uppercase tracking-[0.25em] text-white/80">
+                    жми
+                  </span>
+                </div>
+              </div>
+
               <div className="mt-3 grid grid-cols-2 gap-2.5">
                 <a
                   href={siteConfig.social.whatsapp}
@@ -710,15 +816,6 @@ export function MobileMenu() {
                   <span className="text-[0.78rem] font-semibold tracking-[0.04em] text-[#00f0ff]">Telegram</span>
                 </a>
 
-                <a
-                  href={phoneHref}
-                  className="btn-shine tap-none touch-manipulation col-span-2 flex h-11 items-center justify-center gap-1.5 rounded-full border border-[#e0e6ed14] bg-[#e0e6ed0a] px-3.5 transition-all duration-300 hover:border-[#e0e6ed26] hover:bg-[#e0e6ed14]"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9fadbc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                  </svg>
-                  <span className="text-[0.78rem] font-medium text-[#9fadbc]">Позвонить</span>
-                </a>
               </div>
             </div>
           </div>
