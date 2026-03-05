@@ -45,6 +45,7 @@ const HEADER_PHONE_CHARS = [
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [isBurgerVisible, setIsBurgerVisible] = useState(false);
   const [activeId, setActiveId] = useState<string>("services");
   const [glitchId, setGlitchId] = useState<string | null>(null);
@@ -65,6 +66,8 @@ export function MobileMenu() {
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const pendingAnchorRef = useRef<string | null>(null);
   const closeTlRef = useRef<gsap.core.Timeline | null>(null);
+  const glitchClearTimerRef = useRef<number | null>(null);
+  const openFocusTimerRef = useRef<number | null>(null);
 
   useLockScroll(isOpen);
 
@@ -101,16 +104,24 @@ export function MobileMenu() {
     const node = document.getElementById(id);
     if (!node) return;
 
-    const y = node.getBoundingClientRect().top + window.scrollY - HEADER_HEIGHT;
-    window.scrollTo({ top: y, behavior: "smooth" });
+    window.requestAnimationFrame(() => {
+      const y = node.getBoundingClientRect().top + window.scrollY - HEADER_HEIGHT;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    });
   }, []);
 
   const closeMenu = useCallback((href?: string) => {
+    if (isAnimating) return;
     if (href) pendingAnchorRef.current = href;
+    setIsAnimating(true);
     setIsOpen(false);
-  }, []);
+  }, [isAnimating]);
 
-  const openMenu = useCallback(() => setIsOpen(true), []);
+  const openMenu = useCallback(() => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setIsOpen(true);
+  }, [isAnimating]);
 
   const trapFocus = useCallback(
     (event: KeyboardEvent) => {
@@ -136,6 +147,8 @@ export function MobileMenu() {
   );
 
   useEffect(() => {
+    if (!isOpen) return;
+
     const sections = MENU_ITEMS.map((item) => document.getElementById(item.id)).filter(Boolean) as HTMLElement[];
     if (!sections.length) return;
 
@@ -152,7 +165,7 @@ export function MobileMenu() {
 
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, []);
+  }, [isOpen]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -171,25 +184,35 @@ export function MobileMenu() {
   useEffect(() => {
     if (!isOpen) return;
 
-    let timerId: number | undefined;
+    let loopTimerId: number | undefined;
 
     const tick = () => {
       const randomItem = MENU_ITEMS[Math.floor(Math.random() * MENU_ITEMS.length)];
       if (randomItem) {
         setGlitchId(randomItem.id);
-        window.setTimeout(() => setGlitchId((prev) => (prev === randomItem.id ? null : prev)), 240);
+        if (glitchClearTimerRef.current) {
+          window.clearTimeout(glitchClearTimerRef.current);
+        }
+        glitchClearTimerRef.current = window.setTimeout(() => setGlitchId((prev) => (prev === randomItem.id ? null : prev)), 240);
       }
-      timerId = window.setTimeout(tick, 3000 + Math.random() * 3000);
+      loopTimerId = window.setTimeout(tick, 3000 + Math.random() * 3000);
     };
 
-    timerId = window.setTimeout(tick, 1200);
+    loopTimerId = window.setTimeout(tick, 1200);
 
     return () => {
-      if (timerId) window.clearTimeout(timerId);
+      if (loopTimerId) window.clearTimeout(loopTimerId);
+      if (glitchClearTimerRef.current) {
+        window.clearTimeout(glitchClearTimerRef.current);
+        glitchClearTimerRef.current = null;
+      }
+      setGlitchId(null);
     };
   }, [isOpen]);
 
   useEffect(() => {
+    if (!isOpen) return;
+
     let frameTimer: number | undefined;
     let cycleTimer: number | undefined;
     let cancelled = false;
@@ -219,7 +242,7 @@ export function MobileMenu() {
       if (frameTimer) window.clearInterval(frameTimer);
       if (cycleTimer) window.clearTimeout(cycleTimer);
     };
-  }, []);
+  }, [isOpen]);
 
   useEffect(() => {
     const top = lineTopRef.current;
@@ -227,74 +250,80 @@ export function MobileMenu() {
     const bot = lineBotRef.current;
     if (!top || !mid || !bot) return;
 
-    gsap.killTweensOf([top, mid, bot]);
+    const ctx = gsap.context(() => {
+      gsap.killTweensOf([top, mid, bot]);
 
-    if (isOpen) {
-      const flyDistance = -Math.max((window?.innerWidth ?? 420) - 100, 320);
+      if (isOpen) {
+        const flyDistance = -Math.max((window?.innerWidth ?? 420) - 100, 320);
+        gsap.to(top, {
+          y: 7.2,
+          x: 1.2,
+          rotate: 36,
+          background: "#ccff00",
+          boxShadow: "0 0 12px rgba(204,255,0,0.4)",
+          duration: 0.5,
+          ease: "back.out(1.4)",
+        });
+        gsap.to(mid, {
+          x: flyDistance,
+          y: -1.5,
+          rotate: -14,
+          opacity: 0,
+          scaleX: 0,
+          duration: 0.26,
+          ease: "power4.in",
+        });
+        gsap.to(bot, {
+          y: -7.2,
+          x: -1.2,
+          rotate: -52,
+          width: 38,
+          background: "#00f0ff",
+          boxShadow: "0 0 12px rgba(0,240,255,0.35)",
+          duration: 0.5,
+          ease: "back.out(1.4)",
+        });
+        return;
+      }
+
       gsap.to(top, {
-        y: 7.2,
-        x: 1.2,
-        rotate: 36,
-        background: "#ccff00",
-        boxShadow: "0 0 12px rgba(204,255,0,0.4)",
-        duration: 0.5,
-        ease: "back.out(1.4)",
-      });
-      gsap.to(mid, {
-        x: flyDistance,
-        y: -1.5,
-        rotate: -14,
-        opacity: 0,
-        scaleX: 0,
-        duration: 0.26,
-        ease: "power4.in",
-      });
-      gsap.to(bot, {
-        y: -7.2,
-        x: -1.2,
-        rotate: -52,
-        width: 38,
-        background: "#00f0ff",
-        boxShadow: "0 0 12px rgba(0,240,255,0.35)",
-        duration: 0.5,
-        ease: "back.out(1.4)",
-      });
-      return;
-    }
-
-    gsap.to(top, {
-      y: 0,
-      x: 0,
-      rotate: 0,
-      background: "#ccff00",
-      boxShadow: "0 0 8px rgba(204,255,0,0.25)",
-      duration: 0.46,
-      ease: "back.out(1.35)",
-    });
-    gsap.fromTo(
-      mid,
-      { x: 16, y: 0, rotate: 0, opacity: 0, scaleX: 0.45 },
-      {
-        x: 0,
         y: 0,
+        x: 0,
         rotate: 0,
-        opacity: 1,
-        scaleX: 1,
-        duration: 0.44,
-        delay: 0.06,
+        background: "#ccff00",
+        boxShadow: "0 0 8px rgba(204,255,0,0.25)",
+        duration: 0.46,
         ease: "back.out(1.35)",
-      },
-    );
-    gsap.to(bot, {
-      y: 0,
-      x: 0,
-      rotate: 0,
-      width: 19,
-      background: "#00f0ff",
-      boxShadow: "0 0 8px rgba(0,240,255,0.25)",
-      duration: 0.46,
-      ease: "back.out(1.35)",
+      });
+      gsap.fromTo(
+        mid,
+        { x: 16, y: 0, rotate: 0, opacity: 0, scaleX: 0.45 },
+        {
+          x: 0,
+          y: 0,
+          rotate: 0,
+          opacity: 1,
+          scaleX: 1,
+          duration: 0.44,
+          delay: 0.06,
+          ease: "back.out(1.35)",
+        },
+      );
+      gsap.to(bot, {
+        y: 0,
+        x: 0,
+        rotate: 0,
+        width: 19,
+        background: "#00f0ff",
+        boxShadow: "0 0 8px rgba(0,240,255,0.25)",
+        duration: 0.46,
+        ease: "back.out(1.35)",
+      });
     });
+
+    return () => {
+      ctx.revert();
+    };
   }, [isOpen]);
 
   useEffect(() => {
@@ -304,28 +333,34 @@ export function MobileMenu() {
     if (!isBurgerVisible || !top || !mid || !bot || burgerEntryPlayedRef.current) return;
 
     burgerEntryPlayedRef.current = true;
-    gsap.set([top, mid, bot], { opacity: 0 });
+    const ctx = gsap.context(() => {
+      gsap.set([top, mid, bot], { opacity: 0 });
 
-    const entryTl = gsap.timeline();
-    entryTl
-      .fromTo(
-        top,
-        { x: -50, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.55, ease: "back.out(2)" },
-        0,
-      )
-      .fromTo(
-        bot,
-        { x: 50, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.55, ease: "back.out(2)" },
-        0.06,
-      )
-      .fromTo(
-        mid,
-        { y: -30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.62, ease: "back.out(2.2)" },
-        0.12,
-      );
+      const entryTl = gsap.timeline();
+      entryTl
+        .fromTo(
+          top,
+          { x: -50, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.55, ease: "back.out(2)" },
+          0,
+        )
+        .fromTo(
+          bot,
+          { x: 50, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.55, ease: "back.out(2)" },
+          0.06,
+        )
+        .fromTo(
+          mid,
+          { y: -30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.62, ease: "back.out(2.2)" },
+          0.12,
+        );
+    });
+
+    return () => {
+      ctx.revert();
+    };
   }, [isBurgerVisible]);
 
   useEffect(() => {
@@ -336,81 +371,100 @@ export function MobileMenu() {
 
     if (!overlay || !panel || !footer || !items.length) return;
 
-    closeTlRef.current?.kill();
-    gsap.killTweensOf([overlay, panel, footer, ...items]);
+    const ctx = gsap.context(() => {
+      closeTlRef.current?.kill();
+      gsap.killTweensOf([overlay, panel, footer, ...items]);
 
-    if (isOpen) {
-      gsap.set(overlay, {
-        autoAlpha: 1,
-        visibility: "visible",
-        pointerEvents: "auto",
+      if (isOpen) {
+        gsap.set(overlay, {
+          autoAlpha: 1,
+          visibility: "visible",
+          pointerEvents: "auto",
+        });
+
+        gsap.set(panel, { y: 36, scale: 0.985, autoAlpha: 0 });
+        gsap.set(items, {
+          y: 46,
+          autoAlpha: 0,
+        });
+        gsap.set(footer, { autoAlpha: 0, y: 24 });
+
+        gsap
+          .timeline({
+            onComplete: () => {
+              setIsAnimating(false);
+            },
+          })
+          .to(
+            panel,
+            {
+              y: 0,
+              scale: 1,
+              autoAlpha: 1,
+              duration: 0.62,
+              ease: "back.out(1.45)",
+            },
+            0,
+          )
+          .to(
+            items,
+            {
+              y: 0,
+              autoAlpha: 1,
+              duration: 0.48,
+              stagger: 0.08,
+              ease: "back.out(1.45)",
+            },
+            0.1,
+          )
+          .to(footer, { autoAlpha: 1, y: 0, duration: 0.36, ease: "back.out(1.35)" }, 0.28);
+
+        if (openFocusTimerRef.current) {
+          window.clearTimeout(openFocusTimerRef.current);
+        }
+        openFocusTimerRef.current = window.setTimeout(() => firstItemRef.current?.focus(), 200);
+        return;
+      }
+
+      const closeTl = gsap.timeline({
+        onComplete: () => {
+          gsap.set(overlay, {
+            autoAlpha: 0,
+            visibility: "hidden",
+            pointerEvents: "none",
+          });
+          burgerRef.current?.focus();
+          runPendingScroll();
+          setIsAnimating(false);
+        },
       });
 
-      gsap.set(panel, { y: 36, scale: 0.985, autoAlpha: 0 });
-      gsap.set(items, {
-        y: 46,
-        autoAlpha: 0,
-      });
-      gsap.set(footer, { autoAlpha: 0, y: 24 });
-
-      gsap
-        .timeline()
-        .to(
-          panel,
-          {
-            y: 0,
-            scale: 1,
-            autoAlpha: 1,
-            duration: 0.62,
-            ease: "back.out(1.45)",
-          },
-          0,
-        )
+      closeTl
         .to(
           items,
           {
-            y: 0,
-            autoAlpha: 1,
-            duration: 0.48,
-            stagger: 0.08,
-            ease: "back.out(1.45)",
+            y: 22,
+            autoAlpha: 0,
+            duration: 0.2,
+            stagger: { each: 0.04, from: "end" },
+            ease: "power2.inOut",
           },
-          0.1,
+          0,
         )
-        .to(footer, { autoAlpha: 1, y: 0, duration: 0.36, ease: "back.out(1.35)" }, 0.28);
+        .to(footer, { autoAlpha: 0, y: 16, duration: 0.15, ease: "power2.in" }, 0)
+        .to(panel, { y: 26, autoAlpha: 0, scale: 0.985, duration: 0.34, ease: "power3.in" }, 0.06);
 
-      window.setTimeout(() => firstItemRef.current?.focus(), 200);
-      return;
-    }
-
-    const closeTl = gsap.timeline({
-      onComplete: () => {
-        gsap.set(overlay, {
-          autoAlpha: 0,
-          visibility: "hidden",
-          pointerEvents: "none",
-        });
-        burgerRef.current?.focus();
-        runPendingScroll();
-      },
+      closeTlRef.current = closeTl;
     });
 
-    closeTl
-      .to(
-        items,
-        {
-          y: 22,
-          autoAlpha: 0,
-          duration: 0.2,
-          stagger: { each: 0.04, from: "end" },
-          ease: "power2.inOut",
-        },
-        0,
-      )
-      .to(footer, { autoAlpha: 0, y: 16, duration: 0.15, ease: "power2.in" }, 0)
-      .to(panel, { y: 26, autoAlpha: 0, scale: 0.985, duration: 0.34, ease: "power3.in" }, 0.06);
-
-    closeTlRef.current = closeTl;
+    return () => {
+      if (openFocusTimerRef.current) {
+        window.clearTimeout(openFocusTimerRef.current);
+        openFocusTimerRef.current = null;
+      }
+      closeTlRef.current?.kill();
+      ctx.revert();
+    };
   }, [isOpen, runPendingScroll]);
 
   const phoneHref = useMemo(() => `tel:${HEADER_PHONE.replace(/[^\d+]/g, "")}`, []);
@@ -418,6 +472,7 @@ export function MobileMenu() {
   useEffect(() => {
     if (!isOpen) return;
 
+    let resizeDebounceTimer: number | undefined;
     const recalcScale = () => {
       const content = contentRef.current;
       if (!content) return;
@@ -431,12 +486,40 @@ export function MobileMenu() {
       setMenuScale(Math.max(0.72, Math.min(1, ratio * 0.99)));
     };
 
+    const onResize = () => {
+      if (resizeDebounceTimer) {
+        window.clearTimeout(resizeDebounceTimer);
+      }
+      resizeDebounceTimer = window.setTimeout(recalcScale, 150);
+    };
+
     const raf = window.requestAnimationFrame(recalcScale);
-    window.addEventListener("resize", recalcScale);
+    window.addEventListener("resize", onResize);
     return () => {
       window.cancelAnimationFrame(raf);
-      window.removeEventListener("resize", recalcScale);
+      if (resizeDebounceTimer) {
+        window.clearTimeout(resizeDebounceTimer);
+      }
+      window.removeEventListener("resize", onResize);
     };
+  }, [isOpen]);
+
+  useEffect(() => {
+    const rootContent = document.querySelector<HTMLElement>(".boot-ui");
+    if (!rootContent) return;
+
+    if (isOpen) {
+      rootContent.setAttribute("aria-hidden", "true");
+      rootContent.setAttribute("inert", "");
+      return () => {
+        rootContent.removeAttribute("aria-hidden");
+        rootContent.removeAttribute("inert");
+      };
+    }
+
+    rootContent.removeAttribute("aria-hidden");
+    rootContent.removeAttribute("inert");
+    return undefined;
   }, [isOpen]);
 
   return (
@@ -600,7 +683,11 @@ export function MobileMenu() {
                 {HEADER_PHONE_CHARS.map((char, index) => (
                   <span
                     key={`${char}-${index}`}
-                    className={char === " " ? "phone-char-space" : `phone-char digit ${index === activePhoneCharIndex ? "fisheye-active" : ""}`}
+                    className={
+                      char === " "
+                        ? "phone-char-space"
+                        : `phone-char digit ${isOpen && index === activePhoneCharIndex ? "fisheye-active" : ""}`
+                    }
                   >
                     {char === " " ? "\u00A0" : char}
                   </span>
