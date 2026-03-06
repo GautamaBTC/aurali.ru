@@ -11,7 +11,6 @@ import { ProcessSection } from "@/components/sections/ProcessSection";
 import { ReviewsSection } from "@/components/sections/ReviewsSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { StatsSection } from "@/components/sections/StatsSection";
-import { MultimeterSpoiler } from "@/components/sections/MultimeterSpoiler";
 
 export default function Home() {
   return (
@@ -87,7 +86,6 @@ export default function Home() {
         <BrandsSection />
         <ReviewsSection />
         <ContactSection />
-        <MultimeterSpoiler />
       </main>
       <StickyMobileActions />
       <Footer />
