@@ -819,10 +819,9 @@ export function MobileMenu() {
           }}
         >
           <div className="pointer-events-none absolute inset-0">
-            <video className="h-full w-full object-cover object-center" autoPlay muted loop playsInline preload="metadata">
+            <video className="h-full w-full object-cover object-center" autoPlay muted loop playsInline preload="none">
               <source src="/uploads/videos/menu-bg.webm" type="video/webm" />
               <source src="/uploads/videos/menu-bg.mp4" type="video/mp4" />
-              <source src="/uploads/videos/hader.mp4" type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,17,22,0.85)_0%,rgba(11,17,22,0.72)_42%,rgba(11,17,22,0.86)_100%)] backdrop-blur-[20px]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(0,240,255,0.12),transparent_40%),radial-gradient(circle_at_86%_90%,rgba(204,255,0,0.12),transparent_44%)]" />

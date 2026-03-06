@@ -1,7 +1,7 @@
 ﻿import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { JetBrains_Mono, Manrope } from "next/font/google";
-import { MobileMenu } from "@/components/layout/MobileMenu";
+import { MobileMenuWrapper } from "@/components/layout/MobileMenuWrapper";
 import ParallaxBackground from "@/components/parallax/ParallaxBackground";
 import { siteConfig } from "@/lib/siteConfig";
 import "./globals.css";
@@ -114,7 +114,7 @@ export default function RootLayout({
         className={`${manrope.variable} ${jetBrainsMono.variable} bg-[var(--bg-primary)] antialiased text-[var(--text-primary)]`}
       >
         <ParallaxBackground intensity={1} />
-        <MobileMenu />
+        <MobileMenuWrapper />
         <div className="boot-ui relative z-10 pt-[calc(80px+env(safe-area-inset-top))]">{children}</div>
         <Script id="ui-boot" strategy="beforeInteractive">
           {`
