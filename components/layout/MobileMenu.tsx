@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { siteConfig } from "@/lib/siteConfig";
@@ -66,7 +66,6 @@ export function MobileMenu() {
   const logoAutoRef = useRef<HTMLSpanElement | null>(null);
   const logoRegionRef = useRef<HTMLSpanElement | null>(null);
   const logoAccentRef = useRef<HTMLSpanElement | null>(null);
-  const hasLogoAnimatedRef = useRef(false);
   const topPhoneRef = useRef<HTMLAnchorElement | null>(null);
   const callArrowRef = useRef<HTMLDivElement | null>(null);
   const callLabelRef = useRef<HTMLSpanElement | null>(null);
@@ -102,15 +101,13 @@ export function MobileMenu() {
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const logo = logoRef.current;
     const vip = logoVipRef.current;
     const auto = logoAutoRef.current;
     const region = logoRegionRef.current;
     const accent = logoAccentRef.current;
     if (!logo || !vip || !auto || !region || !accent) return;
-    if (hasLogoAnimatedRef.current) return;
-    hasLogoAnimatedRef.current = true;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
@@ -807,7 +804,11 @@ export function MobileMenu() {
         </div>
       </button>
 
-      <div ref={overlayRef} className="pointer-events-none invisible fixed inset-0 z-[9999] md:hidden" aria-hidden={!isOpen}>
+      <div
+        ref={overlayRef}
+        className="pointer-events-none invisible fixed inset-0 z-[9999] bg-[#050a14]/95 md:hidden"
+        aria-hidden={!isOpen}
+      >
         <div
           id="mobile-nav-dialog"
           ref={panelRef}
@@ -820,13 +821,10 @@ export function MobileMenu() {
           }}
         >
           <div className="pointer-events-none absolute inset-0">
-            <video className="h-full w-full object-cover object-center" autoPlay muted loop playsInline preload="none">
-              <source src="/uploads/videos/menu-bg.webm" type="video/webm" />
-              <source src="/uploads/videos/menu-bg.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,17,22,0.85)_0%,rgba(11,17,22,0.72)_42%,rgba(11,17,22,0.86)_100%)] backdrop-blur-[20px]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(0,240,255,0.12),transparent_40%),radial-gradient(circle_at_86%_90%,rgba(204,255,0,0.12),transparent_44%)]" />
-            <div className="menu-film-grain absolute inset-0 opacity-[0.06]" />
+            <div className="absolute inset-0 bg-[#0b1116]/96" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,17,22,0.96)_0%,rgba(11,17,22,0.9)_42%,rgba(11,17,22,0.97)_100%)] backdrop-blur-[20px]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(0,240,255,0.12),transparent_40%),radial-gradient(circle_at_86%_90%,rgba(204,255,0,0.12),transparent_44%)] opacity-90" />
+            <div className="menu-film-grain absolute inset-0 opacity-[0.04]" />
           </div>
 
           <div
