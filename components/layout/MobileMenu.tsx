@@ -715,7 +715,8 @@ export function MobileMenu() {
             ref={contentRef}
             className="mobile-menu-content relative z-10 flex min-h-dvh max-h-dvh flex-col justify-between overflow-hidden px-5 pt-[calc(80px+env(safe-area-inset-top))] pb-[calc(12px+env(safe-area-inset-bottom))]"
             style={{
-              transform: `scale(${isOpen ? menuScale : 1})`,
+              // Keep scale stable during close animation to avoid visual jump.
+              transform: `scale(${menuScale})`,
               transformOrigin: "top center",
             }}
           >
@@ -744,7 +745,7 @@ export function MobileMenu() {
                             lineHeight: 1.1,
                             letterSpacing: "-0.01em",
                             color: isActive ? "#ffffff" : "#f4f7fb",
-                            transition: "opacity 0.3s",
+                            transition: "none",
                             opacity: isActive ? 1 : 0.92,
                           }}
                         >
