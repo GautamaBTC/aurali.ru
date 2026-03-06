@@ -113,17 +113,48 @@ export function MobileMenu() {
     hasLogoAnimatedRef.current = true;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) return;
+    if (reduce) {
+      gsap.set([vip, auto, region, accent], {
+        opacity: 1,
+        clearProps: "transform",
+      });
+      return;
+    }
 
     const words = [vip, auto, region];
     gsap.killTweensOf(words);
     gsap.killTweensOf(logo);
     gsap.killTweensOf(accent);
 
-    gsap.set(vip, { opacity: 0, x: -80, rotation: -8, scale: 0.85 });
-    gsap.set(auto, { opacity: 0, x: 80, rotation: 8, scale: 0.85 });
-    gsap.set(region, { opacity: 0, x: -80, rotation: -8, scale: 0.85 });
-    gsap.set(accent, { opacity: 0, scaleX: 0, transformOrigin: "left center" });
+    gsap.set([vip, auto, region, accent], { clearProps: "all" });
+
+    gsap.set(vip, {
+      opacity: 0,
+      x: -80,
+      rotation: -8,
+      scale: 0.85,
+      force3D: false,
+    });
+    gsap.set(auto, {
+      opacity: 0,
+      x: 80,
+      rotation: 8,
+      scale: 0.85,
+      force3D: false,
+    });
+    gsap.set(region, {
+      opacity: 0,
+      x: -60,
+      rotation: -6,
+      scale: 0.9,
+      force3D: false,
+    });
+    gsap.set(accent, {
+      opacity: 0,
+      scaleX: 0,
+      transformOrigin: "left center",
+      force3D: false,
+    });
 
     const tl = gsap.timeline({ delay: 0.3 });
     tl.to(vip, {
@@ -133,6 +164,7 @@ export function MobileMenu() {
       scale: 1,
       duration: 0.7,
       ease: "power3.out",
+      force3D: false,
     })
       .to(
         auto,
@@ -143,6 +175,7 @@ export function MobileMenu() {
           scale: 1,
           duration: 0.7,
           ease: "power3.out",
+          force3D: false,
         },
         "-=0.35",
       )
@@ -155,12 +188,13 @@ export function MobileMenu() {
           scale: 1,
           duration: 0.7,
           ease: "power3.out",
+          force3D: false,
         },
         "-=0.35",
       )
-      .to(logo, { scale: 1.04, duration: 0.2, ease: "power2.out" }, "+=0.05")
-      .to(logo, { scale: 1, duration: 0.35, ease: "power2.inOut" })
-      .to(accent, { opacity: 1, scaleX: 1, duration: 0.5, ease: "power3.out" }, "-=0.4");
+      .to(logo, { scale: 1.04, duration: 0.2, ease: "power2.out", force3D: false }, "+=0.05")
+      .to(logo, { scale: 1, duration: 0.35, ease: "power2.inOut", force3D: false })
+      .to(accent, { opacity: 1, scaleX: 1, duration: 0.5, ease: "power3.out", force3D: false }, "-=0.4");
 
     return () => {
       tl.kill();
@@ -692,13 +726,20 @@ export function MobileMenu() {
           ref={logoRef}
           href="/"
           className="header-logo pointer-events-auto absolute top-1/2 z-[1201] -translate-y-1/2 select-none"
-          style={{ left: "max(1.25rem, env(safe-area-inset-left))" }}
+          style={{
+            left: "max(1.25rem, env(safe-area-inset-left))",
+            transition: "none",
+          }}
           aria-label="VIPAuto161 Главная"
         >
-          <span className="vip-logo-monolith" aria-label="VIPАВТО 161 RUS">
-            <span className="logo-text">
-              <span ref={logoVipRef} className="vip-part logo-anim-node">VIP</span>
-              <span ref={logoAutoRef} className="auto-part logo-anim-node">АВТО</span>
+          <span className="vip-logo-monolith" aria-label="VIPАВТО 161 RUS" style={{ overflow: "visible" }}>
+            <span className="logo-text" style={{ overflow: "visible" }}>
+              <span ref={logoVipRef} className="vip-part logo-anim-node" style={{ display: "inline-block" }}>
+                VIP
+              </span>
+              <span ref={logoAutoRef} className="auto-part logo-anim-node" style={{ display: "inline-block" }}>
+                АВТО
+              </span>
             </span>
             <span ref={logoRegionRef} className="logo-region logo-anim-node">
               <span className="region-code">161</span>
@@ -862,6 +903,14 @@ export function MobileMenu() {
                       key={`phone-top-${index}-${char}`}
                       data-phone-char={char === " " ? "space" : "digit"}
                       className={`menu-top-phone-char ${char === " " ? "space" : ""}`}
+                      style={{
+                        display: "inline-block",
+                        backgroundColor: "transparent",
+                        isolation: "isolate",
+                        transformOrigin: "center center",
+                        transition: "none",
+                        WebkitTextFillColor: "currentColor",
+                      }}
                     >
                       {char === " " ? "\u00A0" : char}
                     </span>

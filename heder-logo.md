@@ -1,189 +1,21 @@
-﻿# Найдена корневая проблема: React Error #418
+﻿# Heder/Logo & Mobile Menu — Full Technical Handoff
 
-## Что значит ошибка #418
+## 1) Контекст
+- Проект: ipauto_161 (Next.js App Router, React 19, TypeScript, GSAP, Tailwind v4).
+- Ключевой модуль: мобильный хедер + лого + бургер-меню + футер меню (телефон/стрелка/кнопки).
 
-Это **Hydration Mismatch** — HTML, сгенерированный на сервере (SSR), не совпадает с тем, что React пытается отрендерить на клиенте. Когда это происходит:
+## 2) Критическая проблема сейчас
+Пользователь сообщает: лого отображается не как раньше — блок региона (161/RUS) уходит в неправильную строку/компоновку.
 
-1. **React ломает весь DOM-поддерево** и перерендеривает с нуля
-2. Все `ref`-ы теряют привязку к DOM-элементам
-3. `useEffect` / `useGSAP` срабатывают, но **ref.current === null** или указывает на уже удалённый элемент
-4. GSAP анимирует призрачные ноды — ничего не видно
+## 3) Что уже выяснено
+- LogoReveal.tsx как отдельного компонента в проекте нет.
+- Вся логика лого и меню находится в components/layout/MobileMenu.tsx.
+- На реальных телефонах возможны отличия от desktop эмулятора из-за dvh/safe-area/overflow.
 
-**Вот почему лого статично, нет кнопок, нет блика** — React просто выбросил эти элементы при hydration recovery.
+## 4) Полный код, который за это отвечает
 
-## Что вызывает #418
-
-Самые частые причины в коде:
-
-### Причина A: Браузерные расширения (Brave Shields, Яндекс)
-
-`responsive-toolbar.esm.js` — это **расширение браузера** (Brave или Яндекс), которое вставляет свой HTML через `document.write()` **до гидрации React**. React видит чужой HTML в `<body>` и паникует.
-
-### Причина B: Скрипт `dangerouslySetInnerHTML` в layout
-
-Если добавлен отладочный скрипт в layout — его нужно убрать, он также может вызывать #418.
-
-### Причина C: Динамический контент без `suppressHydrationWarning`
-
-Любой контент, который отличается на сервере и клиенте (дата, случайные числа, user-agent проверки).
-
----
-
-## Полный код `app/layout.tsx`
-
-```tsx
-import type { Metadata, Viewport } from "next";
-import Script from "next/script";
-import { JetBrains_Mono, Manrope } from "next/font/google";
-import { MobileMenu } from "@/components/layout/MobileMenu";
-import ParallaxBackground from "@/components/parallax/ParallaxBackground";
-import { siteConfig } from "@/lib/siteConfig";
-import "./globals.css";
-
-const manrope = Manrope({
-  subsets: ["cyrillic", "latin"],
-  variable: "--font-manrope",
-});
-
-const jetBrainsMono = JetBrains_Mono({
-  subsets: ["cyrillic", "latin"],
-  variable: "--font-jetbrains-mono",
-});
-
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.siteUrl),
-  title: {
-    default: "VIPАвто — Автоэлектрика и автоэлектроника в Шахтах | Официальный дилер StarLine",
-    template: "%s | VIPАвто",
-  },
-  description:
-    "Профессиональная автоэлектрика в г. Шахты. Установка сигнализаций StarLine, LED/Bi-LED оптика, автозвук, камеры. Рейтинг 4.6 на Яндекс.Картах.",
-  alternates: {
-    canonical: "/",
-  },
-  category: "autos",
-  keywords: [
-    "автоэлектрика шахты",
-    "автоэлектрик шахты",
-    "автоэлектроника",
-    "установка starline",
-    "сигнализация starline шахты",
-    "установка led линз",
-    "автозвук",
-    "диагностика автоэлектрики",
-    "vipauto161",
-  ],
-  openGraph: {
-    title: "VIPАвто",
-    description: "Премиальная автоэлектрика и автоэлектроника в г. Шахты.",
-    type: "website",
-    locale: "ru_RU",
-    url: siteConfig.siteUrl,
-    siteName: "VIPАвто",
-    images: [
-      {
-        url: "/images/plate-logo.svg",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "VIPАвто",
-    description: "Премиальная автоэлектрика и автоэлектроника в г. Шахты.",
-    images: ["/images/plate-logo.svg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  themeColor: "#09090b",
-};
-
-const localBusinessJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "AutoRepair",
-  name: siteConfig.brand,
-  image: `${siteConfig.siteUrl}/images/plate-logo.svg`,
-  priceRange: "₽₽",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: siteConfig.address,
-    addressLocality: siteConfig.city,
-    addressRegion: siteConfig.region,
-    addressCountry: "RU",
-  },
-  telephone: siteConfig.phones[0],
-  areaServed: "Ростовская область",
-  url: siteConfig.siteUrl,
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "10:00",
-      closes: "20:00",
-    },
-  ],
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: siteConfig.rating,
-    reviewCount: siteConfig.ratingVotes,
-  },
-  sameAs: [siteConfig.social.telegram, siteConfig.social.whatsapp, siteConfig.social.vk],
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
-  const yandexMetrikaId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
-
-  return (
-    <html lang="ru">
-      <body className={`${manrope.variable} ${jetBrainsMono.variable} bg-[var(--bg-primary)] antialiased text-[var(--text-primary)]`}>
-        <ParallaxBackground intensity={1} />
-        <MobileMenu />
-        <div className="boot-ui relative z-10 pt-[calc(80px+env(safe-area-inset-top))]">{children}</div>
-        <Script id="ui-boot" strategy="beforeInteractive">
-          {`
-            (function () {
-              var root = document.documentElement;
-              root.classList.remove('ui-ready');
-              var show = function () {
-                window.setTimeout(function () {
-                  root.classList.add('ui-ready');
-                }, 110);
-              };
-              if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', show, { once: true });
-              } else {
-                show();
-              }
-            })();
-          `}
-        </Script>
-        <Script id="local-business-jsonld" type="application/ld+json">
-          {JSON.stringify(localBusinessJsonLd)}
-        </Script>
-        {yandexMetrikaId ? (
-          <Script id="yandex-metrika" strategy="afterInteractive">
-            {`window.ym=window.ym||function(){(window.ym.a=window.ym.a||[]).push(arguments)};ym(${yandexMetrikaId},"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true});`}
-          </Script>
-        ) : null}
-      </body>
-    </html>
-  );
-}
-
-
-```
-
-## Полный код файла, где рендерится логика LogoReveal (сейчас в `MobileMenu.tsx`)
-
-```tsx
+### 4.1 components/layout/MobileMenu.tsx
+`	sx
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -883,17 +715,17 @@ export function MobileMenu() {
         >
           <span className="vip-logo-monolith" aria-label="VIPАВТО 161 RUS">
             <span className="logo-text">
-              <span ref={logoVipRef} className="vip-part">VIP</span>
-              <span ref={logoAutoRef} className="auto-part">АВТО</span>
+              <span ref={logoVipRef} className="vip-part logo-anim-node">VIP</span>
+              <span ref={logoAutoRef} className="auto-part logo-anim-node">АВТО</span>
             </span>
-            <span ref={logoRegionRef} className="logo-region">
+            <span ref={logoRegionRef} className="logo-region logo-anim-node">
               <span className="region-code">161</span>
               <span className="region-flag">RUS</span>
             </span>
             <span
               ref={logoAccentRef}
               aria-hidden="true"
-              className="absolute -bottom-[4px] left-0 h-[2px] w-full bg-gradient-to-r from-[#ccff00] to-[#00f0ff]"
+              className="logo-accent-line logo-anim-node absolute -bottom-[4px] left-0 h-[2px] w-full bg-gradient-to-r from-[#ccff00] to-[#00f0ff]"
             />
           </span>
         </Link>
@@ -1107,152 +939,1144 @@ export function MobileMenu() {
   );
 }
 
-```
+`
 
-## Полный код `app/page.tsx`
+### 4.2 pp/globals.css
+`css
+@import "tailwindcss";
 
-```tsx
-import { StickyMobileActions } from "@/components/effects/StickyMobileActions";
-import { ParallaxSection } from "@/components/parallax/ParallaxSection";
-import { Footer } from "@/components/layout/Footer";
-import { ScrollProgress } from "@/components/layout/ScrollProgress";
-import { AdvantagesSection } from "@/components/sections/AdvantagesSection";
-import { BrandsSection } from "@/components/sections/BrandsSection";
-import { CompareSection } from "@/components/sections/CompareSection";
-import { ContactSection } from "@/components/sections/ContactSection";
-import { HeroSection } from "@/components/sections/HeroSection";
-import { ProcessSection } from "@/components/sections/ProcessSection";
-import { ReviewsSection } from "@/components/sections/ReviewsSection";
-import { ServicesSection } from "@/components/sections/ServicesSection";
-import { StatsSection } from "@/components/sections/StatsSection";
-import { MultimeterSpoiler } from "@/components/sections/MultimeterSpoiler";
-
-export default function Home() {
-  return (
-    <>
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-[var(--accent)] focus:px-3 focus:py-2 focus:font-semibold focus:text-black"
-      >
-        Перейти к содержимому
-      </a>
-      <ScrollProgress />
-      <main id="main-content">
-        <HeroSection />
-        <ParallaxSection
-          className="relative"
-          layers={[
-            {
-              id: "stats-glow",
-              speed: -0.2,
-              z: 0,
-              style: {
-                background:
-                  "radial-gradient(circle at 50% 50%, rgba(0,240,255,0.12) 0%, rgba(204,255,0,0.08) 42%, transparent 72%)",
-                filter: "blur(80px)",
-                transform: "translateZ(0)",
-              },
-            },
-            {
-              id: "stats-grid",
-              speed: -0.08,
-              z: 1,
-              opacityRange: [0.12, 0.03],
-              style: {
-                backgroundImage:
-                  "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
-                backgroundSize: "80px 80px",
-              },
-            },
-          ]}
-        >
-          <StatsSection />
-        </ParallaxSection>
-        <ParallaxSection
-          className="relative"
-          layers={[
-            {
-              id: "cmp-bg",
-              speed: -0.16,
-              z: 0,
-              style: {
-                background:
-                  "radial-gradient(ellipse at 20% 50%, rgba(0,240,255,0.09) 0%, transparent 70%), radial-gradient(ellipse at 80% 50%, rgba(204,255,0,0.1) 0%, transparent 70%)",
-              },
-            },
-            {
-              id: "cmp-grid",
-              speed: -0.06,
-              z: 1,
-              opacityRange: [0.1, 0.02],
-              style: {
-                backgroundImage:
-                  "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)",
-                backgroundSize: "100px 100px",
-              },
-            },
-          ]}
-        >
-          <CompareSection />
-        </ParallaxSection>
-        <ServicesSection />
-        <AdvantagesSection />
-        <ProcessSection />
-        <BrandsSection />
-        <ReviewsSection />
-        <ContactSection />
-        <MultimeterSpoiler />
-      </main>
-      <StickyMobileActions />
-      <Footer />
-    </>
-  );
+:root {
+  --bg-primary: #09090b;
+  --bg-secondary: #18181b;
+  --bg-elevated: #27272a;
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --line: #3f3f46;
+  --accent: #ccff00;
+  --accent-2: #00f0ff;
+  --accent-glow: rgba(204, 255, 0, 0.35);
+  --accent-2-glow: rgba(0, 240, 255, 0.35);
+  --header-h: 80px;
 }
 
-```
+html {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-x: none;
+  touch-action: auto;
+}
 
----
+.boot-ui {
+  opacity: 1;
+  transition: opacity 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
 
-## Экстренный фикс гидрации (временный)
+html:not(.ui-ready) .boot-ui {
+  opacity: 0;
+}
 
-```tsx
-// components/ClientOnly.tsx
-'use client';
+body {
+  min-height: 100svh;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(0, 240, 255, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 82% 0%, rgba(204, 255, 0, 0.05) 0%, transparent 34%),
+    #09090b;
+  color: var(--text-primary);
+  font-family: var(--font-manrope), sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: auto;
+}
 
-import { useState, useEffect, type ReactNode } from 'react';
+* {
+  border-color: var(--line);
+}
 
-export function ClientOnly({ children }: { children: ReactNode }) {
-  const [mounted, setMounted] = useState(false);
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 
-  if (!mounted) {
-    return null;
+#mobile-nav-dialog a:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.container-shell {
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-shell {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-shell {
+    padding-inline: 2rem;
+  }
+}
+
+.section-padding {
+  padding-block: 4rem;
+}
+
+.reveal-section {
+  visibility: hidden;
+}
+
+.reveal-section.is-revealed {
+  visibility: visible;
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .mobile-reveal-lite {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    filter: blur(2px);
+    will-change: transform, opacity;
   }
 
-  return <>{children}</>;
+  .mobile-reveal-lite.mobile-reveal-active {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+    transition:
+      opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .mobile-stagger-item {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.985);
+    will-change: transform, opacity;
+  }
+
+  .mobile-stagger-active .mobile-stagger-item {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    transition:
+      opacity 360ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(var(--stagger-index, 0) * 70ms);
+  }
 }
-```
 
-Пример использования:
+@media (max-width: 767px) {
+  .container-shell {
+    padding-inline: 0.875rem;
+  }
 
-```tsx
-import { ClientOnly } from '@/components/ClientOnly';
-import { MobileMenu } from '@/components/MobileMenu';
-import { LogoReveal } from '@/components/LogoReveal';
+  .section-padding {
+    padding-block: 3.25rem;
+  }
+}
 
-export default function Page() {
+@media (max-width: 420px) {
+  .section-padding {
+    padding-block: 2.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-block: 6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding-block: 8rem;
+  }
+}
+
+.card-surface {
+  background: rgb(39 39 42 / 0.5);
+  border: 1px solid rgb(63 63 70);
+  border-radius: 0.75rem;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.03);
+  backdrop-filter: blur(12px);
+  transition: border-color 300ms ease;
+}
+
+.card-surface:hover {
+  border-color: rgb(82 82 91);
+}
+
+.ds-h1 {
+  font-size: 2.25rem;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ds-h2 {
+  font-size: 1.875rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ds-h3 {
+  font-size: 1.5rem;
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+.ds-body {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: rgb(161 161 170);
+}
+
+.ds-caption {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgb(113 113 122);
+}
+
+.btn-primary {
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  color: #0b0b0b;
+  background: var(--accent);
+  transition: all 200ms;
+}
+
+.btn-secondary {
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  color: rgb(244 244 245);
+  background: rgb(39 39 42 / 0.65);
+  border: 1px solid rgb(63 63 70);
+  transition: all 200ms;
+}
+
+.btn-secondary:hover {
+  background: rgb(63 63 70 / 0.75);
+  border-color: rgb(82 82 91);
+}
+
+.input-field {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgb(63 63 70);
+  background: rgb(39 39 42 / 0.75);
+  color: rgb(244 244 245);
+  padding: 0.75rem 1rem;
+}
+
+.input-field::placeholder {
+  color: rgb(82 82 91);
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: rgb(59 130 246);
+  box-shadow: 0 0 0 1px rgb(59 130 246 / 0.5);
+}
+
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: radial-gradient(circle at 1px 1px, #fff 1px, transparent 0);
+  background-size: 6px 6px;
+}
+
+.accent-dot {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  margin-right: 0.65rem;
+  background: linear-gradient(130deg, var(--accent), var(--accent-2));
+  box-shadow: 0 0 22px var(--accent-glow);
+}
+
+.typewriter-container {
+  position: relative;
+  display: inline-block;
+  vertical-align: bottom;
+  width: min(100%, calc(var(--typewriter-ch, 28) * 1ch));
+  min-height: 1.5em;
+  max-width: 100%;
+}
+
+.typewriter-sizer {
+  visibility: hidden;
+  white-space: nowrap;
+  padding-right: 0.2em;
+}
+
+.typewriter-text {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 0;
+  margin-left: 2px;
+  border-right: 2px solid var(--accent);
+  animation: typewriter-cursor-blink 0.9s step-end infinite;
+}
+
+@keyframes typewriter-cursor-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.glass-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(224, 230, 237, 0.08);
+  background: rgba(10, 19, 34, 0.5);
+  backdrop-filter: blur(20px);
+  transition: all 400ms ease;
+  cursor: default;
+}
+
+.glass-card:hover {
+  background: rgba(16, 29, 50, 0.7);
+  border-color: rgba(0, 240, 255, 0.24);
+  box-shadow:
+    0 20px 60px -20px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(0, 240, 255, 0.1);
+}
+
+.glow-line {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 2px;
+  width: 0;
+  border-bottom-left-radius: 999px;
+  border-bottom-right-radius: 999px;
+  transition: width 500ms ease-out;
+}
+
+.glass-card:hover .glow-line {
+  width: 60%;
+}
+
+.corner-glow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  height: 120px;
+  width: 120px;
+  border-radius: 999px;
+  opacity: 0;
+  filter: blur(40px);
+  pointer-events: none;
+  transition: opacity 500ms ease;
+}
+
+.glass-card:hover .corner-glow {
+  opacity: 1;
+}
+
+@keyframes badge-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.animate-badge-pulse {
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, #f0f0f0 0%, #ffffff 50%, #f0f0f0 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 1.8s ease-out forwards;
+}
+
+.duration-400 {
+  transition-duration: 400ms;
+}
+
+.cmp-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  backdrop-filter: blur(20px);
+  transition: all 500ms ease;
+}
+
+.cmp-card--garage {
+  background: rgba(159, 173, 188, 0.04);
+  border: 1px solid rgba(159, 173, 188, 0.18);
+}
+
+.cmp-card--garage:hover {
+  background: rgba(159, 173, 188, 0.07);
+  border-color: rgba(159, 173, 188, 0.3);
+  box-shadow: 0 20px 80px -20px rgba(159, 173, 188, 0.18);
+}
+
+.cmp-card--vip {
+  background: rgba(204, 255, 0, 0.05);
+  border: 1px solid rgba(204, 255, 0, 0.2);
+}
+
+.cmp-card--vip:hover {
+  background: rgba(204, 255, 0, 0.09);
+  border-color: rgba(0, 240, 255, 0.3);
+  box-shadow: 0 20px 80px -20px rgba(204, 255, 0, 0.22);
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@keyframes parallax-twinkle {
+  0%,
+  100% {
+    opacity: var(--tw-opacity, 1);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.05;
+    transform: scale(0.5);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 4s ease-in-out infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+.animate-parallax-twinkle {
+  animation: parallax-twinkle 3s ease-in-out infinite;
+}
+
+.menu-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+
+.menu-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.menu-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+.tap-none {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+.shadow-glass-header {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.3),
+    0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.shadow-crimson-line {
+  box-shadow:
+    0 0 8px rgba(0, 240, 255, 0.55),
+    0 0 20px rgba(0, 240, 255, 0.28);
+}
+
+.shadow-crimson-cta {
+  box-shadow:
+    0 4px 15px rgba(204, 255, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.shadow-crimson-cta-hover {
+  box-shadow:
+    0 8px 30px rgba(204, 255, 0, 0.42),
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 10px rgba(0, 240, 255, 0.2),
+      0 0 30px rgba(0, 240, 255, 0.06);
+  }
+  50% {
+    box-shadow:
+      0 0 15px rgba(204, 255, 0, 0.3),
+      0 0 40px rgba(204, 255, 0, 0.1);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.sticky-actions-anim {
+  transition-property: transform, opacity !important;
+  transition-duration: 460ms, 320ms !important;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1), ease !important;
+}
+
+@keyframes menu-glitch {
+  0%,
+  88%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    text-shadow: none;
+    opacity: 1;
+  }
+  90% {
+    transform: translate3d(-1px, 1px, 0);
+    text-shadow:
+      1px 0 #ccff00,
+      -1px 0 #00f0ff;
+    opacity: 0.96;
+  }
+  93% {
+    transform: translate3d(1px, -1px, 0);
+    text-shadow:
+      -1px 0 #ccff00,
+      1px 0 #00f0ff;
+    opacity: 0.92;
+  }
+  96% {
+    transform: translate3d(0, 0, 0);
+    text-shadow: none;
+    opacity: 1;
+  }
+}
+
+.menu-item {
+  display: inline-block;
+  will-change: transform, opacity, text-shadow;
+}
+
+.menu-item.glitch-active {
+  animation: menu-glitch 260ms linear 1;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  animation: none !important;
+}
+
+.menu-film-grain {
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: soft-light;
+  animation: grain-shift 0.45s steps(4) infinite;
+}
+
+@keyframes grain-shift {
+  to {
+    background-position: 100% 100%;
+  }
+}
+
+.phone-number {
+  position: relative;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0;
+  will-change: transform, opacity, text-shadow, filter;
+  animation: phone-signal-pulse 2.8s ease-in-out infinite;
+  text-shadow:
+    0 0 8px rgba(0, 240, 255, 0.35),
+    0 0 18px rgba(204, 255, 0, 0.12);
+}
+
+.phone-char {
+  display: inline-block;
+  transform-origin: center;
+  transition: transform 120ms ease-out, filter 120ms ease-out, color 120ms ease-out;
+}
+
+.phone-char-space {
+  display: inline-block;
+  width: 0.45em;
+}
+
+.header-phone {
+  font-size: clamp(1.4rem, 5vw, 2.2rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+}
+
+.menu-phone {
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.menu-top-phone-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.menu-top-phone-char {
+  display: inline-block;
+  transform: translateZ(0);
+  background: transparent !important;
+  -webkit-text-fill-color: currentColor;
+  isolation: isolate;
+  transition: none;
+  transform-origin: center center;
+}
+
+.menu-top-phone-char.space {
+  width: 4px;
+}
+
+.vip-logo-monolith {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.vip-logo-monolith::before {
+  content: none;
+}
+
+.logo-text {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.vip-part {
+  color: #fff;
+}
+
+.auto-part {
+  margin-left: 2px;
+  color: #ccff00;
+  text-shadow: 0 0 10px rgba(204, 255, 0, 0.22);
+}
+
+.logo-region {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  border-radius: 5px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 2px 6px;
+}
+
+.region-code {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1;
+  color: #fff;
+}
+
+.region-flag {
+  margin-top: 1px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+.region-flag::before {
+  content: "";
+  display: inline-block;
+  width: 11px;
+  height: 7px;
+  border: 1px solid #ccc;
+  background: linear-gradient(to bottom, #fff 33%, #0039a6 33%, #0039a6 66%, #d52b1e 66%);
+}
+
+/* GSAP logo animation guard: prevent CSS/extension conflicts on transform/opacity targets */
+.logo-anim-node {
+  display: inline-block;
+  transform-origin: center center;
+  transition: none !important;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.logo-accent-line {
+  transform-origin: left center;
+}
+
+.logo-region.logo-anim-node {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.phone-char.fisheye-active {
+  animation: beautiful-pulse 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  color: #ffffff;
+  text-shadow:
+    0 0 15px rgba(224, 17, 95, 0.8),
+    0 0 30px rgba(255, 255, 255, 0.6);
+}
+
+@keyframes phone-signal-pulse {
+  0%,
+  100% {
+    filter: saturate(1);
+    text-shadow:
+      0 0 8px rgba(0, 240, 255, 0.35),
+      0 0 18px rgba(204, 255, 0, 0.12);
+  }
+  50% {
+    filter: saturate(1.14);
+    text-shadow:
+      0 0 12px rgba(204, 255, 0, 0.45),
+      0 0 24px rgba(0, 240, 255, 0.28);
+  }
+}
+
+@keyframes beautiful-pulse {
+  0% {
+    transform: scale(1) translateY(0);
+    color: #fff;
+    text-shadow: none;
+    filter: blur(0);
+  }
+  50% {
+    transform: scale(1.4) translateY(-2px);
+    color: #fff;
+    text-shadow:
+      0 0 15px rgba(224, 17, 95, 0.8),
+      0 0 30px rgba(255, 255, 255, 0.6);
+    filter: blur(0.3px) brightness(1.25);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    color: #fff;
+    text-shadow: none;
+    filter: blur(0);
+  }
+}
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.82), transparent);
+  transform: skewX(-24deg);
+  pointer-events: none;
+  animation: btn-shine-run 3.8s ease-in-out infinite;
+}
+
+.btn-shine:hover::before {
+  animation-duration: 1.9s;
+}
+
+@keyframes btn-shine-run {
+  0% {
+    left: -120%;
+  }
+  28% {
+    left: 170%;
+  }
+  100% {
+    left: 170%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-height: 500px) {
+  .mobile-menu-content nav .menu-item {
+    font-size: clamp(1.45rem, 6vw, 2rem) !important;
+  }
+
+  .mobile-menu-content nav a {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .mobile-menu-content .menu-top-phone-wrapper {
+    font-size: 1.2rem !important;
+  }
+}
+
+@media (max-height: 760px) {
+  .mobile-menu-content {
+    padding-top: calc(72px + env(safe-area-inset-top)) !important;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .mobile-menu-content nav a {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .mobile-menu-content .menu-item {
+    font-size: clamp(1.55rem, 6.4vw, 2.2rem) !important;
+  }
+
+  .mobile-menu-content .menu-footer-copy {
+    display: none;
+  }
+
+  .mobile-menu-content .menu-top-phone-wrapper {
+    font-size: 1.35rem !important;
+  }
+
+  .mobile-menu-content .call-label {
+    font-size: 10px !important;
+    letter-spacing: 0.18em !important;
+  }
+
+  .mobile-menu-content .menu-actions {
+    gap: 8px !important;
+    margin-top: 8px !important;
+  }
+
+  .mobile-menu-content .menu-actions a {
+    height: 40px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .vip-logo-monolith {
+    gap: 6px;
+  }
+
+  .logo-text {
+    font-size: 17px;
+  }
+
+  .region-code {
+    font-size: 15px;
+  }
+}
+
+`
+
+### 4.3 pp/layout.tsx
+`	sx
+import type { Metadata, Viewport } from "next";
+import Script from "next/script";
+import { JetBrains_Mono, Manrope } from "next/font/google";
+import { MobileMenu } from "@/components/layout/MobileMenu";
+import ParallaxBackground from "@/components/parallax/ParallaxBackground";
+import { siteConfig } from "@/lib/siteConfig";
+import "./globals.css";
+
+const manrope = Manrope({
+  subsets: ["cyrillic", "latin"],
+  variable: "--font-manrope",
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["cyrillic", "latin"],
+  variable: "--font-jetbrains-mono",
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.siteUrl),
+  title: {
+    default: "VIPАвто — Автоэлектрика и автоэлектроника в Шахтах | Официальный дилер StarLine",
+    template: "%s | VIPАвто",
+  },
+  description:
+    "Профессиональная автоэлектрика в г. Шахты. Установка сигнализаций StarLine, LED/Bi-LED оптика, автозвук, камеры. Рейтинг 4.6 на Яндекс.Картах.",
+  alternates: {
+    canonical: "/",
+  },
+  category: "autos",
+  keywords: [
+    "автоэлектрика шахты",
+    "автоэлектрик шахты",
+    "автоэлектроника",
+    "установка starline",
+    "сигнализация starline шахты",
+    "установка led линз",
+    "автозвук",
+    "диагностика автоэлектрики",
+    "vipauto161",
+  ],
+  openGraph: {
+    title: "VIPАвто",
+    description: "Премиальная автоэлектрика и автоэлектроника в г. Шахты.",
+    type: "website",
+    locale: "ru_RU",
+    url: siteConfig.siteUrl,
+    siteName: "VIPАвто",
+    images: [
+      {
+        url: "/images/plate-logo.svg",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VIPАвто",
+    description: "Премиальная автоэлектрика и автоэлектроника в г. Шахты.",
+    images: ["/images/plate-logo.svg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#09090b",
+};
+
+const localBusinessJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  name: siteConfig.brand,
+  image: `${siteConfig.siteUrl}/images/plate-logo.svg`,
+  priceRange: "₽₽",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: siteConfig.address,
+    addressLocality: siteConfig.city,
+    addressRegion: siteConfig.region,
+    addressCountry: "RU",
+  },
+  telephone: siteConfig.phones[0],
+  areaServed: "Ростовская область",
+  url: siteConfig.siteUrl,
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "10:00",
+      closes: "20:00",
+    },
+  ],
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: siteConfig.rating,
+    reviewCount: siteConfig.ratingVotes,
+  },
+  sameAs: [siteConfig.social.telegram, siteConfig.social.whatsapp, siteConfig.social.vk],
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  const yandexMetrikaId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
+
   return (
-    <main>
-      <ClientOnly>
-        <LogoReveal words={['BRAND', 'STUDIO']} />
+    <html lang="ru">
+      <body className={`${manrope.variable} ${jetBrainsMono.variable} bg-[var(--bg-primary)] antialiased text-[var(--text-primary)]`}>
+        <ParallaxBackground intensity={1} />
         <MobileMenu />
-      </ClientOnly>
-
-      {/* Остальной контент страницы */}
-    </main>
+        <div className="boot-ui relative z-10 pt-[calc(80px+env(safe-area-inset-top))]">{children}</div>
+        <Script id="ui-boot" strategy="beforeInteractive">
+          {`
+            (function () {
+              var root = document.documentElement;
+              root.classList.remove('ui-ready');
+              var show = function () {
+                window.setTimeout(function () {
+                  root.classList.add('ui-ready');
+                }, 110);
+              };
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', show, { once: true });
+              } else {
+                show();
+              }
+            })();
+          `}
+        </Script>
+        <Script id="local-business-jsonld" type="application/ld+json">
+          {JSON.stringify(localBusinessJsonLd)}
+        </Script>
+        {yandexMetrikaId ? (
+          <Script id="yandex-metrika" strategy="afterInteractive">
+            {`window.ym=window.ym||function(){(window.ym.a=window.ym.a||[]).push(arguments)};ym(${yandexMetrikaId},"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true});`}
+          </Script>
+        ) : null}
+      </body>
+    </html>
   );
 }
-```
+
+
+`
+
+### 4.4 hooks/useLockScroll.ts
+`	s
+"use client";
+
+import { useEffect } from "react";
+
+export function useLockScroll(locked: boolean): void {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const body = document.body;
+
+    if (locked) {
+      const scrollY = window.scrollY;
+      body.dataset.scrollY = String(scrollY);
+      body.style.position = "fixed";
+      body.style.top = `-${scrollY}px`;
+      body.style.left = "0";
+      body.style.right = "0";
+      body.style.width = "100%";
+      body.style.overflow = "hidden";
+      body.style.overscrollBehavior = "none";
+      return () => {
+        const restoreY = Number.parseInt(body.dataset.scrollY ?? "0", 10);
+        body.style.position = "";
+        body.style.top = "";
+        body.style.left = "";
+        body.style.right = "";
+        body.style.width = "";
+        body.style.overflow = "";
+        body.style.overscrollBehavior = "";
+        delete body.dataset.scrollY;
+        window.scrollTo({ top: restoreY, behavior: "auto" });
+      };
+    }
+
+    body.style.position = "";
+    body.style.top = "";
+    body.style.left = "";
+    body.style.right = "";
+    body.style.width = "";
+    body.style.overflow = "";
+    body.style.overscrollBehavior = "";
+    delete body.dataset.scrollY;
+    return undefined;
+  }, [locked]);
+}
+
+`
+
+## 5) Acceptance Criteria
+1. Лого: VIPАВТО + регион 161/RUS выглядят как раньше (вертикальный регион).
+2. Бургер: появляется через 1.5s, линии мягко падают, трансформация в крестик корректна.
+3. Меню: на реальном телефоне видны позвонить, WhatsApp, Telegram.
+4. Закрытие меню мягкое, без рывка.

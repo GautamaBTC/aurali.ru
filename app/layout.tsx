@@ -108,8 +108,11 @@ export default function RootLayout({
   const yandexMetrikaId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
 
   return (
-    <html lang="ru">
-      <body className={`${manrope.variable} ${jetBrainsMono.variable} bg-[var(--bg-primary)] antialiased text-[var(--text-primary)]`}>
+    <html lang="ru" suppressHydrationWarning>
+      <body
+        suppressHydrationWarning
+        className={`${manrope.variable} ${jetBrainsMono.variable} bg-[var(--bg-primary)] antialiased text-[var(--text-primary)]`}
+      >
         <ParallaxBackground intensity={1} />
         <MobileMenu />
         <div className="boot-ui relative z-10 pt-[calc(80px+env(safe-area-inset-top))]">{children}</div>

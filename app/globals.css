@@ -747,18 +747,22 @@ select:focus-visible {
   background: linear-gradient(to bottom, #fff 33%, #0039a6 33%, #0039a6 66%, #d52b1e 66%);
 }
 
-/* GSAP logo animation guard: prevent CSS/extension conflicts on transform/opacity targets */
+/* GSAP logo animation: let GSAP fully own transform/opacity */
 .logo-anim-node {
-  display: inline-block;
   transform-origin: center center;
   transition: none !important;
-  will-change: transform, opacity;
   backface-visibility: hidden;
-  transform: translateZ(0);
 }
 
 .logo-accent-line {
   transform-origin: left center;
+}
+
+.logo-region.logo-anim-node {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .phone-char.fisheye-active {
