@@ -66,6 +66,7 @@ export function MobileMenu() {
   const logoAutoRef = useRef<HTMLSpanElement | null>(null);
   const logoRegionRef = useRef<HTMLSpanElement | null>(null);
   const logoAccentRef = useRef<HTMLSpanElement | null>(null);
+  const hasLogoAnimatedRef = useRef(false);
   const topPhoneRef = useRef<HTMLAnchorElement | null>(null);
   const callArrowRef = useRef<HTMLDivElement | null>(null);
   const callLabelRef = useRef<HTMLSpanElement | null>(null);
@@ -108,67 +109,62 @@ export function MobileMenu() {
     const region = logoRegionRef.current;
     const accent = logoAccentRef.current;
     if (!logo || !vip || !auto || !region || !accent) return;
+    if (hasLogoAnimatedRef.current) return;
+    hasLogoAnimatedRef.current = true;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
 
-    const ctx = gsap.context(() => {
-      const words = [vip, auto, region];
-      gsap.killTweensOf(words);
-      gsap.killTweensOf(logo);
-      gsap.killTweensOf(accent);
+    const words = [vip, auto, region];
+    gsap.killTweensOf(words);
+    gsap.killTweensOf(logo);
+    gsap.killTweensOf(accent);
 
-      gsap.set(words, { clearProps: "all" });
-      gsap.set(accent, { clearProps: "all" });
-      gsap.set(logo, { clearProps: "scale" });
+    gsap.set(vip, { opacity: 0, x: -80, rotation: -8, scale: 0.85 });
+    gsap.set(auto, { opacity: 0, x: 80, rotation: 8, scale: 0.85 });
+    gsap.set(region, { opacity: 0, x: -80, rotation: -8, scale: 0.85 });
+    gsap.set(accent, { opacity: 0, scaleX: 0, transformOrigin: "left center" });
 
-      gsap.set(vip, { opacity: 0, x: -70, rotate: -7, scale: 0.85 });
-      gsap.set(auto, { opacity: 0, x: 70, rotate: 7, scale: 0.85 });
-      gsap.set(region, { opacity: 0, y: 8, scale: 0.92 });
-      gsap.set(accent, { opacity: 0, scaleX: 0, transformOrigin: "left center" });
+    const tl = gsap.timeline({ delay: 0.3 });
+    tl.to(vip, {
+      opacity: 1,
+      x: 0,
+      rotation: 0,
+      scale: 1,
+      duration: 0.7,
+      ease: "power3.out",
+    })
+      .to(
+        auto,
+        {
+          opacity: 1,
+          x: 0,
+          rotation: 0,
+          scale: 1,
+          duration: 0.7,
+          ease: "power3.out",
+        },
+        "-=0.35",
+      )
+      .to(
+        region,
+        {
+          opacity: 1,
+          x: 0,
+          rotation: 0,
+          scale: 1,
+          duration: 0.7,
+          ease: "power3.out",
+        },
+        "-=0.35",
+      )
+      .to(logo, { scale: 1.04, duration: 0.2, ease: "power2.out" }, "+=0.05")
+      .to(logo, { scale: 1, duration: 0.35, ease: "power2.inOut" })
+      .to(accent, { opacity: 1, scaleX: 1, duration: 0.5, ease: "power3.out" }, "-=0.4");
 
-      const tl = gsap.timeline({ delay: 0.2 });
-      tl.to(vip, {
-        x: 0,
-        rotate: 0,
-        scale: 1,
-        opacity: 1,
-        duration: 0.72,
-        ease: "power3.out",
-      })
-        .to(
-          auto,
-          {
-            x: 0,
-            rotate: 0,
-            scale: 1,
-            opacity: 1,
-            duration: 0.72,
-            ease: "power3.out",
-          },
-          "-=0.42",
-        )
-        .to(
-          region,
-          {
-            y: 0,
-            scale: 1,
-            opacity: 1,
-            duration: 0.55,
-            ease: "power2.out",
-          },
-          "-=0.4",
-        )
-        .to(logo, { scale: 1.03, duration: 0.2, ease: "power2.out" })
-        .to(logo, { scale: 1, duration: 0.35, ease: "power2.inOut" })
-        .to(accent, { opacity: 1, scaleX: 1, duration: 0.5, ease: "power3.out" }, "-=0.28");
-
-      return () => {
-        tl.kill();
-      };
-    }, logo);
-
-    return () => ctx.revert();
+    return () => {
+      tl.kill();
+    };
   }, []);
 
   const setItemRef = useCallback((index: number, el: HTMLAnchorElement | null) => {
