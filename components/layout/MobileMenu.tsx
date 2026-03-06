@@ -5,6 +5,7 @@ import Link from "next/link";
 import { gsap } from "gsap";
 import { siteConfig } from "@/lib/siteConfig";
 import { useLockScroll } from "@/hooks/useLockScroll";
+import { shouldReduceMotionInBrowser } from "@/lib/motion";
 
 type MenuItem = {
   id: string;
@@ -43,19 +44,12 @@ const HEADER_PHONE_CHARS = [
   "9",
 ] as const;
 
-function shouldReduceMotion(): boolean {
-  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const isMobileViewport = window.matchMedia("(max-width: 767px)").matches;
-  return prefersReduced && !isMobileViewport;
-}
-
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isBurgerVisible, setIsBurgerVisible] = useState(false);
   const [activeId, setActiveId] = useState<string>("services");
-  const [glitchId, setGlitchId] = useState<string | null>(null);
   const [menuScale, setMenuScale] = useState(1);
 
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -71,7 +65,6 @@ export function MobileMenu() {
   const logoVipRef = useRef<HTMLSpanElement | null>(null);
   const logoAutoRef = useRef<HTMLSpanElement | null>(null);
   const logoRegionRef = useRef<HTMLSpanElement | null>(null);
-  const logoAccentRef = useRef<HTMLSpanElement | null>(null);
   const topPhoneRef = useRef<HTMLAnchorElement | null>(null);
   const callArrowRef = useRef<HTMLDivElement | null>(null);
   const callLabelRef = useRef<HTMLSpanElement | null>(null);
@@ -83,7 +76,6 @@ export function MobileMenu() {
   const openTlRef = useRef<gsap.core.Timeline | null>(null);
   const burgerTlRef = useRef<gsap.core.Timeline | null>(null);
   const burgerEntryTlRef = useRef<gsap.core.Timeline | null>(null);
-  const glitchClearTimerRef = useRef<number | null>(null);
   const openFocusTimerRef = useRef<number | null>(null);
 
   useLockScroll(isLocked);
@@ -112,12 +104,11 @@ export function MobileMenu() {
     const vip = logoVipRef.current;
     const auto = logoAutoRef.current;
     const region = logoRegionRef.current;
-    const accent = logoAccentRef.current;
-    if (!logo || !vip || !auto || !region || !accent) return;
+    if (!logo || !vip || !auto || !region) return;
 
-    const reduce = shouldReduceMotion();
+    const reduce = shouldReduceMotionInBrowser();
     if (reduce) {
-      gsap.set([vip, auto, region, accent], {
+      gsap.set([vip, auto, region], {
         opacity: 1,
         clearProps: "transform",
         force3D: false,
@@ -128,9 +119,8 @@ export function MobileMenu() {
     const words = [vip, auto, region];
     gsap.killTweensOf(words);
     gsap.killTweensOf(logo);
-    gsap.killTweensOf(accent);
 
-    gsap.set([vip, auto, region, accent], { clearProps: "all" });
+    gsap.set([vip, auto, region], { clearProps: "all" });
 
     gsap.set(vip, {
       opacity: 0,
@@ -153,13 +143,6 @@ export function MobileMenu() {
       scale: 0.9,
       force3D: false,
     });
-    gsap.set(accent, {
-      opacity: 0,
-      scaleX: 0,
-      transformOrigin: "left center",
-      force3D: false,
-    });
-
     const tl = gsap.timeline({ delay: 0.3 });
     tl.to(vip, {
       opacity: 1,
@@ -197,8 +180,7 @@ export function MobileMenu() {
         "-=0.35",
       )
       .to(logo, { scale: 1.04, duration: 0.2, ease: "power2.out", force3D: false }, "+=0.05")
-      .to(logo, { scale: 1, duration: 0.35, ease: "power2.inOut", force3D: false })
-      .to(accent, { opacity: 1, scaleX: 1, duration: 0.5, ease: "power3.out", force3D: false }, "-=0.4");
+      .to(logo, { scale: 1, duration: 0.35, ease: "power2.inOut", force3D: false });
 
     return () => {
       tl.kill();
@@ -350,41 +332,6 @@ export function MobileMenu() {
   }, [closeMenu, isOpen, trapFocus]);
 
   useEffect(() => {
-    if (!isOpen) return;
-
-    // Variant 2: deterministic, clearly visible glitch cycle
-    let loopTimerId: number | undefined;
-    let cycleIndex = 0;
-
-    const tick = () => {
-      const item = MENU_ITEMS[cycleIndex % MENU_ITEMS.length];
-      cycleIndex += 1;
-      if (!item) return;
-
-      setGlitchId(item.id);
-      if (glitchClearTimerRef.current) {
-        window.clearTimeout(glitchClearTimerRef.current);
-      }
-      glitchClearTimerRef.current = window.setTimeout(() => {
-        setGlitchId((prev) => (prev === item.id ? null : prev));
-      }, 420);
-
-      loopTimerId = window.setTimeout(tick, 1400);
-    };
-
-    loopTimerId = window.setTimeout(tick, 260);
-
-    return () => {
-      if (loopTimerId) window.clearTimeout(loopTimerId);
-      if (glitchClearTimerRef.current) {
-        window.clearTimeout(glitchClearTimerRef.current);
-        glitchClearTimerRef.current = null;
-      }
-      setGlitchId(null);
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
     if (!isOpen || !topPhoneRef.current) return;
 
     const phoneNode = topPhoneRef.current;
@@ -473,10 +420,8 @@ export function MobileMenu() {
       if (arrow) {
         const arrowTl = gsap.timeline({ repeat: -1, repeatDelay: 1.5 });
         arrowTl
-          .to(arrow, { y: -8, duration: 0.3, ease: "power2.out" })
-          .to(arrow, { y: 0, duration: 0.25, ease: "bounce.out" })
-          .to(arrow, { y: -5, duration: 0.2, ease: "power2.out" })
-          .to(arrow, { y: 0, duration: 0.2, ease: "bounce.out" });
+          .to(arrow, { y: 8, duration: 0.8, ease: "sine.inOut", force3D: false })
+          .to(arrow, { y: 0, duration: 0.8, ease: "sine.inOut", force3D: false });
         masterTl.add(arrowTl, 1.5);
       }
 
@@ -755,11 +700,6 @@ export function MobileMenu() {
               <span className="region-code">161</span>
               <span className="region-flag">RUS</span>
             </span>
-            <span
-              ref={logoAccentRef}
-              aria-hidden="true"
-              className="logo-accent-line logo-anim-node absolute -bottom-[4px] left-0 h-[2px] w-full bg-gradient-to-r from-[#ccff00] to-[#00f0ff]"
-            />
           </span>
         </Link>
       </header>
@@ -789,9 +729,9 @@ export function MobileMenu() {
           />
           <span
             ref={lineMidRef}
-            className="absolute left-0 top-[10px] block h-[1px] rounded-[2px]"
+            className="absolute left-0 top-[10px] block h-[1.5px] rounded-[2px]"
             style={{
-              width: "72%",
+              width: "100%",
               background: "linear-gradient(90deg, #ccff00 0%, #00f0ff 100%)",
               boxShadow: "0 0 8px rgba(224,230,237,0.25)",
               opacity: 1,
@@ -805,7 +745,7 @@ export function MobileMenu() {
             ref={lineBotRef}
             className="absolute bottom-0 left-0 block h-[1.5px] rounded-[2px]"
             style={{
-              width: "50%",
+              width: "100%",
               background: "#00f0ff",
               boxShadow: "0 0 8px rgba(0,240,255,0.25)",
               transform: "translateY(0) rotate(0)",
@@ -850,11 +790,10 @@ export function MobileMenu() {
             }}
           >
 
-            <nav className="flex flex-1 items-start justify-center pt-2">
-              <ul className="w-full max-w-md">
+            <nav className="flex flex-1 items-stretch justify-center pt-2">
+              <ul className="flex h-full min-h-[380px] w-full max-w-md flex-col justify-evenly">
                 {MENU_ITEMS.map((item, index) => {
                   const isActive = activeId === item.id;
-                  const isGlitching = glitchId === item.id;
                   return (
                     <li key={item.id}>
                       <a
@@ -867,15 +806,16 @@ export function MobileMenu() {
                         className="tap-none touch-manipulation group flex items-baseline justify-center py-[clamp(12px,2.6vh,24px)] text-center focus-visible:outline-none"
                       >
                         <span
-                          className={`menu-item ${isGlitching ? "glitch-active" : ""}`}
+                          className="menu-item"
                           style={{
-                            fontSize: "clamp(2rem, 7vw, 2.8rem)",
-                            fontWeight: 300,
-                            lineHeight: 1.1,
-                            letterSpacing: "-0.01em",
+                            fontSize: "clamp(2.25rem, 8.2vw, 3.3rem)",
+                            fontWeight: 350,
+                            lineHeight: 1.02,
+                            letterSpacing: "-0.02em",
                             color: isActive ? "#ffffff" : "#f4f7fb",
-                            transition: "none",
+                            transition: "color 220ms ease, text-shadow 220ms ease, transform 220ms ease",
                             opacity: isActive ? 1 : 0.92,
+                            textShadow: isActive ? "0 0 24px rgba(204,255,0,0.22)" : "0 0 14px rgba(255,255,255,0.1)",
                           }}
                         >
                           <span className="inline-block">{item.label}</span>
@@ -886,6 +826,14 @@ export function MobileMenu() {
                 })}
               </ul>
             </nav>
+
+            <div className="mb-4 flex justify-center">
+              <div className="menu-brand-logo relative inline-flex items-center gap-2 rounded-full border border-white/10 px-5 py-2.5">
+                <span className="menu-brand-shine text-[clamp(1.05rem,3.8vw,1.4rem)] font-black uppercase tracking-[0.14em] text-white">
+                  VIPАВТО 161
+                </span>
+              </div>
+            </div>
 
             <div ref={footerRef} className="menu-footer mt-3">
               <p className="menu-footer-copy mb-3 max-w-[38ch] text-left text-[12px] leading-relaxed tracking-[0.04em] text-[var(--text-secondary)]/84">
@@ -942,7 +890,7 @@ export function MobileMenu() {
                     </svg>
                   </div>
                   <span ref={callLabelRef} className="call-label inline-block text-xs font-bold uppercase tracking-[0.25em] text-white/80">
-                    позвонить
+                    нажмите для звонка
                   </span>
                 </div>
               </div>
@@ -951,7 +899,7 @@ export function MobileMenu() {
                 <a
                   href={siteConfig.social.whatsapp}
                   aria-label="WhatsApp"
-                  className="btn-shine tap-none touch-manipulation flex h-11 items-center justify-center gap-2 rounded-full border border-[#ccff0026] bg-[#ccff0014] px-3.5 transition-all duration-300 hover:border-[#ccff0059] hover:bg-[#ccff0026] hover:shadow-[0_0_20px_rgba(204,255,0,0.15)]"
+                  className="tap-none touch-manipulation flex h-12 items-center justify-center gap-2 rounded-2xl border border-[#ccff0040] bg-[linear-gradient(135deg,rgba(204,255,0,0.22),rgba(204,255,0,0.08))] px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_10px_30px_rgba(204,255,0,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ccff0080] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_16px_34px_rgba(204,255,0,0.22)]"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
@@ -962,7 +910,7 @@ export function MobileMenu() {
                 <a
                   href={siteConfig.social.telegram}
                   aria-label="Telegram"
-                  className="btn-shine tap-none touch-manipulation flex h-11 items-center justify-center gap-2 rounded-full border border-[#00f0ff26] bg-[#00f0ff0f] px-3.5 transition-all duration-300 hover:border-[#00f0ff59] hover:bg-[#00f0ff1f] hover:shadow-[0_0_20px_rgba(0,240,255,0.15)]"
+                  className="tap-none touch-manipulation flex h-12 items-center justify-center gap-2 rounded-2xl border border-[#00f0ff45] bg-[linear-gradient(135deg,rgba(0,240,255,0.22),rgba(0,240,255,0.08))] px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_10px_30px_rgba(0,240,255,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#00f0ff85] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_16px_34px_rgba(0,240,255,0.22)]"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <line x1="22" y1="2" x2="11" y2="13" />
