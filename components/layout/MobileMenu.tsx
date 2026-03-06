@@ -113,18 +113,26 @@ export function MobileMenu() {
     if (reduce) return;
 
     const ctx = gsap.context(() => {
-      gsap.set(vip, { autoAlpha: 0, x: -70, rotate: -7, scale: 0.9, filter: "blur(6px)" });
-      gsap.set(auto, { autoAlpha: 0, x: 70, rotate: 7, scale: 0.9, filter: "blur(6px)" });
-      gsap.set(region, { autoAlpha: 0, y: 8, scale: 0.92, filter: "blur(5px)" });
-      gsap.set(accent, { autoAlpha: 0, scaleX: 0, transformOrigin: "left center" });
+      const words = [vip, auto, region];
+      gsap.killTweensOf(words);
+      gsap.killTweensOf(logo);
+      gsap.killTweensOf(accent);
+
+      gsap.set(words, { clearProps: "all" });
+      gsap.set(accent, { clearProps: "all" });
+      gsap.set(logo, { clearProps: "scale" });
+
+      gsap.set(vip, { opacity: 0, x: -70, rotate: -7, scale: 0.85 });
+      gsap.set(auto, { opacity: 0, x: 70, rotate: 7, scale: 0.85 });
+      gsap.set(region, { opacity: 0, y: 8, scale: 0.92 });
+      gsap.set(accent, { opacity: 0, scaleX: 0, transformOrigin: "left center" });
 
       const tl = gsap.timeline({ delay: 0.2 });
       tl.to(vip, {
         x: 0,
         rotate: 0,
         scale: 1,
-        autoAlpha: 1,
-        filter: "blur(0px)",
+        opacity: 1,
         duration: 0.72,
         ease: "power3.out",
       })
@@ -134,8 +142,7 @@ export function MobileMenu() {
             x: 0,
             rotate: 0,
             scale: 1,
-            autoAlpha: 1,
-            filter: "blur(0px)",
+            opacity: 1,
             duration: 0.72,
             ease: "power3.out",
           },
@@ -146,8 +153,7 @@ export function MobileMenu() {
           {
             y: 0,
             scale: 1,
-            autoAlpha: 1,
-            filter: "blur(0px)",
+            opacity: 1,
             duration: 0.55,
             ease: "power2.out",
           },
@@ -155,7 +161,11 @@ export function MobileMenu() {
         )
         .to(logo, { scale: 1.03, duration: 0.2, ease: "power2.out" })
         .to(logo, { scale: 1, duration: 0.35, ease: "power2.inOut" })
-        .to(accent, { autoAlpha: 1, scaleX: 1, duration: 0.5, ease: "power3.out" }, "-=0.28");
+        .to(accent, { opacity: 1, scaleX: 1, duration: 0.5, ease: "power3.out" }, "-=0.28");
+
+      return () => {
+        tl.kill();
+      };
     }, logo);
 
     return () => ctx.revert();
@@ -691,10 +701,10 @@ export function MobileMenu() {
         >
           <span className="vip-logo-monolith" aria-label="VIPАВТО 161 RUS">
             <span className="logo-text">
-              <span ref={logoVipRef} className="vip-part" style={{ opacity: 0 }}>VIP</span>
-              <span ref={logoAutoRef} className="auto-part" style={{ opacity: 0 }}>АВТО</span>
+              <span ref={logoVipRef} className="vip-part">VIP</span>
+              <span ref={logoAutoRef} className="auto-part">АВТО</span>
             </span>
-            <span ref={logoRegionRef} className="logo-region" style={{ opacity: 0 }}>
+            <span ref={logoRegionRef} className="logo-region">
               <span className="region-code">161</span>
               <span className="region-flag">RUS</span>
             </span>
@@ -702,7 +712,6 @@ export function MobileMenu() {
               ref={logoAccentRef}
               aria-hidden="true"
               className="absolute -bottom-[4px] left-0 h-[2px] w-full bg-gradient-to-r from-[#ccff00] to-[#00f0ff]"
-              style={{ opacity: 0 }}
             />
           </span>
         </Link>
