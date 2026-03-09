@@ -1,6 +1,7 @@
 ﻿import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { JetBrains_Mono, Manrope } from "next/font/google";
+import { DesktopHeader } from "@/components/layout/DesktopHeader";
 import { MobileMenuWrapper } from "@/components/layout/MobileMenuWrapper";
 import ParallaxBackground from "@/components/parallax/ParallaxBackground";
 import { siteConfig } from "@/lib/siteConfig";
@@ -114,8 +115,24 @@ export default function RootLayout({
         className={`${manrope.variable} ${jetBrainsMono.variable} bg-[var(--bg-primary)] antialiased text-[var(--text-primary)]`}
       >
         <ParallaxBackground intensity={1} />
+        <DesktopHeader />
         <MobileMenuWrapper />
-        <div className="boot-ui relative z-10 pt-[calc(80px+env(safe-area-inset-top))]">{children}</div>
+        <div className="boot-ui relative z-10 pt-[calc(80px+env(safe-area-inset-top))] lg:pt-[72px]">{children}</div>
+        <Script id="motion-policy" strategy="beforeInteractive">
+          {`
+            (function () {
+              var root = document.documentElement;
+              var params = new URLSearchParams(window.location.search);
+              var raw = (params.get('debug-motion') || '').trim().toLowerCase();
+              var forceMotion = raw === '1' || raw === 'true' || raw === 'on';
+              var forceReduced = raw === '0' || raw === 'false' || raw === 'off';
+              var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+              if (forceMotion) reduced = false;
+              if (forceReduced) reduced = true;
+              root.setAttribute('data-reduce-motion', reduced ? 'true' : 'false');
+            })();
+          `}
+        </Script>
         <Script id="local-business-jsonld" type="application/ld+json">
           {JSON.stringify(localBusinessJsonLd)}
         </Script>

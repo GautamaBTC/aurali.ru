@@ -33,10 +33,8 @@ export function ScrollProgress() {
     };
   }, []);
 
-  if (typeof window !== "undefined" && getIsMobile()) return null;
-
   return (
-    <div className="fixed inset-x-0 top-0 z-40 h-1 bg-transparent">
+    <div className="fixed inset-x-0 top-0 z-40 hidden h-1 bg-transparent md:block">
       <div ref={barRef} className="h-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent-2)] will-change-transform" />
     </div>
   );

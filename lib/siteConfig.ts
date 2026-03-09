@@ -21,7 +21,9 @@ export const siteConfig = {
     whatsapp: "https://wa.me/message/OHQIEET6AABBO1",
     vk: "https://vk.com/vipauto161",
   },
-  yandexMaps: "https://yandex.ru/maps/-/CDa1rOdV",
+  yandexMaps: "https://yandex.ru/maps/org/vipavto/1107053584/?ll=40.184441%2C47.715671&z=15",
+  twoGis: "https://2gis.ru/shakhty/firm/70000001024162951",
+  twoGisRating: "4,7",
   siteUrl: "https://vipauto161.ru",
   ogrnip: "316619600153914",
 } as const;

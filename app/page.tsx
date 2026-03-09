@@ -1,5 +1,6 @@
-﻿import { StickyMobileActions } from "@/components/effects/StickyMobileActions";
-import { ParallaxSection } from "@/components/parallax/ParallaxSection";
+﻿"use client";
+
+import { StickyMobileActions } from "@/components/effects/StickyMobileActions";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { AdvantagesSection } from "@/components/sections/AdvantagesSection";
@@ -7,12 +8,18 @@ import { BrandsSection } from "@/components/sections/BrandsSection";
 import { CompareSection } from "@/components/sections/CompareSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { PartnerBrandsSection } from "@/components/sections/PartnerBrandsSection";
 import { ProcessSection } from "@/components/sections/ProcessSection";
+import { ProductShowcase } from "@/components/sections/ProductShowcase";
 import { ReviewsSection } from "@/components/sections/ReviewsSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { StatsSection } from "@/components/sections/StatsSection";
+import ScrollToTop from "@/components/ui/ScrollToTop";
+import { useGlobalReveal } from "@/hooks/useGlobalReveal";
 
 export default function Home() {
+  useGlobalReveal();
+
   return (
     <>
       <a
@@ -24,63 +31,11 @@ export default function Home() {
       <ScrollProgress />
       <main id="main-content">
         <HeroSection />
-        <ParallaxSection
-          className="relative"
-          layers={[
-            {
-              id: "stats-glow",
-              speed: -0.2,
-              z: 0,
-              style: {
-                background:
-                  "radial-gradient(circle at 50% 50%, rgba(0,240,255,0.12) 0%, rgba(204,255,0,0.08) 42%, transparent 72%)",
-                filter: "blur(80px)",
-                transform: "translateZ(0)",
-              },
-            },
-            {
-              id: "stats-grid",
-              speed: -0.08,
-              z: 1,
-              opacityRange: [0.12, 0.03],
-              style: {
-                backgroundImage:
-                  "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
-                backgroundSize: "80px 80px",
-              },
-            },
-          ]}
-        >
-          <StatsSection />
-        </ParallaxSection>
-        <ParallaxSection
-          className="relative"
-          layers={[
-            {
-              id: "cmp-bg",
-              speed: -0.16,
-              z: 0,
-              style: {
-                background:
-                  "radial-gradient(ellipse at 20% 50%, rgba(0,240,255,0.09) 0%, transparent 70%), radial-gradient(ellipse at 80% 50%, rgba(204,255,0,0.1) 0%, transparent 70%)",
-              },
-            },
-            {
-              id: "cmp-grid",
-              speed: -0.06,
-              z: 1,
-              opacityRange: [0.1, 0.02],
-              style: {
-                backgroundImage:
-                  "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)",
-                backgroundSize: "100px 100px",
-              },
-            },
-          ]}
-        >
-          <CompareSection />
-        </ParallaxSection>
+        <StatsSection />
+        <CompareSection />
+        <ProductShowcase />
         <ServicesSection />
+        <PartnerBrandsSection />
         <AdvantagesSection />
         <ProcessSection />
         <BrandsSection />
@@ -88,6 +43,7 @@ export default function Home() {
         <ContactSection />
       </main>
       <StickyMobileActions />
+      <ScrollToTop />
       <Footer />
     </>
   );

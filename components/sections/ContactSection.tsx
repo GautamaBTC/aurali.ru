@@ -50,8 +50,8 @@ export function ContactSection() {
     <section ref={sectionRef} id="contacts" className="reveal-section section-padding">
       <div className="container-shell">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
-          <article className="contact-info-col card-surface rounded-xl p-6 md:p-8">
-            <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl">Контакты и запись</h2>
+          <article className="contact-info-col reveal-item card-surface rounded-xl p-6 md:p-8">
+            <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight md:text-4xl">Контакты и запись</h2>
             <p className="mt-4 text-base leading-relaxed text-zinc-400 md:text-lg">{siteConfig.address}</p>
             <p className="mt-4 text-base leading-relaxed text-zinc-400 md:text-lg">{siteConfig.schedule}</p>
             <ul className="mt-6 space-y-3 text-base md:space-y-4 md:text-lg">
@@ -85,10 +85,19 @@ export function ContactSection() {
               >
                 {"Яндекс Карты"}
               </a>
+              <a
+                href={siteConfig.twoGis}
+                className="btn-secondary inline-flex items-center justify-center px-4 py-2"
+              >
+                2GIS
+              </a>
             </div>
+            <p className="mt-4 text-sm leading-normal text-zinc-500">
+              Рейтинг в 2GIS: <span className="font-semibold text-zinc-200">{siteConfig.twoGisRating}</span>
+            </p>
           </article>
-          <article className="contact-form-col card-surface rounded-xl p-6 md:p-8">
-            <h3 className="form-reveal text-2xl font-semibold leading-snug md:text-3xl">Оставьте заявку</h3>
+          <article className="contact-form-col reveal-item card-surface rounded-xl p-6 md:p-8">
+            <h3 className="form-reveal reveal-item text-2xl font-semibold leading-snug md:text-3xl">Оставьте заявку</h3>
             <p className="form-reveal mt-4 text-sm leading-normal text-zinc-500">
               {"Ответим в рабочее время и согласуем удобную дату визита."}
             </p>

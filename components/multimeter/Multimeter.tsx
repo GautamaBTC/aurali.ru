@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { getIsMobile } from "@/hooks/useIsMobile";
+import { shouldReduceMotionInBrowser } from "@/lib/motion";
 
 import { CHANNELS } from "./multimeter.constants";
 import { useMultimeter } from "./useMultimeter";
@@ -50,7 +51,7 @@ export default function Multimeter({ voltage, current, resistance, autoAnimate =
 
   useEffect(() => {
     const el = shellRef.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!el || shouldReduceMotionInBrowser()) return;
     if (getIsMobile()) return;
 
     const panels = Array.from(el.querySelectorAll<HTMLElement>("[data-panel]"));

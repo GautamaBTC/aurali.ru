@@ -32,14 +32,19 @@ export function ReviewsSection() {
     <section ref={sectionRef} id="reviews" className="reveal-section section-padding">
       <div className="container-shell">
         <div className="flex flex-wrap items-end justify-between gap-3 md:gap-4">
-          <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl">Отзывы клиентов</h2>
-          <p className="text-sm leading-normal text-zinc-500">
-            {"Яндекс Карты:"} {siteConfig.rating} ({siteConfig.ratingVotes} {"оценок"})
-          </p>
+          <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight md:text-4xl">Отзывы клиентов</h2>
+          <div className="text-right text-sm leading-normal text-zinc-500">
+            <p>
+              {"Яндекс Карты:"} {siteConfig.rating} ({siteConfig.ratingVotes} {"оценок"})
+            </p>
+            <p>
+              {"2GIS:"} {siteConfig.twoGisRating}
+            </p>
+          </div>
         </div>
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
           {reviews.filter((review) => review.id !== "r5").map((review) => (
-            <article key={review.id} className="review-card card-surface rounded-xl p-6 md:p-8">
+            <article key={review.id} className="review-card reveal-item card-surface rounded-xl p-6 md:p-8">
               <p className="text-sm leading-normal text-zinc-500">
                 <span className="text-[#f5c542]">{`${"★".repeat(review.rating)}`}</span> <span className="ml-1">{review.car}</span>
               </p>

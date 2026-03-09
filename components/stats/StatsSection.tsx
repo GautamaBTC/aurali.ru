@@ -43,12 +43,12 @@ export function StatsSection() {
 
       <div className="container-shell relative z-10">
         <div className="mb-8 text-center md:mb-12">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/15 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[var(--accent-2)] md:mb-6">
+          <div className="reveal-item mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/15 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[var(--accent-2)] md:mb-6">
             <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-badge-pulse" />
             Наши результаты
           </div>
 
-          <h2 className="text-3xl font-bold leading-tight tracking-tight text-zinc-100 md:text-4xl">
+          <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight text-zinc-100 md:text-4xl">
             Цифры, которые{" "}
             <span className="bg-gradient-to-br from-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent">
               говорят за нас
@@ -73,7 +73,7 @@ export function StatsSection() {
               );
 
             return (
-              <div key={item.id} data-stat-card>
+              <div key={item.id} data-stat-card className="reveal-item">
                 <StatCard
                   icon={icon}
                   target={item.value}

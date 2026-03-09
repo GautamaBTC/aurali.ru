@@ -38,7 +38,7 @@ export function ProcessSection() {
   return (
     <section ref={sectionRef} id="process" className="reveal-section section-padding">
       <div className="container-shell">
-        <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl">Как мы работаем</h2>
+        <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight md:text-4xl">Как мы работаем</h2>
         <div className="relative mt-8">
           <div
             data-process-line
@@ -47,7 +47,7 @@ export function ProcessSection() {
           />
           <ol className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
             {processSteps.map((step) => (
-              <li key={step.id} className="process-step card-surface relative rounded-xl p-6 md:p-8">
+              <li key={step.id} className="process-step reveal-item card-surface relative rounded-xl p-6 md:p-8">
                 <p className="font-mono text-sm leading-normal text-zinc-500">{"Шаг"} {step.id}</p>
                 <h3 className="mt-4 text-2xl font-semibold leading-snug md:text-3xl">{step.title}</h3>
                 <p className="mt-4 text-base leading-relaxed text-zinc-400 md:text-lg">{step.description}</p>

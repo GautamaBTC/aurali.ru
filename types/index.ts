@@ -36,6 +36,18 @@ export type BrandItem = {
   name: string;
   color: string;
   group: "china" | "japan" | "korea" | "europe" | "usa" | "russia";
+  featured?: boolean;
+};
+
+export type PartnerBrandItem = {
+  id: string;
+  index: string;
+  name: string;
+  role: string;
+  logo: string;
+  accent: string;
+  description: string;
+  tags: string[];
 };
 
 export type LeadPayload = {

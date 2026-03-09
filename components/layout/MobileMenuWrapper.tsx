@@ -1,7 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Link from "next/link";
 
 function MobileMenuFallback() {
   return (
@@ -12,30 +11,7 @@ function MobileMenuFallback() {
         backdropFilter: "blur(10px) saturate(130%)",
         WebkitBackdropFilter: "blur(10px) saturate(130%)",
       }}
-    >
-      <Link
-        href="/"
-        className="header-logo pointer-events-auto absolute top-1/2 z-[1201] -translate-y-1/2 select-none"
-        style={{ left: "max(1.25rem, env(safe-area-inset-left))", transition: "none" }}
-        aria-label="VIPAuto161 Главная"
-      >
-        <span className="vip-logo-monolith" aria-label="VIPАВТО 161 RUS" style={{ overflow: "visible" }}>
-          <span className="logo-text" style={{ overflow: "visible" }}>
-            <span className="vip-part logo-anim-node">VIP</span>
-            <span className="auto-part logo-anim-node">АВТО</span>
-          </span>
-          <span className="logo-region logo-anim-node">
-            <span className="region-code">161</span>
-            <span className="region-flag">RUS</span>
-          </span>
-          <span
-            aria-hidden="true"
-            className="logo-accent-line logo-anim-node absolute -bottom-[4px] left-0 h-[2px] w-full bg-gradient-to-r from-[#ccff00] to-[#00f0ff]"
-            style={{ opacity: 1 }}
-          />
-        </span>
-      </Link>
-    </header>
+    />
   );
 }
 

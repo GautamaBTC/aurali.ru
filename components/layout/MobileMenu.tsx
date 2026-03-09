@@ -731,7 +731,7 @@ export function MobileMenu() {
             ref={lineMidRef}
             className="absolute left-0 top-[10px] block h-[1.5px] rounded-[2px]"
             style={{
-              width: "100%",
+              width: "72%",
               background: "linear-gradient(90deg, #ccff00 0%, #00f0ff 100%)",
               boxShadow: "0 0 8px rgba(224,230,237,0.25)",
               opacity: 1,
@@ -745,7 +745,7 @@ export function MobileMenu() {
             ref={lineBotRef}
             className="absolute bottom-0 left-0 block h-[1.5px] rounded-[2px]"
             style={{
-              width: "100%",
+              width: "50%",
               background: "#00f0ff",
               boxShadow: "0 0 8px rgba(0,240,255,0.25)",
               transform: "translateY(0) rotate(0)",
@@ -829,10 +829,6 @@ export function MobileMenu() {
             </nav>
 
             <div ref={footerRef} className="menu-footer mt-3">
-              <p className="menu-footer-copy mb-3 max-w-[38ch] text-left text-[12px] leading-relaxed tracking-[0.04em] text-[var(--text-secondary)]/84">
-                Премиальный центр автоэлектрики. Диагностика, StarLine, автосвет и сложные электрические случаи.
-              </p>
-
               <div className="mb-4 flex justify-center">
                 <div className="h-px w-16 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
               </div>

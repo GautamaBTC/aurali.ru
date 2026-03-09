@@ -1,162 +1,78 @@
 "use client";
 
-import { useEffect, useRef, type RefObject } from "react";
-import { useGSAP } from "@/hooks/useGSAP";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { adaptRevealVarsForMobile, REVEAL_CONFIG } from "@/lib/revealConfig";
-
-type GsapVars = Record<string, unknown>;
+import { useEffect, type RefObject } from "react";
+import { gsap } from "gsap";
+import { shouldReduceMotionInBrowser } from "@/lib/motion";
 
 type StaggerRevealConfig = {
   childSelector: string;
-  from: GsapVars;
-  to: GsapVars;
-  stagger?: number | Record<string, unknown>;
+  from?: gsap.TweenVars;
+  to?: gsap.TweenVars;
+  stagger?: number;
   duration?: number;
-  ease?: string;
-  threshold?: number;
-  once?: boolean;
   observe?: boolean;
   revealed?: boolean;
 };
 
 export function useStaggerReveal(ref: RefObject<HTMLElement | null>, config: StaggerRevealConfig): void {
-  const gsap = useGSAP();
-  const reduced = useReducedMotion();
-  const tweenRef = useRef<ReturnType<typeof gsap.to> | null>(null);
-  const playedRef = useRef(false);
-
-  const {
-    childSelector,
-    from,
-    to,
-    stagger = 0.1,
-    duration = REVEAL_CONFIG.defaultDuration,
-    ease = REVEAL_CONFIG.defaultEase,
-    threshold = REVEAL_CONFIG.defaultThreshold,
-    once = true,
-    observe = true,
-    revealed = false,
-  } = config;
-
   useEffect(() => {
     const container = ref.current;
     if (!container) return;
-    const isMobile = window.matchMedia(REVEAL_CONFIG.mobileQuery).matches;
 
-    const children = Array.from(container.querySelectorAll<HTMLElement>(childSelector));
+    const children = Array.from(container.querySelectorAll<HTMLElement>(config.childSelector));
     if (!children.length) return;
 
-    const showImmediately = () => {
-      gsap.set(children, { ...to, clearProps: "visibility,transform,opacity,filter" });
-      playedRef.current = true;
-    };
+    children.forEach((child) => child.classList.add("reveal-item"));
 
-    if (reduced) {
-      container.classList.add("is-revealed");
-      showImmediately();
-      return;
-    }
-
-    if (isMobile) {
-      children.forEach((child, index) => {
-        child.classList.add("mobile-stagger-item");
-        child.style.setProperty("--stagger-index", String(index));
+    if (shouldReduceMotionInBrowser()) {
+      children.forEach((child) => {
+        child.classList.add("is-revealed", "is-in-view");
+        gsap.set(child, { clearProps: "all" });
       });
 
-      const activate = () => {
-        if (once && playedRef.current) return;
-        container.classList.add("is-revealed", "mobile-stagger-active");
-        playedRef.current = true;
-      };
-
-      if (!observe) {
-        if (revealed) activate();
-        else {
-          playedRef.current = false;
-          container.classList.remove("mobile-stagger-active");
-        }
-        return () => {
-          children.forEach((child) => child.style.removeProperty("--stagger-index"));
-        };
-      }
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            activate();
-            if (once) observer.disconnect();
-          } else if (!once) {
-            playedRef.current = false;
-            container.classList.remove("mobile-stagger-active");
-          }
-        },
-        { threshold },
-      );
-
-      observer.observe(container);
-
       return () => {
-        observer.disconnect();
-        children.forEach((child) => child.style.removeProperty("--stagger-index"));
+        children.forEach((child) => child.classList.remove("reveal-item"));
       };
     }
 
-    const fromVars = isMobile ? adaptRevealVarsForMobile(from) : from;
-    const toVars = isMobile ? adaptRevealVarsForMobile(to) : to;
-    const durationValue = isMobile ? duration * REVEAL_CONFIG.mobileDurationMultiplier : duration;
-
-    const run = () => {
-      if (once && playedRef.current) return;
-      tweenRef.current?.kill();
-      gsap.set(children, fromVars);
-      tweenRef.current = gsap.to(children, {
-        ...toVars,
-        duration: durationValue,
-        ease,
-        stagger,
-      });
-      playedRef.current = true;
+    const fromVars: gsap.TweenVars = {
+      y: 24,
+      autoAlpha: 0,
+      ...(config.from ?? {}),
     };
 
-    if (!observe) {
-      if (revealed) run();
-      return () => {
-        tweenRef.current?.kill();
-      };
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          run();
-          if (once) observer.disconnect();
-        } else if (!once) {
-          playedRef.current = false;
-        }
+    const toVars: gsap.TweenVars = {
+      y: 0,
+      autoAlpha: 1,
+      duration: config.duration ?? 0.4,
+      stagger: config.stagger ?? 0.06,
+      ease: "power2.out",
+      overwrite: "auto",
+      ...(config.to ?? {}),
+      onStart: () => {
+        children.forEach((child) => child.classList.add("is-revealed", "is-in-view"));
       },
-      { threshold },
-    );
+      onComplete: () => {
+        children.forEach((child) => {
+          child.style.willChange = "auto";
+        });
+      },
+    };
 
-    observer.observe(container);
+    if (config.revealed) {
+      gsap.killTweensOf(children);
+      gsap.set(children, { willChange: "transform,opacity" });
+      gsap.fromTo(children, fromVars, toVars);
+    } else if (config.observe) {
+      children.forEach((child) => {
+        child.classList.remove("is-revealed");
+        gsap.set(child, fromVars);
+      });
+    }
 
     return () => {
-      observer.disconnect();
-      tweenRef.current?.kill();
+      gsap.killTweensOf(children);
+      children.forEach((child) => child.classList.remove("reveal-item"));
     };
-  }, [
-    childSelector,
-    duration,
-    ease,
-    from,
-    gsap,
-    observe,
-    once,
-    reduced,
-    ref,
-    revealed,
-    stagger,
-    threshold,
-    to,
-  ]);
+  }, [config.childSelector, config.duration, config.from, config.observe, config.revealed, config.stagger, config.to, ref]);
 }

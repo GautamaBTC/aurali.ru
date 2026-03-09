@@ -1,4 +1,6 @@
 ﻿import type { Metadata } from "next";
+import { LegalBottomHomeButton } from "@/components/legal/LegalBottomHomeButton";
+import { LegalTopBar } from "@/components/legal/LegalTopBar";
 import { siteConfig } from "@/lib/siteConfig";
 
 export const metadata: Metadata = {
@@ -29,18 +31,19 @@ export default function PrivacyPage() {
   return (
     <main className="section-padding pt-24">
       <div className="container-shell">
-        <p className="text-sm text-zinc-500">Главная / Политика конфиденциальности</p>
+        <LegalTopBar trail="Главная / Политика конфиденциальности" />
         <article className="card-surface mt-4 max-w-3xl p-6 md:p-8">
-          <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-5xl">Политика конфиденциальности</h1>
+          <h1 className="break-words text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">Политика конфиденциальности</h1>
           <div className="mt-6 space-y-6 md:space-y-8">
             {sections.map(([title, body]) => (
               <section key={title}>
-                <h2 className="text-2xl font-semibold leading-snug md:text-3xl">{title}</h2>
+                <h2 className="break-words text-xl font-semibold leading-snug sm:text-2xl md:text-3xl">{title}</h2>
                 <p className="mt-2 text-base leading-relaxed text-zinc-400 md:text-lg">{body}</p>
               </section>
             ))}
           </div>
         </article>
+        <LegalBottomHomeButton />
       </div>
     </main>
   );
