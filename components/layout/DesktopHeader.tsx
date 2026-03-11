@@ -48,10 +48,10 @@ export function DesktopHeader() {
         >
           <Image
             src="/images/plate-logo.svg"
-            alt="VIPAuto161"
+            alt="ВИПАВТО 161"
             width={130}
             height={34}
-            className="logo-animate__img h-8 w-auto"
+            className="logo-animate__img header-logo-glitch h-8 w-auto"
             priority
           />
         </button>

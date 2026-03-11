@@ -24,6 +24,7 @@ const MENU_ITEMS: readonly MenuItem[] = [
 
 const HEADER_HEIGHT = 72;
 const HEADER_PHONE = "+7 (928) 7777-009";
+const DISABLE_HEADER_INTRO_ANIMATIONS = true;
 const HEADER_PHONE_CHARS = [
   "+",
   "7",
@@ -48,14 +49,8 @@ export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isBurgerVisible, setIsBurgerVisible] = useState<boolean>(() => {
-    if (typeof document === "undefined") return false;
-    return document.documentElement.dataset.introBurger === "true";
-  });
-  const [isLogoIntroReady, setIsLogoIntroReady] = useState<boolean>(() => {
-    if (typeof document === "undefined") return false;
-    return document.documentElement.dataset.introLogo === "true";
-  });
+  const [isBurgerVisible] = useState(true);
+  const [isLogoIntroReady] = useState(true);
   const [activeId, setActiveId] = useState<string>("services");
   const [menuScale, setMenuScale] = useState(1);
 
@@ -75,7 +70,7 @@ export function MobileMenu() {
   const topPhoneRef = useRef<HTMLAnchorElement | null>(null);
   const callArrowRef = useRef<HTMLDivElement | null>(null);
   const callLabelRef = useRef<HTMLSpanElement | null>(null);
-  const burgerEntryPlayedRef = useRef(false);
+  const burgerEntryPlayedRef = useRef(true);
 
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const pendingAnchorRef = useRef<string | null>(null);
@@ -88,19 +83,6 @@ export function MobileMenu() {
 
   useLockScroll(isLocked);
 
-  useEffect(() => {
-    const onLogoStart = () => setIsLogoIntroReady(true);
-    const onBurgerStart = () => setIsBurgerVisible(true);
-
-    window.addEventListener("ui:intro-logo", onLogoStart as EventListener);
-    window.addEventListener("ui:intro-burger", onBurgerStart as EventListener);
-
-    return () => {
-      window.removeEventListener("ui:intro-logo", onLogoStart as EventListener);
-      window.removeEventListener("ui:intro-burger", onBurgerStart as EventListener);
-    };
-  }, []);
-
   useLayoutEffect(() => {
     if (!isLogoIntroReady) return;
 
@@ -112,7 +94,7 @@ export function MobileMenu() {
 
     const override = resolveMotionOverride(window.location.search);
     const reduce = override === "force-reduced";
-    if (reduce) {
+    if (reduce || DISABLE_HEADER_INTRO_ANIMATIONS) {
       gsap.set(logo, { clearProps: "all" });
       gsap.set([vip, auto, region], {
         opacity: 1,
@@ -762,16 +744,16 @@ export function MobileMenu() {
             marginLeft: "max(0.5rem, env(safe-area-inset-left))",
             transition: "none",
           }}
-          aria-label="VIPAuto161 Главная"
+          aria-label="ВИПАВТО 161 Главная"
         >
-          <span className="vip-logo-monolith" aria-label="VIPАВТО 161 RUS" style={{ overflow: "visible" }}>
+          <span className="vip-logo-monolith" aria-label="ВИПАВТО 161 RUS" style={{ overflow: "visible" }}>
             <span className="logo-text" style={{ overflow: "visible" }}>
               <span
                 ref={logoVipRef}
                 className="vip-part logo-anim-node logo-anim-node--vip"
                 style={{ display: "inline-block", opacity: isLogoIntroReady ? undefined : 0 }}
               >
-                VIP
+                ВИП
               </span>
               <span
                 ref={logoAutoRef}

@@ -1397,6 +1397,31 @@ select:focus-visible {
   }
 }
 
+@keyframes header-logo-glitch {
+  0%,
+  94%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    filter: none;
+  }
+  95% {
+    transform: translate3d(-1px, 0, 0);
+    filter:
+      drop-shadow(1px 0 0 rgba(0, 240, 255, 0.55))
+      drop-shadow(-1px 0 0 rgba(204, 255, 0, 0.55));
+  }
+  96% {
+    transform: translate3d(1px, -1px, 0);
+    filter:
+      drop-shadow(-1px 0 0 rgba(0, 240, 255, 0.45))
+      drop-shadow(1px 0 0 rgba(204, 255, 0, 0.45));
+  }
+  97% {
+    transform: translate3d(0, 0, 0);
+    filter: none;
+  }
+}
+
 .logo-animate {
   position: relative;
   display: inline-flex;
@@ -1448,6 +1473,11 @@ select:focus-visible {
     filter 180ms ease;
 }
 
+.header-logo-glitch {
+  animation: header-logo-glitch 9s linear infinite;
+  will-change: transform, filter;
+}
+
 .logo-animate:hover .logo-animate__img,
 .logo-animate:focus-visible .logo-animate__img {
   transform: scale(1.02);
@@ -1481,6 +1511,12 @@ select:focus-visible {
   .header-logo::after {
     animation: none !important;
     opacity: 0 !important;
+  }
+
+  .header-logo-glitch {
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
   }
 }
 

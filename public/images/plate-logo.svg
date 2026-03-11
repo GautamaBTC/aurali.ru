@@ -1,4 +1,4 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" width="200" height="54" viewBox="0 0 260 70" class="plate-logo" aria-label="VIPАвто 161">
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="54" viewBox="0 0 260 70" class="plate-logo" aria-label="ВИПАВТО 161">
   <defs>
     <linearGradient id="plateBg" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0%" stop-color="#fdfdfd"/>
@@ -11,7 +11,7 @@
   <rect class="svg-elem-1" x="3" y="5" width="254" height="60" rx="9" fill="url(#plateBg)" stroke="#1a1f2b" stroke-width="3.2" filter="url(#shadow)"/>
   <rect class="svg-elem-2" x="7" y="9" width="246" height="52" rx="7" fill="none" stroke="#0d121f" stroke-width="1.6"/>
   <line class="svg-elem-3" x1="186" y1="9" x2="186" y2="61" stroke="#0d121f" stroke-width="2"/>
-  <text class="svg-elem-4" x="20" y="48" fill="#0d121f" font-family="DIN Condensed, 'Segoe UI', Arial" font-weight="700" font-size="34" letter-spacing="1.2">VIPАВТО</text>
+  <text class="svg-elem-4" x="20" y="48" fill="#0d121f" font-family="DIN Condensed, 'Segoe UI', Arial" font-weight="700" font-size="34" letter-spacing="1.2">ВИПАВТО</text>
   <text class="svg-elem-5" x="196" y="36" fill="#0d121f" font-family="DIN Condensed, 'Segoe UI', Arial" font-weight="700" font-size="24" letter-spacing="1">161</text>
   <text class="svg-elem-6" x="196" y="52.5" fill="#0d121f" font-family="DIN Condensed, 'Segoe UI', Arial" font-weight="700" font-size="13">RUS</text>
   <rect class="svg-elem-7" x="224" y="42" width="22" height="12" fill="#fff" stroke="#0d121f" stroke-width="1"/>

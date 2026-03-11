@@ -5,7 +5,6 @@ import { MessageCircle, ShieldCheck } from "lucide-react";
 import { AnimatedGrid } from "@/components/effects/AnimatedGrid";
 import { CountUp } from "@/components/effects/CountUp";
 import { FloatingBadge } from "@/components/effects/FloatingBadge";
-import { GlitchText } from "@/components/effects/GlitchText";
 import { Magnetic } from "@/components/effects/Magnetic";
 import { TypeWriter } from "@/components/effects/TypeWriter";
 import { useReveal } from "@/hooks/useReveal";
@@ -78,7 +77,7 @@ export function HeroSection() {
               </p>
 
               <h1 className="hero-reveal mt-4 text-3xl font-bold leading-[1.02] tracking-tight sm:text-4xl md:text-6xl lg:text-7xl">
-                <GlitchText className="text-[var(--text-primary)]">{`${HERO_BRAND}:`}</GlitchText>{" "}
+                <span className="text-[var(--text-primary)]">{`${HERO_BRAND}:`}</span>{" "}
                 <span className="hero-gradient-text">автоэлектрика и автоэлектроника</span>
               </h1>
 
