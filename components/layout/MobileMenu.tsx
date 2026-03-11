@@ -5,7 +5,7 @@ import Link from "next/link";
 import { gsap } from "gsap";
 import { siteConfig } from "@/lib/siteConfig";
 import { useLockScroll } from "@/hooks/useLockScroll";
-import { shouldReduceMotionInBrowser } from "@/lib/motion";
+import { resolveMotionOverride, shouldReduceMotionInBrowser } from "@/lib/motion";
 
 type MenuItem = {
   id: string;
@@ -48,7 +48,14 @@ export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isBurgerVisible, setIsBurgerVisible] = useState(false);
+  const [isBurgerVisible, setIsBurgerVisible] = useState<boolean>(() => {
+    if (typeof document === "undefined") return false;
+    return document.documentElement.dataset.introBurger === "true";
+  });
+  const [isLogoIntroReady, setIsLogoIntroReady] = useState<boolean>(() => {
+    if (typeof document === "undefined") return false;
+    return document.documentElement.dataset.introLogo === "true";
+  });
   const [activeId, setActiveId] = useState<string>("services");
   const [menuScale, setMenuScale] = useState(1);
 
@@ -77,113 +84,183 @@ export function MobileMenu() {
   const burgerTlRef = useRef<gsap.core.Timeline | null>(null);
   const burgerEntryTlRef = useRef<gsap.core.Timeline | null>(null);
   const openFocusTimerRef = useRef<number | null>(null);
+  const logoAccentTimerRef = useRef<number | null>(null);
 
   useLockScroll(isLocked);
 
   useEffect(() => {
-    let timeoutId: number | undefined;
+    const onLogoStart = () => setIsLogoIntroReady(true);
+    const onBurgerStart = () => setIsBurgerVisible(true);
 
-    const showBurger = () => {
-      timeoutId = window.setTimeout(() => setIsBurgerVisible(true), 1500);
-    };
-
-    if (document.readyState === "complete") {
-      showBurger();
-    } else {
-      window.addEventListener("load", showBurger, { once: true });
-    }
+    window.addEventListener("ui:intro-logo", onLogoStart as EventListener);
+    window.addEventListener("ui:intro-burger", onBurgerStart as EventListener);
 
     return () => {
-      if (timeoutId) window.clearTimeout(timeoutId);
-      window.removeEventListener("load", showBurger);
+      window.removeEventListener("ui:intro-logo", onLogoStart as EventListener);
+      window.removeEventListener("ui:intro-burger", onBurgerStart as EventListener);
     };
   }, []);
 
   useLayoutEffect(() => {
+    if (!isLogoIntroReady) return;
+
     const logo = logoRef.current;
     const vip = logoVipRef.current;
     const auto = logoAutoRef.current;
     const region = logoRegionRef.current;
     if (!logo || !vip || !auto || !region) return;
 
-    const reduce = shouldReduceMotionInBrowser();
+    const override = resolveMotionOverride(window.location.search);
+    const reduce = override === "force-reduced";
     if (reduce) {
+      gsap.set(logo, { clearProps: "all" });
       gsap.set([vip, auto, region], {
         opacity: 1,
-        clearProps: "transform",
+        y: 0,
+        scale: 1,
+        filter: "none",
+        clearProps: "all",
         force3D: false,
       });
       return;
     }
 
-    const words = [vip, auto, region];
-    gsap.killTweensOf(words);
+    const parts = [vip, auto, region];
+    gsap.killTweensOf(parts);
     gsap.killTweensOf(logo);
-
-    gsap.set([vip, auto, region], { clearProps: "all" });
 
     gsap.set(vip, {
       opacity: 0,
-      x: -80,
-      rotation: -8,
-      scale: 0.85,
+      x: -22,
+      y: 6,
+      scale: 0.97,
+      filter: "blur(4px)",
+      transformOrigin: "center center",
+      willChange: "transform, opacity, filter",
       force3D: false,
     });
     gsap.set(auto, {
       opacity: 0,
-      x: 80,
-      rotation: 8,
-      scale: 0.85,
+      x: 22,
+      y: 6,
+      scale: 0.97,
+      filter: "blur(4px)",
+      transformOrigin: "center center",
+      willChange: "transform, opacity, filter",
       force3D: false,
     });
     gsap.set(region, {
       opacity: 0,
-      x: -60,
-      rotation: -6,
-      scale: 0.9,
+      x: -14,
+      y: 10,
+      scale: 0.96,
+      filter: "blur(4px)",
+      transformOrigin: "center center",
+      willChange: "transform, opacity, filter",
       force3D: false,
     });
-    const tl = gsap.timeline({ delay: 0.3 });
-    tl.to(vip, {
-      opacity: 1,
-      x: 0,
-      rotation: 0,
-      scale: 1,
-      duration: 0.7,
-      ease: "power3.out",
+    gsap.set(logo, {
+      filter: "drop-shadow(0 0 0 rgba(0,0,0,0))",
+      willChange: "filter",
       force3D: false,
-    })
+    });
+
+    const tl = gsap.timeline({ delay: 0.14 });
+    tl.to(
+      vip,
+      {
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 0.46,
+        ease: "back.out(1.7)",
+        force3D: false,
+      },
+      0,
+    )
       .to(
         auto,
         {
-          opacity: 1,
-          x: 0,
-          rotation: 0,
-          scale: 1,
-          duration: 0.7,
-          ease: "power3.out",
-          force3D: false,
-        },
-        "-=0.35",
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 0.46,
+        ease: "back.out(1.7)",
+        force3D: false,
+      },
+        0.1,
       )
       .to(
         region,
         {
-          opacity: 1,
-          x: 0,
-          rotation: 0,
-          scale: 1,
-          duration: 0.7,
-          ease: "power3.out",
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 0.46,
+        ease: "back.out(1.7)",
+        force3D: false,
+      },
+        0.22,
+      )
+      .to(
+        logo,
+        {
+          filter: "drop-shadow(0 0 16px rgba(204,255,0,0.24)) drop-shadow(0 0 22px rgba(0,240,255,0.2))",
+          duration: 0.22,
+          ease: "power2.out",
           force3D: false,
         },
-        "-=0.35",
+        0.14,
       )
-      .to(logo, { scale: 1.04, duration: 0.2, ease: "power2.out", force3D: false }, "+=0.05")
-      .to(logo, { scale: 1, duration: 0.35, ease: "power2.inOut", force3D: false });
+      .to(
+        logo,
+        {
+          filter: "drop-shadow(0 0 0 rgba(0,0,0,0))",
+          duration: 0.42,
+          ease: "power2.out",
+          force3D: false,
+        },
+        0.36,
+      )
+      .set(parts, { clearProps: "willChange" })
+      .set(logo, { clearProps: "willChange" });
 
     return () => {
       tl.kill();
+    };
+  }, [isLogoIntroReady]);
+
+  useEffect(() => {
+    const logo = logoRef.current;
+    if (!logo || !isOpen) return;
+    const override = resolveMotionOverride(window.location.search);
+    if (override === "force-reduced" || shouldReduceMotionInBrowser()) return;
+
+    logo.classList.remove("logo-open-accent");
+    void logo.offsetWidth;
+    logo.classList.add("logo-open-accent");
+
+    if (logoAccentTimerRef.current) {
+      window.clearTimeout(logoAccentTimerRef.current);
+    }
+
+    logoAccentTimerRef.current = window.setTimeout(() => {
+      logo.classList.remove("logo-open-accent");
+      logoAccentTimerRef.current = null;
+    }, 280);
+  }, [isOpen]);
+
+  useEffect(() => {
+    return () => {
+      if (logoAccentTimerRef.current) {
+        window.clearTimeout(logoAccentTimerRef.current);
+      }
     };
   }, []);
 
@@ -668,7 +745,7 @@ export function MobileMenu() {
   return (
     <>
       <header
-        className="fixed left-0 right-0 top-0 z-[1200] flex h-[calc(80px+env(safe-area-inset-top))] items-center justify-center px-5 pt-[env(safe-area-inset-top)] md:hidden"
+        className="fixed left-0 right-0 top-0 z-[1200] flex h-[calc(72px+env(safe-area-inset-top))] items-center justify-start px-4 pt-[env(safe-area-inset-top)] md:hidden"
         style={{
           background: "rgba(5,10,20,0.8)",
           backdropFilter: "blur(10px) saturate(130%)",
@@ -680,23 +757,35 @@ export function MobileMenu() {
         <Link
           ref={logoRef}
           href="/"
-          className="header-logo pointer-events-auto absolute top-1/2 z-[1201] -translate-y-1/2 select-none"
+          className="header-logo pointer-events-auto z-[1201] select-none"
           style={{
-            left: "max(1.25rem, env(safe-area-inset-left))",
+            marginLeft: "max(0.5rem, env(safe-area-inset-left))",
             transition: "none",
           }}
           aria-label="VIPAuto161 Главная"
         >
           <span className="vip-logo-monolith" aria-label="VIPАВТО 161 RUS" style={{ overflow: "visible" }}>
             <span className="logo-text" style={{ overflow: "visible" }}>
-              <span ref={logoVipRef} className="vip-part logo-anim-node" style={{ display: "inline-block" }}>
+              <span
+                ref={logoVipRef}
+                className="vip-part logo-anim-node logo-anim-node--vip"
+                style={{ display: "inline-block", opacity: isLogoIntroReady ? undefined : 0 }}
+              >
                 VIP
               </span>
-              <span ref={logoAutoRef} className="auto-part logo-anim-node" style={{ display: "inline-block" }}>
+              <span
+                ref={logoAutoRef}
+                className="auto-part logo-anim-node logo-anim-node--auto"
+                style={{ display: "inline-block", opacity: isLogoIntroReady ? undefined : 0 }}
+              >
                 АВТО
               </span>
             </span>
-            <span ref={logoRegionRef} className="logo-region logo-anim-node">
+            <span
+              ref={logoRegionRef}
+              className="logo-region logo-anim-node logo-anim-node--region"
+              style={{ opacity: isLogoIntroReady ? undefined : 0 }}
+            >
               <span className="region-code">161</span>
               <span className="region-flag">RUS</span>
             </span>
@@ -711,7 +800,7 @@ export function MobileMenu() {
         aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
         aria-expanded={isOpen}
         aria-controls="mobile-nav-dialog"
-        className={`tap-none touch-manipulation fixed right-5 top-0 z-[10001] flex h-[calc(80px+env(safe-area-inset-top))] w-[84px] items-center justify-end pt-[env(safe-area-inset-top)] transition-opacity duration-300 md:hidden ${isBurgerVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`tap-none touch-manipulation fixed right-4 top-0 z-[10001] flex h-[calc(72px+env(safe-area-inset-top))] w-[72px] items-center justify-end pt-[env(safe-area-inset-top)] transition-opacity duration-300 md:hidden ${isBurgerVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
         style={{ background: "none", border: "none", outline: "none" }}
       >
         <div className="relative h-[22px] w-[38px]">

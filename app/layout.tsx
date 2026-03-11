@@ -1,6 +1,7 @@
 ﻿import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { JetBrains_Mono, Manrope } from "next/font/google";
+import { BootGate } from "@/components/layout/BootGate";
 import { DesktopHeader } from "@/components/layout/DesktopHeader";
 import { MobileMenuWrapper } from "@/components/layout/MobileMenuWrapper";
 import ParallaxBackground from "@/components/parallax/ParallaxBackground";
@@ -68,6 +69,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
   themeColor: "#09090b",
 };
 
@@ -114,10 +117,14 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${manrope.variable} ${jetBrainsMono.variable} bg-[var(--bg-primary)] antialiased text-[var(--text-primary)]`}
       >
-        <ParallaxBackground intensity={1} />
-        <DesktopHeader />
-        <MobileMenuWrapper />
-        <div className="boot-ui relative z-10 pt-[calc(80px+env(safe-area-inset-top))] lg:pt-[72px]">{children}</div>
+        <BootGate>
+          <ParallaxBackground intensity={1} />
+          <DesktopHeader />
+          <MobileMenuWrapper />
+          <div className="boot-ui relative z-10 pt-[calc(72px+env(safe-area-inset-top))] lg:pt-[72px]">
+            {children}
+          </div>
+        </BootGate>
         <Script id="motion-policy" strategy="beforeInteractive">
           {`
             (function () {

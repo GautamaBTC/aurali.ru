@@ -46,7 +46,14 @@ export function DesktopHeader() {
           onClick={() => scrollToId("top")}
           className="logo-animate flex shrink-0 items-center"
         >
-          <Image src="/images/plate-logo.svg" alt="VIPAuto161" width={130} height={34} className="h-8 w-auto" priority />
+          <Image
+            src="/images/plate-logo.svg"
+            alt="VIPAuto161"
+            width={130}
+            height={34}
+            className="logo-animate__img h-8 w-auto"
+            priority
+          />
         </button>
 
         <nav aria-label="Основная навигация" className="flex items-center gap-6">

@@ -31,7 +31,7 @@ export function StatsSection() {
   });
 
   return (
-    <section ref={sectionRef} id="stats" className="reveal-section section-padding relative">
+    <section ref={sectionRef} id="stats" className="reveal-section section-padding relative mt-6 md:mt-10">
       <div
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[80px]"
