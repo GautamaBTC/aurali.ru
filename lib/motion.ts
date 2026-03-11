@@ -19,5 +19,12 @@ export function shouldReduceMotionInBrowser(): boolean {
   if (override === "force-motion") return false;
   if (override === "force-reduced") return true;
 
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!prefersReduced) return false;
+
+  // Keep mobile experience animated by default.
+  const mobileViewport = window.matchMedia("(max-width: 1024px)").matches;
+  if (mobileViewport) return false;
+
+  return true;
 }
