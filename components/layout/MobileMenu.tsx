@@ -24,7 +24,7 @@ const MENU_ITEMS: readonly MenuItem[] = [
 
 const HEADER_HEIGHT = 72;
 const HEADER_PHONE = "+7 (928) 7777-009";
-const DISABLE_HEADER_INTRO_ANIMATIONS = true;
+const DISABLE_HEADER_INTRO_ANIMATIONS = false;
 const HEADER_PHONE_CHARS = [
   "+",
   "7",
@@ -70,7 +70,7 @@ export function MobileMenu() {
   const topPhoneRef = useRef<HTMLAnchorElement | null>(null);
   const callArrowRef = useRef<HTMLDivElement | null>(null);
   const callLabelRef = useRef<HTMLSpanElement | null>(null);
-  const burgerEntryPlayedRef = useRef(true);
+  const burgerEntryPlayedRef = useRef(false);
 
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const pendingAnchorRef = useRef<string | null>(null);

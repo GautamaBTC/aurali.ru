@@ -76,6 +76,12 @@ export function SiteScrollBackdrop() {
       glitchStartTimer = setTimeout(scheduleRandomGlitchWindow, 5000);
     };
 
+    const startLogoGlitchSchedulerFallback = () => {
+      if (!glitchStarted) {
+        startLogoGlitchScheduler();
+      }
+    };
+
     const tryPlay = () => {
       video.defaultMuted = true;
       video.muted = true;
@@ -124,6 +130,7 @@ export function SiteScrollBackdrop() {
     video.addEventListener("canplay", tryPlay);
     video.addEventListener("canplaythrough", tryPlay);
     video.addEventListener("playing", startLogoGlitchScheduler);
+    video.addEventListener("loadeddata", startLogoGlitchSchedulerFallback);
     video.addEventListener("loadeddata", clearStartupTimer);
     video.addEventListener("error", fallbackToAlternateSource);
 
@@ -162,6 +169,7 @@ export function SiteScrollBackdrop() {
       video.removeEventListener("canplay", tryPlay);
       video.removeEventListener("canplaythrough", tryPlay);
       video.removeEventListener("playing", startLogoGlitchScheduler);
+      video.removeEventListener("loadeddata", startLogoGlitchSchedulerFallback);
       video.removeEventListener("loadeddata", clearStartupTimer);
       video.removeEventListener("error", fallbackToAlternateSource);
       document.removeEventListener("visibilitychange", onVisibilityChange);
