@@ -42,7 +42,7 @@ export function HeroSection() {
       style={{ touchAction: "auto" }}
     >
       <div className="container-shell">
-        <div className="card-surface hero-card-surface relative overflow-hidden bg-[rgba(5,10,20,0.62)] p-5 sm:p-6 md:p-9 lg:p-10">
+        <div className="card-surface hero-card-surface relative overflow-hidden bg-[rgba(5,10,20,0.78)] p-5 sm:p-6 md:p-9 lg:p-10">
           <div className="hidden md:block">
             <AnimatedGrid />
           </div>

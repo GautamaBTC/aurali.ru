@@ -14,9 +14,15 @@ export function SiteScrollBackdrop() {
   useEffect(() => {
     const video = videoRef.current;
     if (!video || reduced) return;
+    const root = document.documentElement;
     const mediaQuery = window.matchMedia(MOBILE_QUERY);
     let fallbackAttempted = false;
     let startupTimer: ReturnType<typeof setTimeout> | undefined;
+    let glitchStartTimer: ReturnType<typeof setTimeout> | undefined;
+    let glitchWindowTimer: ReturnType<typeof setTimeout> | undefined;
+    let glitchBurstTimer: ReturnType<typeof setTimeout> | undefined;
+    let glitchActiveTimer: ReturnType<typeof setTimeout> | undefined;
+    let glitchStarted = false;
 
     const applySource = (src: string) => {
       if (video.dataset.src === src) return;
@@ -34,6 +40,40 @@ export function SiteScrollBackdrop() {
         clearTimeout(startupTimer);
         startupTimer = undefined;
       }
+    };
+
+    const clearGlitchTimers = () => {
+      if (glitchStartTimer !== undefined) clearTimeout(glitchStartTimer);
+      if (glitchWindowTimer !== undefined) clearTimeout(glitchWindowTimer);
+      if (glitchBurstTimer !== undefined) clearTimeout(glitchBurstTimer);
+      if (glitchActiveTimer !== undefined) clearTimeout(glitchActiveTimer);
+      glitchStartTimer = undefined;
+      glitchWindowTimer = undefined;
+      glitchBurstTimer = undefined;
+      glitchActiveTimer = undefined;
+      root.removeAttribute("data-logo-glitch");
+    };
+
+    const runGlitchBurst = () => {
+      root.setAttribute("data-logo-glitch", "on");
+      const duration = 180 + Math.round(Math.random() * 260);
+      if (glitchActiveTimer !== undefined) clearTimeout(glitchActiveTimer);
+      glitchActiveTimer = setTimeout(() => {
+        root.removeAttribute("data-logo-glitch");
+      }, duration);
+    };
+
+    const scheduleRandomGlitchWindow = () => {
+      const burstDelay = 1000 + Math.round(Math.random() * 9000);
+      glitchBurstTimer = setTimeout(runGlitchBurst, burstDelay);
+      glitchWindowTimer = setTimeout(scheduleRandomGlitchWindow, 10000);
+    };
+
+    const startLogoGlitchScheduler = () => {
+      if (glitchStarted) return;
+      glitchStarted = true;
+      root.setAttribute("data-video-ready", "true");
+      glitchStartTimer = setTimeout(scheduleRandomGlitchWindow, 5000);
     };
 
     const tryPlay = () => {
@@ -83,6 +123,7 @@ export function SiteScrollBackdrop() {
     video.addEventListener("loadeddata", tryPlay);
     video.addEventListener("canplay", tryPlay);
     video.addEventListener("canplaythrough", tryPlay);
+    video.addEventListener("playing", startLogoGlitchScheduler);
     video.addEventListener("loadeddata", clearStartupTimer);
     video.addEventListener("error", fallbackToAlternateSource);
 
@@ -115,10 +156,12 @@ export function SiteScrollBackdrop() {
 
     return () => {
       clearStartupTimer();
+      clearGlitchTimers();
       video.removeEventListener("loadedmetadata", tryPlay);
       video.removeEventListener("loadeddata", tryPlay);
       video.removeEventListener("canplay", tryPlay);
       video.removeEventListener("canplaythrough", tryPlay);
+      video.removeEventListener("playing", startLogoGlitchScheduler);
       video.removeEventListener("loadeddata", clearStartupTimer);
       video.removeEventListener("error", fallbackToAlternateSource);
       document.removeEventListener("visibilitychange", onVisibilityChange);

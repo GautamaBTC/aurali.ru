@@ -747,7 +747,7 @@ export function MobileMenu() {
           aria-label="ВИПАВТО 161 Главная"
         >
           <span className="vip-logo-monolith" aria-label="ВИПАВТО 161 RUS" style={{ overflow: "visible" }}>
-            <span className="logo-text" style={{ overflow: "visible" }}>
+            <span className="logo-text mobile-logo-glitch" style={{ overflow: "visible" }}>
               <span
                 ref={logoVipRef}
                 className="vip-part logo-anim-node logo-anim-node--vip"
