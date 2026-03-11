@@ -4,7 +4,7 @@ import { JetBrains_Mono, Manrope } from "next/font/google";
 import { BootGate } from "@/components/layout/BootGate";
 import { DesktopHeader } from "@/components/layout/DesktopHeader";
 import { MobileMenuWrapper } from "@/components/layout/MobileMenuWrapper";
-import ParallaxBackground from "@/components/parallax/ParallaxBackground";
+import { SiteScrollBackdrop } from "@/components/layout/SiteScrollBackdrop";
 import { siteConfig } from "@/lib/siteConfig";
 import "./globals.css";
 
@@ -115,10 +115,10 @@ export default function RootLayout({
     <html lang="ru" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${manrope.variable} ${jetBrainsMono.variable} bg-[var(--bg-primary)] antialiased text-[var(--text-primary)]`}
+        className={`${manrope.variable} ${jetBrainsMono.variable} antialiased text-[var(--text-primary)]`}
       >
         <BootGate>
-          <ParallaxBackground intensity={1} />
+          <SiteScrollBackdrop />
           <DesktopHeader />
           <MobileMenuWrapper />
           <div className="boot-ui relative z-10 pt-[calc(72px+env(safe-area-inset-top))] lg:pt-[72px]">
@@ -134,6 +134,8 @@ export default function RootLayout({
               var forceMotion = raw === '1' || raw === 'true' || raw === 'on';
               var forceReduced = raw === '0' || raw === 'false' || raw === 'off';
               var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+              var mobileViewport = window.matchMedia('(max-width: 1024px)').matches;
+              if (reduced && mobileViewport) reduced = false;
               if (forceMotion) reduced = false;
               if (forceReduced) reduced = true;
               root.setAttribute('data-reduce-motion', reduced ? 'true' : 'false');

@@ -1,19 +1,25 @@
 <svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="1600" height="900" fill="#09090B"/>
-  <ellipse cx="371" cy="208" rx="326" ry="224" fill="#00F0FF" fill-opacity="0.12"/>
-  <ellipse cx="1220" cy="108" rx="268" ry="180" fill="#CCFF00" fill-opacity="0.08"/>
-  <ellipse cx="802" cy="468" rx="520" ry="280" fill="#111827" fill-opacity="0.7"/>
-  <rect x="218" y="202" width="1164" height="496" rx="36" fill="url(#paint0_linear)"/>
-  <rect x="219" y="203" width="1162" height="494" rx="35" stroke="rgba(255,255,255,0.08)"/>
-  <path d="M362 600C470 484 600 428 748 428C896 428 1032 484 1160 600" stroke="#00F0FF" stroke-opacity="0.16" stroke-width="2"/>
-  <path d="M448 612C534 530 636 490 754 490C872 490 980 530 1080 612" stroke="#CCFF00" stroke-opacity="0.14" stroke-width="2"/>
-  <text x="290" y="326" fill="white" fill-opacity="0.5" font-family="monospace" font-size="24" letter-spacing="8">VIPAUTO161</text>
-  <text x="290" y="390" fill="white" fill-opacity="0.9" font-family="Arial, sans-serif" font-size="76" font-weight="700">PREMIUM AUTO ELECTRONICS</text>
-  <text x="290" y="442" fill="white" fill-opacity="0.32" font-family="Arial, sans-serif" font-size="28">Mobile hero fallback poster for reduced motion and initial paint.</text>
+  <ellipse cx="300" cy="180" rx="360" ry="250" fill="#00F0FF" fill-opacity="0.10"/>
+  <ellipse cx="1270" cy="120" rx="290" ry="200" fill="#CCFF00" fill-opacity="0.08"/>
+  <ellipse cx="820" cy="470" rx="560" ry="320" fill="#111827" fill-opacity="0.72"/>
+  <rect x="160" y="170" width="1280" height="560" rx="40" fill="url(#paint0_linear)"/>
+  <rect x="161" y="171" width="1278" height="558" rx="39" stroke="url(#paint1_linear)" stroke-opacity="0.7"/>
+  <path d="M250 618C390 460 560 380 760 380C960 380 1140 460 1338 618" stroke="#00F0FF" stroke-opacity="0.12" stroke-width="2.5"/>
+  <path d="M320 664C438 540 586 476 766 476C946 476 1100 540 1278 664" stroke="#CCFF00" stroke-opacity="0.11" stroke-width="2.5"/>
+  <circle cx="300" cy="250" r="6" fill="#00F0FF" fill-opacity="0.6"/>
+  <circle cx="430" cy="330" r="4" fill="#00F0FF" fill-opacity="0.32"/>
+  <circle cx="1180" cy="250" r="6" fill="#CCFF00" fill-opacity="0.56"/>
+  <circle cx="1080" cy="336" r="4" fill="#CCFF00" fill-opacity="0.28"/>
   <defs>
-    <linearGradient id="paint0_linear" x1="800" y1="202" x2="800" y2="698" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0F172A" stop-opacity="0.72"/>
-      <stop offset="1" stop-color="#09090B" stop-opacity="0.96"/>
+    <linearGradient id="paint0_linear" x1="800" y1="170" x2="800" y2="730" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101A2C" stop-opacity="0.62"/>
+      <stop offset="1" stop-color="#09090B" stop-opacity="0.92"/>
+    </linearGradient>
+    <linearGradient id="paint1_linear" x1="180" y1="200" x2="1420" y2="700" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00F0FF" stop-opacity="0.22"/>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#CCFF00" stop-opacity="0.2"/>
     </linearGradient>
   </defs>
 </svg>

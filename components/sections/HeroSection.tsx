@@ -1,19 +1,20 @@
 "use client";
 
 import { useRef } from "react";
-import { Magnetic } from "@/components/effects/Magnetic";
-import { TypeWriter } from "@/components/effects/TypeWriter";
+import { MessageCircle, ShieldCheck } from "lucide-react";
 import { AnimatedGrid } from "@/components/effects/AnimatedGrid";
 import { CountUp } from "@/components/effects/CountUp";
-import { GlitchText } from "@/components/effects/GlitchText";
 import { FloatingBadge } from "@/components/effects/FloatingBadge";
-import { MessageCircle, ShieldCheck } from "lucide-react";
+import { GlitchText } from "@/components/effects/GlitchText";
+import { Magnetic } from "@/components/effects/Magnetic";
+import { TypeWriter } from "@/components/effects/TypeWriter";
 import { useReveal } from "@/hooks/useReveal";
 import { useStaggerReveal } from "@/hooks/useStaggerReveal";
 import { REVEAL_PRESETS } from "@/lib/revealPresets";
 import { siteConfig } from "@/lib/siteConfig";
 
 const YEARS = new Date().getFullYear() - siteConfig.founded;
+const HERO_BRAND = "ВИПАвто";
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -43,7 +44,9 @@ export function HeroSection() {
     >
       <div className="container-shell">
         <div className="card-surface hero-card-surface relative overflow-hidden bg-[rgba(5,10,20,0.62)] p-5 sm:p-6 md:p-9 lg:p-10">
-          <AnimatedGrid />
+          <div className="hidden md:block">
+            <AnimatedGrid />
+          </div>
 
           <div className="absolute inset-0 z-0 overflow-hidden" suppressHydrationWarning>
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(0,240,255,0.14),transparent_44%),radial-gradient(circle_at_85%_85%,rgba(204,255,0,0.12),transparent_42%)]" />
@@ -75,8 +78,8 @@ export function HeroSection() {
               </p>
 
               <h1 className="hero-reveal mt-4 text-3xl font-bold leading-[1.02] tracking-tight sm:text-4xl md:text-6xl lg:text-7xl">
-                <GlitchText className="text-[var(--text-primary)]">{`${siteConfig.brand}:`}</GlitchText>{" "}
-                <span className="hero-gradient-text">Автоэлектрика и автоэлектроника</span>
+                <GlitchText className="text-[var(--text-primary)]">{`${HERO_BRAND}:`}</GlitchText>{" "}
+                <span className="hero-gradient-text">автоэлектрика и автоэлектроника</span>
               </h1>
 
               <div className="hero-reveal hero-divider-line mt-5" />
@@ -92,7 +95,7 @@ export function HeroSection() {
                 <span className="hero-star-icon" aria-hidden>
                   ★
                 </span>
-                Официальный дилер <span className="hero-starline-brand">StarLine</span>
+                Официальный дилер охранных систем
               </div>
 
               <p className="hero-reveal mt-4 text-xs leading-normal text-zinc-500 sm:text-sm">
@@ -104,14 +107,14 @@ export function HeroSection() {
                   <span className="text-lg font-bold text-[var(--accent)] sm:text-xl">
                     <CountUp end={YEARS} duration={1800} suffix="+" revealed={isSectionRevealed} />
                   </span>
-                  <span className="text-[10px] uppercase tracking-wider text-zinc-500">Лет работы</span>
+                  <span className="text-[10px] uppercase tracking-wider text-zinc-500">лет работы</span>
                 </div>
                 <div className="h-8 w-px bg-[var(--line)]/30" />
                 <div className="flex flex-col">
                   <span className="text-lg font-bold text-[var(--accent-2)] sm:text-xl">
                     <CountUp end={ratingVotes} duration={2200} revealed={isSectionRevealed} />
                   </span>
-                  <span className="text-[10px] uppercase tracking-wider text-zinc-500">Отзывов</span>
+                  <span className="text-[10px] uppercase tracking-wider text-zinc-500">отзывов</span>
                 </div>
                 <div className="h-8 w-px bg-[var(--line)]/30" />
                 <div className="flex flex-col">
@@ -119,7 +122,7 @@ export function HeroSection() {
                     {siteConfig.rating}
                     <span className="hero-rating-star">★</span>
                   </span>
-                  <span className="text-[10px] uppercase tracking-wider text-zinc-500">Рейтинг</span>
+                  <span className="text-[10px] uppercase tracking-wider text-zinc-500">рейтинг</span>
                 </div>
               </div>
 
