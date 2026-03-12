@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ChevronDown } from "lucide-react";
 import { useMemo, useRef, useState, type CSSProperties } from "react";
@@ -8,6 +8,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useReveal } from "@/hooks/useReveal";
 import { useStaggerReveal } from "@/hooks/useStaggerReveal";
 import { REVEAL_PRESETS } from "@/lib/revealPresets";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 import type { BrandItem } from "@/types";
 
 const BRAND_GROUPS = [
@@ -140,9 +141,9 @@ export function BrandsSection() {
     <section ref={sectionRef} id="brands" className="reveal-section section-padding" aria-label="Бренды автомобилей">
       <div className="container-shell">
         <div className="brand-showcase-shell overflow-hidden rounded-[2rem] border border-white/5 px-4 py-5 md:px-6 md:py-6">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col items-center gap-6 text-center">
             <div className="max-w-2xl">
-              <p className="brands-reveal-item reveal-item text-xs font-semibold uppercase tracking-[0.22em] text-[var(--accent)]">Автомарки</p>
+              <SectionBadge title="Автомарки" className="brands-reveal-item" />
               <h2 className="brands-reveal-item reveal-item mt-3 text-3xl font-bold leading-tight tracking-tight md:text-4xl">Работаем с распространенными и редкими платформами</h2>
               <p className="brands-reveal-item reveal-item mt-4 text-base leading-relaxed text-[var(--text-secondary)] md:text-lg">
                 От немецких и японских моделей до новых китайских платформ. Подбираем решение под конкретную электронику, а не по шаблону.
@@ -236,3 +237,6 @@ export function BrandsSection() {
     </section>
   );
 }
+
+
+

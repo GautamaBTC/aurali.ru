@@ -747,6 +747,7 @@ export function MobileMenu() {
   return (
     <>
       <header
+        data-site-header="mobile"
         className="fixed left-0 right-0 top-0 z-[1200] flex h-[calc(72px+env(safe-area-inset-top))] items-center justify-start px-4 pt-[env(safe-area-inset-top)] md:hidden"
         style={{
           background: "rgba(5,10,20,0.8)",

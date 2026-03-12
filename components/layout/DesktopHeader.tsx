@@ -48,6 +48,7 @@ export function DesktopHeader() {
 
   return (
     <header
+      data-site-header="desktop"
       className={`fixed inset-x-0 top-0 z-[1200] hidden h-[72px] border-b transition-transform duration-300 ease-out lg:block ${
         hidden ? "-translate-y-full" : "translate-y-0"
       } ${atTop ? "border-white/5 bg-zinc-950/55" : "border-white/10 bg-zinc-950/80 backdrop-blur-md"}`}

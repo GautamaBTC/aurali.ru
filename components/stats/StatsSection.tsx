@@ -7,6 +7,7 @@ import { useStaggerReveal } from "@/hooks/useStaggerReveal";
 import { REVEAL_PRESETS } from "@/lib/revealPresets";
 import { stats } from "@/data/stats";
 import { StatCard, type AccentKey } from "@/components/stats/StatCard";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 
 const accentOrder: readonly AccentKey[] = ["red", "orange", "blue", "green", "orange"] as const;
 
@@ -43,10 +44,7 @@ export function StatsSection() {
 
       <div className="container-shell relative z-10">
         <div className="mb-8 text-center md:mb-12">
-          <div className="reveal-item mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/15 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[var(--accent-2)] md:mb-6">
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-badge-pulse" />
-            Наши результаты
-          </div>
+          <SectionBadge title="Наши результаты" className="mb-4 md:mb-6" />
 
           <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight text-zinc-100 md:text-4xl">
             Цифры, которые{" "}

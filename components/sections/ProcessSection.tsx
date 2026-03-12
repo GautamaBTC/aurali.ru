@@ -5,6 +5,7 @@ import { useReveal } from "@/hooks/useReveal";
 import { useStaggerReveal } from "@/hooks/useStaggerReveal";
 import { REVEAL_PRESETS } from "@/lib/revealPresets";
 import { processSteps } from "@/data/process";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 
 export function ProcessSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -38,7 +39,10 @@ export function ProcessSection() {
   return (
     <section ref={sectionRef} id="process" className="reveal-section section-padding">
       <div className="container-shell">
-        <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight md:text-4xl">Как мы работаем</h2>
+        <div className="mb-8 text-center md:mb-12">
+          <SectionBadge title="Этапы работы" className="mb-4 md:mb-6" />
+          <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight md:text-4xl">Как проходит работа с ВИПАВТО</h2>
+        </div>
         <div className="relative mt-8">
           <div
             data-process-line

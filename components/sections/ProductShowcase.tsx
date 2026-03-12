@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -7,6 +7,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useReveal } from "@/hooks/useReveal";
 import { useStaggerReveal } from "@/hooks/useStaggerReveal";
 import { REVEAL_PRESETS } from "@/lib/revealPresets";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 
 type Product = {
   id: string;
@@ -485,9 +486,7 @@ export function ProductShowcase() {
 
       <div className="container-shell relative z-10">
         <div className="mb-12 text-center md:mb-16">
-          <span className="product-showcase-reveal reveal-item inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/60">
-            Каталог
-          </span>
+          <SectionBadge title="Каталог" className="product-showcase-reveal" />
           <h2 className="product-showcase-reveal reveal-item mt-4 text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">LED продукция</h2>
           <p className="product-showcase-reveal reveal-item mx-auto mt-3 max-w-xl text-sm text-white/45 md:text-base">
             Би-LED линзы, грузовые модули и LED-лампы из актуального ассортимента. Все изображения в каталоге привязаны к реальным товарам из папки проекта.
@@ -574,3 +573,6 @@ export function ProductShowcase() {
     </section>
   );
 }
+
+
+

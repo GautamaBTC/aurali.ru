@@ -8,6 +8,7 @@ import { REVEAL_PRESETS } from "@/lib/revealPresets";
 import { ComparisonCard } from "@/components/comparison/ComparisonCard";
 import { ComparisonItem } from "@/components/comparison/ComparisonItem";
 import { BrandWordmark } from "@/components/ui/BrandWordmark";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 
 const garageItems = [
   {
@@ -106,10 +107,7 @@ export function ComparisonSection() {
       />
 
       <div className="relative z-10 mb-8 text-center md:mb-12">
-        <div className="reveal-item mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/15 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[var(--accent-2)] md:mb-6">
-          <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-badge-pulse" />
-          {"Сравнение"}
-        </div>
+        <SectionBadge title="Сравнение" className="mb-4 md:mb-6" />
 
         <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight text-zinc-100 md:text-4xl">
           <span className="text-zinc-400">{"Обычный гараж"}</span>{" "}

@@ -4,6 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { services } from "@/data/services";
 import { useReveal } from "@/hooks/useReveal";
 import { REVEAL_PRESETS } from "@/lib/revealPresets";
+import { withAlpha } from "@/lib/withAlpha";
+import { SectionBadge } from "@/components/ui/SectionBadge";
+
+const ACCORDION_DURATION_MS = 380;
 
 type ServiceIcon = "shield" | "window" | "sound" | "gear" | "bulb" | "drop";
 
@@ -26,15 +30,62 @@ const SERVICE_META: Record<string, ServiceMeta> = {
   repair: { accent: "#FF3D71", icon: "drop", title: "Ремонт электрики" },
 };
 
-function withAlpha(hex: string, alpha: number) {
-  const normalized = hex.replace("#", "");
-  const value = normalized.length === 3 ? normalized.split("").map((char) => char + char).join("") : normalized;
-  const int = Number.parseInt(value, 16);
-  if (Number.isNaN(int)) return `rgba(255,255,255,${alpha})`;
-  const r = (int >> 16) & 255;
-  const g = (int >> 8) & 255;
-  const b = int & 255;
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+function createBezier(x1: number, y1: number, x2: number, y2: number) {
+  const cx = 3 * x1;
+  const bx = 3 * (x2 - x1) - cx;
+  const ax = 1 - cx - bx;
+  const cy = 3 * y1;
+  const by = 3 * (y2 - y1) - cy;
+  const ay = 1 - cy - by;
+
+  const sampleCurveX = (t: number) => ((ax * t + bx) * t + cx) * t;
+  const sampleCurveY = (t: number) => ((ay * t + by) * t + cy) * t;
+  const sampleDerivativeX = (t: number) => (3 * ax * t + 2 * bx) * t + cx;
+
+  const solveCurveX = (x: number) => {
+    let t2 = x;
+
+    for (let i = 0; i < 8; i += 1) {
+      const x2Value = sampleCurveX(t2) - x;
+      if (Math.abs(x2Value) < 1e-6) return t2;
+      const derivative = sampleDerivativeX(t2);
+      if (Math.abs(derivative) < 1e-6) break;
+      t2 -= x2Value / derivative;
+    }
+
+    let t0 = 0;
+    let t1 = 1;
+    t2 = x;
+
+    while (t0 < t1) {
+      const x2Value = sampleCurveX(t2);
+      if (Math.abs(x2Value - x) < 1e-6) return t2;
+      if (x > x2Value) {
+        t0 = t2;
+      } else {
+        t1 = t2;
+      }
+      t2 = (t1 - t0) * 0.5 + t0;
+    }
+
+    return t2;
+  };
+
+  return (x: number) => sampleCurveY(solveCurveX(x));
+}
+
+const easeAccordion = createBezier(0.22, 1, 0.36, 1);
+
+function getHeaderBottom() {
+  if (typeof window === "undefined") return 72;
+
+  const headers = Array.from(document.querySelectorAll<HTMLElement>("[data-site-header]"));
+  const visibleHeader = headers.find((node) => {
+    const styles = window.getComputedStyle(node);
+    return styles.display !== "none" && styles.visibility !== "hidden" && node.getBoundingClientRect().height > 0;
+  });
+
+  return visibleHeader?.getBoundingClientRect().bottom ?? 72;
 }
 
 function ServiceGlyph({ icon, className }: { icon: ServiceIcon; className?: string }) {
@@ -140,8 +191,17 @@ function ServiceRow({
 }: ServiceRowProps) {
   const panelId = `service-panel-${id}`;
   const buttonId = `service-button-${id}`;
+  const headerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState(0);
+  const [progress, setProgress] = useState(isActive ? 1 : 0);
+  const progressRef = useRef(progress);
+  const [shouldRenderContent, setShouldRenderContent] = useState(isActive);
+  const animationRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    progressRef.current = progress;
+  }, [progress]);
 
   useEffect(() => {
     const node = contentRef.current;
@@ -155,6 +215,71 @@ function ServiceRow({
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (isActive) {
+      setShouldRenderContent(true);
+    }
+
+    if (animationRef.current) {
+      window.cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
+
+    const startProgress = progressRef.current;
+    const targetProgress = isActive ? 1 : 0;
+    const startScrollY = typeof window === "undefined" ? 0 : window.scrollY;
+    const targetViewportTop = getHeaderBottom() + 12;
+
+    if (Math.abs(targetProgress - startProgress) < 0.001) {
+      setProgress(targetProgress);
+      progressRef.current = targetProgress;
+      if (!isActive) {
+        setShouldRenderContent(false);
+      }
+      return;
+    }
+
+    const startedAt = performance.now();
+
+    const step = (now: number) => {
+      const raw = Math.min((now - startedAt) / ACCORDION_DURATION_MS, 1);
+      const eased = easeAccordion(raw);
+      const nextProgress = startProgress + (targetProgress - startProgress) * eased;
+      progressRef.current = nextProgress;
+      setProgress(nextProgress);
+
+      if (isActive && headerRef.current) {
+        const rect = headerRef.current.getBoundingClientRect();
+        const absoluteTop = window.scrollY + rect.top;
+        const desiredScrollY = Math.max(0, absoluteTop - targetViewportTop);
+        const nextScrollY = startScrollY + (desiredScrollY - startScrollY) * eased;
+        window.scrollTo({ top: nextScrollY, behavior: "auto" });
+      }
+
+      if (raw < 1) {
+        animationRef.current = window.requestAnimationFrame(step);
+        return;
+      }
+
+      animationRef.current = null;
+      progressRef.current = targetProgress;
+      setProgress(targetProgress);
+
+      if (!isActive) {
+        setShouldRenderContent(false);
+      }
+    };
+
+    animationRef.current = window.requestAnimationFrame(step);
+
+    return () => {
+      if (animationRef.current) {
+        window.cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+    };
+  }, [isActive, contentHeight]);
+
   return (
     <article className="group relative border-b border-white/5 last:border-b-0">
       <div
@@ -166,8 +291,9 @@ function ServiceRow({
       />
 
       <div
-        className={`relative z-20 transition-all duration-300 ${isActive ? "sticky border-b border-white/8 bg-[rgba(6,12,20,0.92)] backdrop-blur-md" : ""}`}
-        style={isActive ? { top: "calc(72px + env(safe-area-inset-top))" } : undefined}
+        ref={headerRef}
+        className={`relative z-20 transition-all duration-300 ${progress > 0 ? "sticky border-b border-white/8 bg-[rgba(6,12,20,0.92)] backdrop-blur-md" : ""}`}
+        style={progress > 0 ? { top: "calc(var(--header-h) + env(safe-area-inset-top) + 12px)" } : undefined}
       >
         <button
           id={buttonId}
@@ -180,10 +306,10 @@ function ServiceRow({
           <span
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-all duration-300"
             style={{
-              borderColor: isActive ? withAlpha(accent, 0.35) : "rgba(255,255,255,0.12)",
-              background: isActive ? withAlpha(accent, 0.16) : "rgba(255,255,255,0.03)",
-              color: isActive ? accent : "rgba(255,255,255,0.65)",
-              boxShadow: isActive ? `0 0 20px ${withAlpha(accent, 0.2)}` : "none",
+              borderColor: isActive ? withAlpha(accent, 0.35) : withAlpha(accent, 0.18),
+              background: isActive ? withAlpha(accent, 0.16) : withAlpha(accent, 0.07),
+              color: accent,
+              boxShadow: isActive ? `0 0 20px ${withAlpha(accent, 0.2)}` : `inset 0 0 0 1px ${withAlpha(accent, 0.04)}`,
             }}
           >
             <ServiceGlyph icon={icon} className="h-5 w-5" />
@@ -191,14 +317,18 @@ function ServiceRow({
 
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-white sm:text-base">{title}</p>
-            <p className="mt-1 text-xs text-white/45">{leadTime} • {price}</p>
+            <p className="mt-1 text-xs text-white/45">
+              {leadTime} • {price}
+            </p>
           </div>
 
           <span
-            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-colors duration-300"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-300"
             style={{
-              borderColor: isActive ? withAlpha(accent, 0.45) : "rgba(255,255,255,0.14)",
-              color: isActive ? accent : "rgba(255,255,255,0.55)",
+              borderColor: isActive ? withAlpha(accent, 0.4) : "rgba(255,255,255,0.14)",
+              background: isActive ? withAlpha(accent, 0.12) : "rgba(255,255,255,0.03)",
+              color: isActive ? accent : "rgba(255,255,255,0.6)",
+              boxShadow: isActive ? `0 0 18px ${withAlpha(accent, 0.16)}` : "none",
             }}
             aria-hidden
           >
@@ -221,10 +351,22 @@ function ServiceRow({
         id={panelId}
         role="region"
         aria-labelledby={buttonId}
-        className="relative z-[1] overflow-hidden transition-[max-height,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-        style={{ maxHeight: isActive ? `${contentHeight}px` : "0px", opacity: isActive ? 1 : 0 }}
+        aria-hidden={!shouldRenderContent}
+        className="relative z-[1] overflow-hidden"
+        style={{
+          maxHeight: `${contentHeight * progress}px`,
+          opacity: progress,
+          visibility: shouldRenderContent ? "visible" : "hidden",
+        }}
       >
-        <div ref={contentRef} className="px-4 pb-5 sm:px-6 sm:pb-6">
+        <div
+          ref={contentRef}
+          className="px-4 pb-5 sm:px-6 sm:pb-6"
+          style={{
+            transform: `translateY(${(1 - progress) * 8}px)`,
+            opacity: 0.3 + progress * 0.7,
+          }}
+        >
           <div className="mb-4 h-px" style={{ background: `linear-gradient(90deg, ${withAlpha(accent, 0.5)} 0%, transparent 75%)` }} />
 
           <p
@@ -288,7 +430,7 @@ export function ServicesSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const accordionRef = useRef<HTMLDivElement>(null);
-  const [activeId, setActiveId] = useState<string>(services[0]?.id ?? "");
+  const [activeId, setActiveId] = useState<string>("");
 
   useReveal(sectionRef, {
     ...REVEAL_PRESETS.FADE_UP,
@@ -329,20 +471,18 @@ export function ServicesSection() {
   );
 
   return (
-    <section ref={sectionRef} id="services" className="reveal-section section-padding">
+    <section ref={sectionRef} id="services" className="services-section reveal-section section-padding">
       <div className="container-shell">
-        <div ref={headingRef} className="reveal-item mb-10 text-center sm:mb-12 sm:text-left">
-          <span className="inline-flex rounded-full border border-white/8 bg-white/[0.04] px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">
-            Услуги
-          </span>
+        <div ref={headingRef} className="reveal-item mb-10 text-center sm:mb-12">
+          <SectionBadge title="Услуги" />
           <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">Что мы делаем</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-white/50 sm:mx-0 sm:text-base">
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-white/50 sm:text-base">
             Продуманный технологичный сервис: диагностика, установка, настройка и сопровождение.
           </p>
         </div>
 
         <div ref={accordionRef} className="reveal-item">
-          <div className="overflow-hidden rounded-2xl border border-white/8 bg-[rgba(6,12,20,0.7)] backdrop-blur-md sm:rounded-3xl">
+          <div className="overflow-visible rounded-2xl border border-white/8 bg-[rgba(6,12,20,0.7)] backdrop-blur-md sm:rounded-3xl">
             {serviceRows.map((service) => (
               <ServiceRow
                 key={service.id}
@@ -364,3 +504,6 @@ export function ServicesSection() {
     </section>
   );
 }
+
+
+

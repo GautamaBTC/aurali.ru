@@ -7,6 +7,7 @@ import { useReveal } from "@/hooks/useReveal";
 import { useStaggerReveal } from "@/hooks/useStaggerReveal";
 import { REVEAL_PRESETS } from "@/lib/revealPresets";
 import { BrandWordmark } from "@/components/ui/BrandWordmark";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 
 const AUTO_DELAY_MS = 4500;
 
@@ -73,12 +74,15 @@ export function GallerySection() {
     <section ref={sectionRef} id="gallery" className="reveal-section section-padding">
       <div className="container-shell">
         <div className="card-surface rounded-xl p-6 md:p-8">
-          <h2 className="gallery-reveal text-3xl font-bold leading-tight tracking-tight md:text-4xl">
-            Галлерея <BrandWordmark />
-          </h2>
-          <p className="gallery-reveal mt-4 max-w-3xl text-base leading-relaxed text-zinc-300 md:text-lg">
-            Реальные примеры выполненных работ: автосвет, диагностика и установка электроники.
-          </p>
+          <div className="text-center">
+            <SectionBadge title="Галерея" className="gallery-reveal mb-4 md:mb-6" />
+            <h2 className="gallery-reveal text-3xl font-bold leading-tight tracking-tight md:text-4xl">
+              Галлерея <BrandWordmark />
+            </h2>
+            <p className="gallery-reveal mx-auto mt-4 max-w-3xl text-base leading-relaxed text-zinc-300 md:text-lg">
+              Реальные примеры выполненных работ: автосвет, диагностика и установка электроники.
+            </p>
+          </div>
 
           <div className="gallery-reveal mt-8">
             <div

@@ -6,6 +6,7 @@ import { useStaggerReveal } from "@/hooks/useStaggerReveal";
 import { REVEAL_PRESETS } from "@/lib/revealPresets";
 import { reviews } from "@/data/reviews";
 import { siteConfig } from "@/lib/siteConfig";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 
 export function ReviewsSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -31,9 +32,12 @@ export function ReviewsSection() {
   return (
     <section ref={sectionRef} id="reviews" className="reveal-section section-padding">
       <div className="container-shell">
-        <div className="flex flex-wrap items-end justify-between gap-3 md:gap-4">
-          <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight md:text-4xl">Отзывы клиентов</h2>
-          <div className="text-right text-sm leading-normal text-zinc-500">
+        <div className="mb-8 text-center md:mb-12">
+          <div>
+            <SectionBadge title="Отзывы" className="mb-4 md:mb-6" />
+            <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight md:text-4xl">Отзывы клиентов</h2>
+          </div>
+          <div className="mt-4 text-sm leading-normal text-zinc-500">
             <p>
               {"Яндекс Карты:"} {siteConfig.rating} ({siteConfig.ratingVotes} {"оценок"})
             </p>
