@@ -7,6 +7,7 @@ import { AdvantagesSection } from "@/components/sections/AdvantagesSection";
 import { BrandsSection } from "@/components/sections/BrandsSection";
 import { CompareSection } from "@/components/sections/CompareSection";
 import { ContactSection } from "@/components/sections/ContactSection";
+import { GallerySection } from "@/components/sections/GallerySection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { PartnerBrandsSection } from "@/components/sections/PartnerBrandsSection";
 import { ProcessSection } from "@/components/sections/ProcessSection";
@@ -34,6 +35,7 @@ export default function Home() {
         <StatsSection />
         <CompareSection />
         <ProductShowcase />
+        <GallerySection />
         <ServicesSection />
         <PartnerBrandsSection />
         <AdvantagesSection />

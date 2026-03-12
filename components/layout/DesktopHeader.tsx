@@ -2,15 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 
 const MENU_ITEMS = [
   { id: "services", href: "#services", label: "Услуги" },
+  { id: "products", href: "#products", label: "Товары" },
+  { id: "gallery", href: "#gallery", label: "Галерея" },
   { id: "advantages", href: "#advantages", label: "Преимущества" },
   { id: "process", href: "#process", label: "Процесс" },
   { id: "reviews", href: "#reviews", label: "Отзывы" },
-  { id: "products", href: "#products", label: "Продукция" },
   { id: "contacts", href: "#contacts", label: "Контакты" },
 ] as const;
 
@@ -33,6 +35,17 @@ export function DesktopHeader() {
   const activeSection = useActiveSection(MENU_ITEMS.map((item) => item.id));
   const hidden = direction === "down" && !atTop;
 
+  const [isLogoReady, setIsLogoReady] = useState<boolean>(() => {
+    if (typeof document === "undefined") return false;
+    return document.documentElement.dataset.introLogo === "true";
+  });
+
+  useEffect(() => {
+    const onLogoStart = () => setIsLogoReady(true);
+    window.addEventListener("ui:intro-logo", onLogoStart as EventListener);
+    return () => window.removeEventListener("ui:intro-logo", onLogoStart as EventListener);
+  }, []);
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-[1200] hidden h-[72px] border-b transition-transform duration-300 ease-out lg:block ${
@@ -40,21 +53,25 @@ export function DesktopHeader() {
       } ${atTop ? "border-white/5 bg-zinc-950/55" : "border-white/10 bg-zinc-950/80 backdrop-blur-md"}`}
     >
       <div className="container-shell flex h-full items-center justify-between gap-8">
-        <button
-          type="button"
-          aria-label="На главную"
-          onClick={() => scrollToId("top")}
-          className="logo-animate flex shrink-0 items-center"
-        >
-          <Image
-            src="/images/plate-logo.svg"
-            alt="ВИПАВТО 161"
-            width={130}
-            height={34}
-            className="logo-animate__img header-logo-glitch h-8 w-auto"
-            priority
-          />
-        </button>
+        {isLogoReady ? (
+          <button
+            type="button"
+            aria-label="На главную"
+            onClick={() => scrollToId("top")}
+            className="logo-animate flex shrink-0 items-center"
+          >
+            <Image
+              src="/images/plate-logo.svg"
+              alt="ВИПАВТО 161"
+              width={130}
+              height={34}
+              className="logo-animate__img header-logo-glitch h-8 w-auto"
+              priority
+            />
+          </button>
+        ) : (
+          <div className="h-8 w-[130px] shrink-0" aria-hidden />
+        )}
 
         <nav aria-label="Основная навигация" className="flex items-center gap-6">
           {MENU_ITEMS.map((item) => {

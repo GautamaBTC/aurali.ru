@@ -1,4 +1,5 @@
-﻿import { siteConfig } from "@/lib/siteConfig";
+﻿import { BrandWordmark } from "@/components/ui/BrandWordmark";
+import { siteConfig } from "@/lib/siteConfig";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -12,7 +13,7 @@ export function Footer() {
           <p>{siteConfig.address}</p>
           <p>Email: {siteConfig.email}</p>
           <p>
-          © {siteConfig.founded}-{year} ВИПАВТО · ИП · ОГРНИП {siteConfig.ogrnip}
+            © {siteConfig.founded}-{year} <BrandWordmark /> · ИП · ОГРНИП {siteConfig.ogrnip}
           </p>
         </div>
         <div className="space-y-3 md:space-y-4 md:text-right">

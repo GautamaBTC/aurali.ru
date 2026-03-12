@@ -7,13 +7,13 @@ import { CountUp } from "@/components/effects/CountUp";
 import { FloatingBadge } from "@/components/effects/FloatingBadge";
 import { Magnetic } from "@/components/effects/Magnetic";
 import { TypeWriter } from "@/components/effects/TypeWriter";
+import { BrandWordmark } from "@/components/ui/BrandWordmark";
 import { useReveal } from "@/hooks/useReveal";
 import { useStaggerReveal } from "@/hooks/useStaggerReveal";
 import { REVEAL_PRESETS } from "@/lib/revealPresets";
 import { siteConfig } from "@/lib/siteConfig";
 
 const YEARS = new Date().getFullYear() - siteConfig.founded;
-const HERO_BRAND = "ВИПАвто";
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -77,7 +77,7 @@ export function HeroSection() {
               </p>
 
               <h1 className="hero-reveal mt-4 text-3xl font-bold leading-[1.02] tracking-tight sm:text-4xl md:text-6xl lg:text-7xl">
-                <span className="text-[var(--text-primary)]">{`${HERO_BRAND}:`}</span>{" "}
+                <BrandWordmark />{" "}
                 <span className="hero-gradient-text">автоэлектрика и автоэлектроника</span>
               </h1>
 

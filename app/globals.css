@@ -197,14 +197,14 @@ select:focus-visible {
 }
 
 .card-surface {
-  background: rgba(9, 14, 22, 0.74);
-  border: 1px solid rgba(122, 138, 156, 0.32);
+  background: rgba(6, 12, 20, 0.82);
+  border: 1px solid rgba(140, 156, 174, 0.28);
   border-radius: 0.75rem;
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.05),
-    0 8px 26px rgba(0, 0, 0, 0.26);
-  backdrop-filter: blur(8px) saturate(120%);
-  -webkit-backdrop-filter: blur(8px) saturate(120%);
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 10px 34px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(11px) saturate(125%);
+  -webkit-backdrop-filter: blur(11px) saturate(125%);
   transition: border-color 300ms ease;
 }
 
@@ -354,8 +354,10 @@ select:focus-visible {
   position: relative;
   overflow: hidden;
   border-radius: 24px;
-  border: 1px solid rgba(224, 230, 237, 0.08);
-  background: rgba(10, 19, 34, 0.5);
+  border: 1px solid rgba(224, 230, 237, 0.1);
+  background: rgba(7, 14, 25, 0.72);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
   transition: all 400ms ease;
   cursor: default;
 }
@@ -443,11 +445,13 @@ select:focus-visible {
   position: relative;
   overflow: hidden;
   border-radius: 24px;
+  backdrop-filter: blur(9px) saturate(118%);
+  -webkit-backdrop-filter: blur(9px) saturate(118%);
   transition: all 500ms ease;
 }
 
 .cmp-card--garage {
-  background: rgba(159, 173, 188, 0.04);
+  background: rgba(93, 107, 122, 0.2);
   border: 1px solid rgba(159, 173, 188, 0.18);
 }
 
@@ -458,7 +462,7 @@ select:focus-visible {
 }
 
 .cmp-card--vip {
-  background: rgba(204, 255, 0, 0.05);
+  background: rgba(131, 170, 12, 0.18);
   border: 1px solid rgba(204, 255, 0, 0.2);
 }
 
@@ -796,13 +800,33 @@ select:focus-visible {
 }
 
 .vip-part {
-  color: #fff;
+  color: #ccff00;
+  text-shadow: 0 0 10px rgba(204, 255, 0, 0.24);
 }
 
 .auto-part {
   margin-left: 2px;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.12);
+}
+
+.brand-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.03em;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+
+.brand-wordmark__vip {
   color: #ccff00;
-  text-shadow: 0 0 10px rgba(204, 255, 0, 0.22);
+  text-shadow: 0 0 12px rgba(204, 255, 0, 0.22);
+}
+
+.brand-wordmark__auto {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
 }
 
 .logo-region {
@@ -1192,7 +1216,10 @@ select:focus-visible {
   background:
     radial-gradient(circle at top left, rgba(0, 240, 255, 0.05), transparent 28%),
     radial-gradient(circle at 88% 22%, rgba(204, 255, 0, 0.05), transparent 24%),
-    linear-gradient(180deg, rgba(16, 16, 19, 0.94), rgba(9, 9, 11, 0.9));
+    linear-gradient(180deg, rgba(10, 14, 22, 0.88), rgba(7, 11, 17, 0.84));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px) saturate(118%);
+  -webkit-backdrop-filter: blur(10px) saturate(118%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.03),
     0 24px 80px -40px rgba(0, 0, 0, 0.6);
@@ -1225,6 +1252,10 @@ select:focus-visible {
 }
 
 .brand-grid-card {
+  background: rgba(10, 15, 24, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px) saturate(118%);
+  -webkit-backdrop-filter: blur(8px) saturate(118%);
   transition:
     transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
     opacity 400ms cubic-bezier(0.16, 1, 0.3, 1),
@@ -1283,6 +1314,10 @@ select:focus-visible {
 .partner-card {
   position: relative;
   overflow: hidden;
+  background: rgba(8, 14, 22, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px) saturate(118%);
+  -webkit-backdrop-filter: blur(8px) saturate(118%);
   transition:
     transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
     border-color 400ms ease,
@@ -1605,6 +1640,10 @@ html[data-logo-glitch="on"] .mobile-logo-glitch {
 }
 
 .cipher-accordion-shell {
+  background: rgba(8, 13, 21, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px) saturate(118%);
+  -webkit-backdrop-filter: blur(10px) saturate(118%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.03),
     inset 0 -1px 0 rgba(0, 0, 0, 0.2),
@@ -2172,6 +2211,8 @@ html[data-logo-glitch="on"] .mobile-logo-glitch {
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   width: 100vw;
   height: 100vh;
   height: 100dvh;
@@ -2181,17 +2222,17 @@ html[data-logo-glitch="on"] .mobile-logo-glitch {
   background: #0b1116;
   transform: translate3d(0, 0, 0);
   will-change: transform;
+  contain: layout paint style;
 }
 
 .site-scroll-backdrop__poster,
 .site-scroll-backdrop__video,
 .site-scroll-backdrop__shade {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
+  width: 100%;
+  height: 100%;
 }
 
 .site-scroll-backdrop__poster {

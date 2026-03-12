@@ -413,11 +413,13 @@ export function ProductShowcase() {
     ...REVEAL_PRESETS.FADE_UP,
     threshold: 0.15,
   });
+  const staggerFrom = useMemo(() => ({ y: 30, autoAlpha: 0 }), []);
+  const staggerTo = useMemo(() => ({ y: 0, autoAlpha: 1 }), []);
 
   useStaggerReveal(sectionRef, {
     childSelector: ".product-showcase-reveal",
-    from: { y: 30, autoAlpha: 0 },
-    to: { y: 0, autoAlpha: 1 },
+    from: staggerFrom,
+    to: staggerTo,
     stagger: 0.08,
     duration: 0.45,
     observe: false,

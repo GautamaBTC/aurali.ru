@@ -9,11 +9,10 @@ import { REVEAL_PRESETS } from "@/lib/revealPresets";
 import { siteConfig } from "@/lib/siteConfig";
 
 const SOCIAL_CHANNELS = [
-  { id: "telegram", label: "Telegram", icon: "/images/social/telegram.png", href: "#" },
-  { id: "whatsapp", label: "WhatsApp", icon: "/images/social/whatsapp.png", href: "#" },
+  { id: "telegram", label: "Макс", icon: "/images/social/telegram.png", href: "#" },
+  { id: "whatsapp", label: "Телеграм", icon: "/images/social/whatsapp.png", href: "#" },
   { id: "vk", label: "ВКонтакте", icon: "/images/social/vk.png", href: "#" },
-  { id: "odnoklassniki", label: "Одноклассники", icon: "/images/social/odnoklassniki.png", href: "#" },
-  { id: "messenger-alt", label: "Мессенджер", icon: "/images/social/messenger-alt.png", href: "#" },
+  { id: "messenger-alt", label: "Ватсапп", icon: "/images/social/messenger-alt.png", href: "#" },
 ] as const;
 
 export function ContactSection() {

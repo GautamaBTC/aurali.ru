@@ -16,6 +16,7 @@ type MenuItem = {
 const MENU_ITEMS: readonly MenuItem[] = [
   { id: "services", href: "#services", label: "Услуги" },
   { id: "products", href: "#products", label: "Товары" },
+  { id: "gallery", href: "#gallery", label: "Галерея" },
   { id: "advantages", href: "#advantages", label: "Преимущества" },
   { id: "process", href: "#process", label: "Процесс" },
   { id: "reviews", href: "#reviews", label: "Отзывы" },
@@ -49,8 +50,8 @@ export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isBurgerVisible] = useState(true);
-  const [isLogoIntroReady] = useState(true);
+  const [isBurgerVisible, setIsBurgerVisible] = useState(false);
+  const [isLogoIntroReady, setIsLogoIntroReady] = useState(false);
   const [activeId, setActiveId] = useState<string>("services");
   const [menuScale, setMenuScale] = useState(1);
 
@@ -82,6 +83,25 @@ export function MobileMenu() {
   const logoAccentTimerRef = useRef<number | null>(null);
 
   useLockScroll(isLocked);
+
+  useEffect(() => {
+    const onLogoStart = () => setIsLogoIntroReady(true);
+    const onBurgerStart = () => setIsBurgerVisible(true);
+    window.addEventListener("ui:intro-logo", onLogoStart as EventListener);
+    window.addEventListener("ui:intro-burger", onBurgerStart as EventListener);
+
+    if (document.documentElement.dataset.introLogo === "true") {
+      window.requestAnimationFrame(onLogoStart);
+    }
+    if (document.documentElement.dataset.introBurger === "true") {
+      window.requestAnimationFrame(onBurgerStart);
+    }
+
+    return () => {
+      window.removeEventListener("ui:intro-logo", onLogoStart as EventListener);
+      window.removeEventListener("ui:intro-burger", onBurgerStart as EventListener);
+    };
+  }, []);
 
   useLayoutEffect(() => {
     if (!isLogoIntroReady) return;
@@ -783,7 +803,13 @@ export function MobileMenu() {
         aria-expanded={isOpen}
         aria-controls="mobile-nav-dialog"
         className={`tap-none touch-manipulation fixed right-4 top-0 z-[10001] flex h-[calc(72px+env(safe-area-inset-top))] w-[72px] items-center justify-end pt-[env(safe-area-inset-top)] transition-opacity duration-300 md:hidden ${isBurgerVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
-        style={{ background: "none", border: "none", outline: "none" }}
+        style={{
+          background: "none",
+          border: "none",
+          outline: "none",
+          opacity: isBurgerVisible ? 1 : 0,
+          visibility: isBurgerVisible ? "visible" : "hidden",
+        }}
       >
         <div className="relative h-[22px] w-[38px]">
           <span

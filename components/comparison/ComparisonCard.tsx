@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 type ComparisonCardProps = {
   variant: "garage" | "vip";
   badge: string;
-  title: string;
+  title: ReactNode;
   titleIcon: ReactNode;
   children: ReactNode;
   className?: string;

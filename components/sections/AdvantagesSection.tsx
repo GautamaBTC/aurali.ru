@@ -5,6 +5,7 @@ import { useReveal } from "@/hooks/useReveal";
 import { useStaggerReveal } from "@/hooks/useStaggerReveal";
 import { REVEAL_PRESETS } from "@/lib/revealPresets";
 import { advantages } from "@/data/advantages";
+import { BrandWordmark } from "@/components/ui/BrandWordmark";
 
 export function AdvantagesSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -30,7 +31,9 @@ export function AdvantagesSection() {
   return (
     <section ref={sectionRef} id="advantages" className="reveal-section section-padding">
       <div className="container-shell">
-            <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight md:text-4xl">Почему выбирают ВИПАВТО</h2>
+            <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight md:text-4xl">
+              Почему выбирают <BrandWordmark />
+            </h2>
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8">
           {advantages.map((advantage) => (
             <article key={advantage.id} className="adv-card reveal-item card-surface rounded-xl p-6 md:p-8">
