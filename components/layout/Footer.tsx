@@ -12,7 +12,7 @@ export function Footer() {
           <p>{siteConfig.address}</p>
           <p>Email: {siteConfig.email}</p>
           <p>
-            © {siteConfig.founded}-{year} VIPAuto · ИП · ОГРНИП {siteConfig.ogrnip}
+          © {siteConfig.founded}-{year} ВИПАВТО · ИП · ОГРНИП {siteConfig.ogrnip}
           </p>
         </div>
         <div className="space-y-3 md:space-y-4 md:text-right">

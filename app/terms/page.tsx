@@ -4,7 +4,7 @@ import { LegalTopBar } from "@/components/legal/LegalTopBar";
 import { siteConfig } from "@/lib/siteConfig";
 
 export const metadata: Metadata = {
-  title: "Публичная оферта - VIPАвто",
+  title: "Публичная оферта - ВИПАВТО",
   description: "Публичная оферта на оказание услуг автоэлектрики и автоэлектроники.",
   alternates: {
     canonical: "/terms",
@@ -25,7 +25,7 @@ const sections = [
   ["11. Срок действия", "Оферта действует бессрочно до момента ее изменения или отзыва исполнителем."],
   [
     "12. Реквизиты исполнителя",
-    `Исполнитель: VIPАвто, ОГРНИП ${siteConfig.ogrnip}, ИНН ${siteConfig.inn}, ОКПО ${siteConfig.okpo}, ОКВЭД ${siteConfig.okved}, дата регистрации ${siteConfig.registrationDate}, адрес: ${siteConfig.address}.`,
+    `Исполнитель: ВИПАВТО, ОГРНИП ${siteConfig.ogrnip}, ИНН ${siteConfig.inn}, ОКПО ${siteConfig.okpo}, ОКВЭД ${siteConfig.okved}, дата регистрации ${siteConfig.registrationDate}, адрес: ${siteConfig.address}.`,
   ],
 ] as const;
 

@@ -113,7 +113,7 @@ export function ComparisonSection() {
         <h2 className="reveal-item text-3xl font-bold leading-tight tracking-tight text-zinc-100 md:text-4xl">
           <span className="text-zinc-400">{"Обычный гараж"}</span>{" "}
           <span className="mx-1 text-zinc-600 sm:mx-2">vs</span>{" "}
-          <span className="bg-gradient-to-br from-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent">VIPАвто</span>
+                <span className="bg-gradient-to-br from-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent">ВИПАВТО</span>
         </h2>
 
         <p className="reveal-item mx-auto mt-4 max-w-2xl text-base leading-relaxed text-zinc-400 md:text-lg">
@@ -149,8 +149,8 @@ export function ComparisonSection() {
 
           <ComparisonCard
             variant="vip"
-            badge={"Подход VIPАвто"}
-            title={"VIPАвто"}
+                badge={"Подход ВИПАВТО"}
+                title={"ВИПАВТО"}
             titleIcon={<Crown className="h-5 w-5" />}
             className="comparison-vip reveal-item"
           >

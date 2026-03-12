@@ -1,5 +1,5 @@
 export const siteConfig = {
-  brand: "VIPАвто",
+  brand: "ВИПАВТО",
   legalBrand: "VIPAUTO161",
   specialization: "Автоэлектрика и автоэлектроника",
   founded: 2009,

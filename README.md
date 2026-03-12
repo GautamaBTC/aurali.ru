@@ -1,6 +1,6 @@
 # vipauto_161
 
-Production website for VIPАвто (Шахты), built with Next.js + TypeScript + Tailwind + GSAP.
+Production website for ВИПАВТО (Шахты), built with Next.js + TypeScript + Tailwind + GSAP.
 
 ## Run locally
 

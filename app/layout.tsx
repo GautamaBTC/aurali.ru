@@ -21,8 +21,8 @@ const jetBrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: {
-    default: "VIPАвто — Автоэлектрика и автоэлектроника в Шахтах | Официальный дилер StarLine",
-    template: "%s | VIPАвто",
+    default: "ВИПАВТО — Автоэлектрика и автоэлектроника в Шахтах | Официальный дилер StarLine",
+    template: "%s | ВИПАВТО",
   },
   description:
     "Профессиональная автоэлектрика в г. Шахты. Установка сигнализаций StarLine, LED/Bi-LED оптика, автозвук, камеры. Рейтинг 4.6 на Яндекс.Картах.",
@@ -42,12 +42,12 @@ export const metadata: Metadata = {
     "vipauto161",
   ],
   openGraph: {
-    title: "VIPАвто",
+    title: "ВИПАВТО",
     description: "Премиальная автоэлектрика и автоэлектроника в г. Шахты.",
     type: "website",
     locale: "ru_RU",
     url: siteConfig.siteUrl,
-    siteName: "VIPАвто",
+    siteName: "ВИПАВТО",
     images: [
       {
         url: "/images/plate-logo.svg",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "VIPАвто",
+    title: "ВИПАВТО",
     description: "Премиальная автоэлектрика и автоэлектроника в г. Шахты.",
     images: ["/images/plate-logo.svg"],
   },

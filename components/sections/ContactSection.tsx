@@ -1,11 +1,20 @@
 ﻿"use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { LeadForm } from "@/components/forms/LeadForm";
 import { useReveal } from "@/hooks/useReveal";
 import { useStaggerReveal } from "@/hooks/useStaggerReveal";
 import { REVEAL_PRESETS } from "@/lib/revealPresets";
 import { siteConfig } from "@/lib/siteConfig";
+
+const SOCIAL_CHANNELS = [
+  { id: "telegram", label: "Telegram", icon: "/images/social/telegram.png", href: "#" },
+  { id: "whatsapp", label: "WhatsApp", icon: "/images/social/whatsapp.png", href: "#" },
+  { id: "vk", label: "ВКонтакте", icon: "/images/social/vk.png", href: "#" },
+  { id: "odnoklassniki", label: "Одноклассники", icon: "/images/social/odnoklassniki.png", href: "#" },
+  { id: "messenger-alt", label: "Мессенджер", icon: "/images/social/messenger-alt.png", href: "#" },
+] as const;
 
 export function ContactSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -95,6 +104,23 @@ export function ContactSection() {
             <p className="mt-4 text-sm leading-normal text-zinc-500">
               Рейтинг в 2GIS: <span className="font-semibold text-zinc-200">{siteConfig.twoGisRating}</span>
             </p>
+            <div className="mt-7">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-zinc-400">Мы в соцсетях</p>
+              <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+                {SOCIAL_CHANNELS.map((channel) => (
+                  <a
+                    key={channel.id}
+                    href={channel.href}
+                    className="btn-secondary inline-flex items-center gap-2 px-3 py-2 text-sm"
+                  >
+                    <span className="relative h-5 w-5 overflow-hidden rounded">
+                      <Image src={channel.icon} alt={channel.label} fill sizes="20px" className="object-cover" />
+                    </span>
+                    <span>{channel.label}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
           </article>
           <article className="contact-form-col reveal-item card-surface rounded-xl p-6 md:p-8">
             <h3 className="form-reveal reveal-item text-2xl font-semibold leading-snug md:text-3xl">Оставьте заявку</h3>

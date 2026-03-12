@@ -26,7 +26,7 @@ function isRateLimited(ip: string, now: number): boolean {
 
 function formatTelegramMessage(payload: LeadPayload): string {
   return [
-    "🔌 *Новая заявка с сайта VIPAuto*",
+    "🔌 *Новая заявка с сайта ВИПАВТО*",
     `Имя: ${payload.name}`,
     `Телефон: ${payload.phone}`,
     `Услуга: ${payload.service}`,
