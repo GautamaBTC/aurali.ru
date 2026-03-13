@@ -14,6 +14,10 @@ module.exports = {
         NODE_ENV: "production",
         PORT: "3000",
       },
+      error_file: "/var/log/pm2/vipauto161-error.log",
+      out_file: "/var/log/pm2/vipauto161-out.log",
+      log_file: "/var/log/pm2/vipauto161-combined.log",
+      time: true,
     },
   ],
 };

@@ -18,16 +18,37 @@ npm run start
 
 ## Deploy (REG.RU VPS)
 
-Production deployment instructions are in:
+### Quick Start
 
-- `docs/deploy-reg-ru.md`
+1. **Setup server** — follow [`docs/server-setup.md`](docs/server-setup.md)
+2. **Configure env** — copy `.env.example` to `.env.production` and fill in:
+   - `TELEGRAM_BOT_TOKEN` — create bot via @BotFather
+   - `TELEGRAM_CHAT_ID` — your chat ID for notifications
+3. **Deploy** — run `./deploy/scripts/deploy.sh main`
 
-Ready-to-use deployment files:
+### Documentation
 
-- `ecosystem.config.cjs` (PM2)
-- `deploy/nginx/vipauto161.conf` (Nginx reverse proxy)
-- `deploy/scripts/deploy.sh` (pull + build + reload)
-- `.env.production.example`
+- [`docs/quick-deploy.md`](docs/quick-deploy.md) — copy-paste commands
+- [`docs/server-setup.md`](docs/server-setup.md) — full server setup guide
+- [`docs/deploy-reg-ru.md`](docs/deploy-reg-ru.md) — detailed deployment guide
+
+### Deployment Files
+
+- `ecosystem.config.cjs` — PM2 process manager config
+- `deploy/nginx/vipauto161.conf` — Nginx reverse proxy (HTTPS + security headers)
+- `deploy/scripts/deploy.sh` — automated deploy script
+- `.env.example` — environment variables template
+- `app/api/health/route.ts` — health check endpoint
+
+## Features
+
+- 📱 Responsive design with dark premium theme
+- ⚡ GSAP animations with reduced-motion support
+- 📊 Yandex.Metrika analytics support
+- 🔔 Telegram bot notifications for leads
+- 📝 Lead form with rate limiting (3 requests / 10 min)
+- 🔒 HTTPS with Let's Encrypt SSL
+- 🚀 PM2 process manager for production
 
 ## Motion Debug And Rules
 
