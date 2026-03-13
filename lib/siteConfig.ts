@@ -11,6 +11,7 @@ export const siteConfig = {
   schedule: "Пн-Пт 10:00-20:00, Сб-Вс выходные дни",
   rating: "4.7",
   ratingVotes: 117,
+  carsServiced: 25000,
   email: "info@vipauto161.ru",
   inn: "615512388814",
   okpo: "0178696862",

@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { ArrowUpRight, Clock3 } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Clock3 } from "lucide-react";
 import { LeadForm } from "@/components/forms/LeadForm";
 import { BrandWordmark } from "@/components/ui/BrandWordmark";
 import { useReveal } from "@/hooks/useReveal";
@@ -142,8 +142,8 @@ export function ContactSection() {
             </ul>
 
             <div className="mt-7">
-              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-zinc-400">Каналы связи и навигация</p>
-              <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+              <p className="text-center text-sm font-semibold uppercase tracking-[0.14em] text-zinc-400 md:text-left">Каналы связи и навигация</p>
+              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
                 {QUICK_LINKS.map((item) => (
                   <a
                     key={item.id}
@@ -152,26 +152,32 @@ export function ContactSection() {
                     rel={item.href.startsWith("http") ? "noreferrer" : undefined}
                     aria-disabled={item.disabled ? true : undefined}
                     className={[
-                      "group flex min-h-[76px] flex-col justify-between rounded-[var(--radius-1)] border border-white/12",
-                      "bg-white/[0.04] px-3 py-3 backdrop-blur-md transition-all duration-300",
-                      "hover:-translate-y-1 hover:border-white/20",
+                      "group relative flex min-h-[86px] items-center gap-4 overflow-hidden rounded-[18px] border border-white/12",
+                      "bg-[linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] px-4 py-3 backdrop-blur-md transition-all duration-300",
+                      "hover:-translate-y-1 hover:border-[var(--accent)]/35 hover:shadow-[0_16px_36px_rgba(0,0,0,0.22)]",
                       item.disabled ? "pointer-events-none opacity-70" : "",
                     ].join(" ")}
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-[10px] border border-white/10 bg-white/[0.06]">
-                        <Image src={item.icon} alt={item.label} fill sizes="36px" className="object-contain p-1.5" />
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    />
+                    <div className="flex min-w-0 flex-1 items-center gap-3">
+                      <span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-[14px] border border-white/12 bg-black/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+                        <Image src={item.icon} alt={item.label} fill sizes="48px" className="object-contain p-2" />
                       </span>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-white">{item.label}</p>
-                        <p className="mt-0.5 line-clamp-1 text-xs leading-relaxed text-zinc-400">{item.description}</p>
+                        <p className="text-base font-semibold text-white">{item.label}</p>
+                        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-400">{item.description}</p>
                       </div>
                     </div>
-                    <div className="mt-3 flex items-center justify-between">
-                      <span className="text-[11px] uppercase tracking-[0.16em] text-zinc-500">
+                    <div className="flex shrink-0 flex-col items-end justify-center gap-2">
+                      <span className="rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-zinc-400">
                         {item.disabled ? "Скоро" : "Открыть"}
                       </span>
-                      <ArrowUpRight className="h-4 w-4 text-zinc-500 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--accent)]" />
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-zinc-400 transition-all duration-300 group-hover:border-[var(--accent)]/35 group-hover:bg-[var(--accent)]/10 group-hover:text-[var(--accent)]">
+                        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                      </span>
                     </div>
                   </a>
                 ))}

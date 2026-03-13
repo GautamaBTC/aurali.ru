@@ -6,24 +6,7 @@ import { gsap } from "gsap";
 import { siteConfig } from "@/lib/siteConfig";
 import { useLockScroll } from "@/hooks/useLockScroll";
 import { resolveMotionOverride, shouldReduceMotionInBrowser } from "@/lib/motion";
-
-type MenuItem = {
-  id: string;
-  href: string;
-  label: string;
-};
-
-const MENU_ITEMS: readonly MenuItem[] = [
-  { id: "services", href: "#services", label: "Услуги" },
-  { id: "products", href: "#products", label: "Товары" },
-  { id: "gallery", href: "#gallery", label: "Галерея" },
-  { id: "advantages", href: "#advantages", label: "Преимущества" },
-  { id: "process", href: "#process", label: "Процесс" },
-  { id: "reviews", href: "#reviews", label: "Отзывы" },
-  { id: "contacts", href: "#contacts", label: "Контакты" },
-] as const;
-
-const HEADER_HEIGHT = 72;
+import { MENU_ITEMS, scrollToSection } from "@/lib/navigation";
 const HEADER_PHONE = "+7 (928) 7777-009";
 const DISABLE_HEADER_INTRO_ANIMATIONS = false;
 const HEADER_PHONE_CHARS = [
@@ -276,13 +259,11 @@ export function MobileMenu() {
     if (!pending) return;
     pendingAnchorRef.current = null;
 
-    const id = pending.replace("#", "");
-    const node = document.getElementById(id);
-    if (!node) return;
+    const id = pending.split("#")[1] ?? "";
+    if (!id) return;
 
     window.requestAnimationFrame(() => {
-      const y = node.getBoundingClientRect().top + window.scrollY - HEADER_HEIGHT;
-      window.scrollTo({ top: y, behavior: "smooth" });
+      scrollToSection(id);
     });
   }, []);
 

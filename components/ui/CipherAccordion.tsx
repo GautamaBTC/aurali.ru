@@ -75,9 +75,9 @@ type ScanCellProps = {
 export function ScanCell({ active, children, className }: ScanCellProps) {
   return (
     <div
-      className={cn("accordion-leading-visual relative flex h-14 w-14 shrink-0 items-center justify-center sm:h-16 sm:w-16", className)}
+      className={cn("accordion-leading-visual relative flex h-16 w-16 shrink-0 items-center justify-center sm:h-[4.5rem] sm:w-[4.5rem]", className)}
       style={{
-        background: active ? "rgba(229,233,237,0.14)" : "rgba(229,233,237,0.11)",
+        background: active ? "rgba(239,243,248,0.26)" : "rgba(239,243,248,0.2)",
         borderRadius: "12px",
         transform: active ? "translateY(-1px)" : "translateY(0)",
         transition: `transform ${ACCORDION_DURATION_MS}ms cubic-bezier(0.22, 1, 0.36, 1), background ${ACCORDION_DURATION_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
@@ -363,21 +363,21 @@ export function ImageScanContent({
 }) {
   return (
     <div
-      className="rounded-[8px] p-[15px]"
+      className="rounded-[10px] p-[12px]"
       style={{
-        background: active ? "rgba(232,236,240,0.32)" : "rgba(232,236,240,0.26)",
+        background: active ? "rgba(246,248,251,0.88)" : "rgba(246,248,251,0.8)",
         opacity: 1,
       }}
     >
       <Image
         src={src}
         alt={alt}
-        width={30}
-        height={30}
+        width={38}
+        height={38}
         className="object-contain transition-all duration-300"
         style={{
-          filter: active ? "brightness(1.02)" : "brightness(0.98)",
-          transform: active ? "scale(1.04)" : "scale(1.01)",
+          filter: active ? "brightness(1.06)" : "brightness(1.02)",
+          transform: active ? "scale(1.02)" : "scale(1)",
         }}
       />
     </div>

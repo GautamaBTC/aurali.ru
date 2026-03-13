@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, KeyboardEvent, useMemo, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useMemo, useRef, useState } from "react";
 import { services } from "@/data/services";
 import { siteConfig } from "@/lib/siteConfig";
 
@@ -36,7 +36,7 @@ function normalizeLocalDigits(value: string) {
 
 function formatPhone(localDigits: string) {
   if (!localDigits) {
-    return PHONE_PREFIX;
+    return "";
   }
 
   const area = localDigits.slice(0, 3);
@@ -79,16 +79,15 @@ function getCursorFromDigitsCount(count: number) {
 
 export function LeadForm() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const lastKeyRef = useRef<string | null>(null);
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phoneDigits, setPhoneDigits] = useState("");
   const [service, setService] = useState(services[0]?.title ?? "");
   const [message, setMessage] = useState("");
   const [formState, setFormState] = useState<FormState>("idle");
   const [errors, setErrors] = useState<Errors>({});
 
-  const localDigits = useMemo(() => normalizeLocalDigits(phone), [phone]);
-  const cleanPhone = useMemo(() => (localDigits.length === 10 ? `7${localDigits}` : ""), [localDigits]);
+  const formattedPhone = useMemo(() => formatPhone(phoneDigits), [phoneDigits]);
+  const cleanPhone = useMemo(() => (phoneDigits.length === 10 ? `7${phoneDigits}` : ""), [phoneDigits]);
 
   const setCaret = (position: number) => {
     requestAnimationFrame(() => {
@@ -108,7 +107,7 @@ export function LeadForm() {
       nextErrors.name = "Введите имя, минимум 2 символа.";
     }
 
-    if (localDigits.length !== 10) {
+    if (phoneDigits.length !== 10) {
       nextErrors.phone = "Введите номер полностью в формате +7 (___) ___-__-__.";
     }
 
@@ -116,70 +115,13 @@ export function LeadForm() {
     return Object.keys(nextErrors).length === 0;
   };
 
-  const handlePhoneFocus = () => {
-    if (!phone) {
-      setPhone(PHONE_PREFIX);
-      setCaret(PHONE_START_CURSOR);
-      return;
-    }
-
-    if (phone === PHONE_PREFIX) {
-      setCaret(PHONE_START_CURSOR);
-    }
-  };
-
-  const handlePhoneBlur = () => {
-    if (normalizeLocalDigits(phone).length < 10) {
-      setPhone("");
-    }
-  };
-
-  const handlePhoneKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    lastKeyRef.current = event.key;
-  };
-
   const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
     const rawValue = event.target.value;
     const selectionStart = event.target.selectionStart ?? rawValue.length;
     const typedLocalDigits = normalizeLocalDigits(rawValue);
     const digitsBeforeCursor = normalizeLocalDigits(rawValue.slice(0, selectionStart)).length;
-    const previousValue = phone;
-    const previousDigits = normalizeLocalDigits(previousValue);
-    const lastKey = lastKeyRef.current;
-
-    if (!typedLocalDigits) {
-      if (lastKey === "Backspace" || lastKey === "Delete" || rawValue === "") {
-        setPhone("");
-        return;
-      }
-
-      if (rawValue.includes("7") || rawValue.includes("8") || rawValue.includes("9") || rawValue.includes("+")) {
-        setPhone(PHONE_PREFIX);
-        setCaret(PHONE_START_CURSOR);
-        return;
-      }
-
-      setPhone("");
-      return;
-    }
-
-    const formatted = formatPhone(typedLocalDigits);
-    setPhone(formatted);
-
-    const nextDigitsCount = Math.min(digitsBeforeCursor, typedLocalDigits.length);
-    const nextCursor = getCursorFromDigitsCount(nextDigitsCount);
-
-    if (
-      lastKey === "Backspace" &&
-      previousValue === PHONE_PREFIX &&
-      selectionStart <= PHONE_START_CURSOR &&
-      previousDigits.length === 0
-    ) {
-      setPhone("");
-      return;
-    }
-
-    setCaret(nextCursor);
+    setPhoneDigits(typedLocalDigits);
+    setCaret(typedLocalDigits.length ? getCursorFromDigitsCount(Math.min(digitsBeforeCursor, typedLocalDigits.length)) : 0);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -209,7 +151,7 @@ export function LeadForm() {
 
       setFormState("success");
       setName("");
-      setPhone("");
+      setPhoneDigits("");
       setMessage("");
     } catch {
       setFormState("error");
@@ -248,20 +190,14 @@ export function LeadForm() {
           type="tel"
           autoComplete="tel"
           required
-          value={phone}
-          onFocus={handlePhoneFocus}
-          onBlur={handlePhoneBlur}
-          onKeyDown={handlePhoneKeyDown}
+          value={formattedPhone}
           onChange={handlePhoneChange}
           aria-invalid={Boolean(errors.phone)}
-          aria-describedby={errors.phone ? "lead-phone-error lead-phone-hint" : "lead-phone-hint"}
+          aria-describedby={errors.phone ? "lead-phone-error" : undefined}
           className="input-field font-mono tracking-[0.04em]"
           inputMode="tel"
           placeholder={PHONE_MASK_PLACEHOLDER}
         />
-        <span id="lead-phone-hint" className="mt-2 block text-xs leading-normal text-zinc-500">
-          {PHONE_MASK_PLACEHOLDER}
-        </span>
         {errors.phone ? (
           <span id="lead-phone-error" className="mt-2 block text-sm leading-normal text-red-500">
             {errors.phone}

@@ -9,6 +9,7 @@ import { useReveal } from "@/hooks/useReveal";
 import { useStaggerReveal } from "@/hooks/useStaggerReveal";
 import { REVEAL_PRESETS } from "@/lib/revealPresets";
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { siteConfig } from "@/lib/siteConfig";
 import type { BrandItem } from "@/types";
 
 const BRAND_GROUPS = [
@@ -160,7 +161,7 @@ export function BrandsSection() {
                 <p className="text-[10px] uppercase tracking-[0.18em] text-white/35">лет</p>
               </div>
               <div>
-                <p className="text-lg font-bold text-white">50K+</p>
+                <p className="text-lg font-bold text-white">{`${Math.floor(siteConfig.carsServiced / 1000)}K+`}</p>
                 <p className="text-[10px] uppercase tracking-[0.18em] text-white/35">авто</p>
               </div>
             </div>

@@ -62,6 +62,10 @@ section {
   scroll-snap-stop: normal;
 }
 
+section[id] {
+  scroll-margin-top: calc(var(--header-h) + env(safe-area-inset-top));
+}
+
 section:first-child,
 section:first-of-type,
 .reveal-section:first-child,

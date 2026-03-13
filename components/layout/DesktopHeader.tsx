@@ -5,30 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
-
-const MENU_ITEMS = [
-  { id: "services", href: "#services", label: "Услуги" },
-  { id: "products", href: "#products", label: "Товары" },
-  { id: "gallery", href: "#gallery", label: "Галерея" },
-  { id: "advantages", href: "#advantages", label: "Преимущества" },
-  { id: "process", href: "#process", label: "Процесс" },
-  { id: "reviews", href: "#reviews", label: "Отзывы" },
-  { id: "contacts", href: "#contacts", label: "Контакты" },
-] as const;
-
-const HEADER_HEIGHT = 72;
-
-function scrollToId(id: string) {
-  if (id === "top") {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    return;
-  }
-
-  const node = document.getElementById(id);
-  if (!node) return;
-  const y = node.getBoundingClientRect().top + window.scrollY - HEADER_HEIGHT;
-  window.scrollTo({ top: y, behavior: "smooth" });
-}
+import { MENU_ITEMS, scrollToSection } from "@/lib/navigation";
 
 export function DesktopHeader() {
   const { direction, atTop } = useScrollDirection();
@@ -58,7 +35,7 @@ export function DesktopHeader() {
           <button
             type="button"
             aria-label="На главную"
-            onClick={() => scrollToId("top")}
+            onClick={() => scrollToSection("top")}
             className="logo-animate flex shrink-0 items-center"
           >
             <Image
@@ -83,7 +60,7 @@ export function DesktopHeader() {
                 href={item.href}
                 onClick={(event) => {
                   event.preventDefault();
-                  scrollToId(item.id);
+                  scrollToSection(item.id);
                 }}
                 className={`relative text-sm font-medium transition-colors duration-200 ${
                   isActive ? "text-white" : "text-white/60 hover:text-white"
@@ -102,7 +79,7 @@ export function DesktopHeader() {
 
         <button
           type="button"
-          onClick={() => scrollToId("contacts")}
+          onClick={() => scrollToSection("contacts")}
           className="rounded-xl bg-white px-5 py-2 text-sm font-semibold text-zinc-950 transition-all duration-200 hover:bg-white/90"
         >
           Оставить заявку

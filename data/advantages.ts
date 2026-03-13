@@ -1,4 +1,4 @@
-import type { AdvantageItem } from "@/types";
+﻿import type { AdvantageItem } from "@/types";
 
 export const advantages: AdvantageItem[] = [
   {
@@ -17,7 +17,7 @@ export const advantages: AdvantageItem[] = [
     id: "diagnostic",
     title: "Точная диагностика",
     description: "Ищем причину, а не маскируем симптомы. Показываем, что нашли.",
-    stat: "4.6 / 5 рейтинг",
+    stat: "4.7 / 5 рейтинг",
   },
   {
     id: "terms",
@@ -26,3 +26,4 @@ export const advantages: AdvantageItem[] = [
     stat: "117 отзывов",
   },
 ];
+
