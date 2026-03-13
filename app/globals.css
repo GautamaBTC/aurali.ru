@@ -1418,15 +1418,22 @@ select:focus-visible {
 
 .animate-brands-marquee {
   animation: brands-marquee var(--marquee-duration, 36s) linear infinite;
+  animation-play-state: paused;
 }
 
 .animate-brands-marquee-reverse {
   animation: brands-marquee-reverse var(--marquee-duration, 42s) linear infinite;
+  animation-play-state: paused;
 }
 
 .brands-marquee:hover .animate-brands-marquee,
 .brands-marquee:hover .animate-brands-marquee-reverse {
   animation-play-state: paused;
+}
+
+.brands-marquee.is-in-view .animate-brands-marquee,
+.brands-marquee.is-in-view .animate-brands-marquee-reverse {
+  animation-play-state: running;
 }
 
 .brand-showcase-shell {

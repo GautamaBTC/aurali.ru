@@ -33,16 +33,18 @@ function MarqueeRow({
   reverse = false,
   duration = 32,
   animate = true,
+  inView = false,
 }: {
   items: BrandItem[];
   reverse?: boolean;
   duration?: number;
   animate?: boolean;
+  inView?: boolean;
 }) {
   const doubled = [...items, ...items];
 
   return (
-    <div className="brands-marquee relative overflow-hidden py-2">
+    <div className={`brands-marquee relative overflow-hidden py-2 ${inView ? "is-in-view" : ""}`}>
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-[var(--bg-primary)] via-[var(--bg-primary)]/95 to-transparent md:w-16" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-[var(--bg-primary)] via-[var(--bg-primary)]/95 to-transparent md:w-16" />
 
@@ -173,8 +175,8 @@ export function BrandsSection() {
               marqueeInView ? "is-in-view" : ""
             }`}
           >
-            <MarqueeRow items={topRow} duration={32} animate={!reduceMotion && marqueeInView} />
-            {bottomRow.length ? <MarqueeRow items={bottomRow} reverse duration={35} animate={!reduceMotion && marqueeInView} /> : null}
+            <MarqueeRow items={topRow} duration={32} animate={!reduceMotion} inView={marqueeInView} />
+            {bottomRow.length ? <MarqueeRow items={bottomRow} reverse duration={35} animate={!reduceMotion} inView={marqueeInView} /> : null}
           </div>
 
           <div className="brands-reveal-item reveal-item mt-5 flex items-center justify-center">

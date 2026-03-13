@@ -363,21 +363,21 @@ export function ImageScanContent({
 }) {
   return (
     <div
-      className="rounded-[10px] p-[12px]"
+      className="relative flex h-16 w-16 items-center justify-center rounded-[10px] p-[12px]"
       style={{
-        background: active ? "rgba(246,248,251,0.88)" : "rgba(246,248,251,0.8)",
+        background: "#FFFFFF",
         opacity: 1,
       }}
     >
       <Image
         src={src}
         alt={alt}
-        width={38}
-        height={38}
+        width={42}
+        height={42}
         className="object-contain transition-all duration-300"
         style={{
           filter: active ? "brightness(1.06)" : "brightness(1.02)",
-          transform: active ? "scale(1.02)" : "scale(1)",
+          transform: active ? "scale(1.12)" : "scale(1.1)",
         }}
       />
     </div>
