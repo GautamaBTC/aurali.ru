@@ -12,10 +12,7 @@ export function DesktopHeader() {
   const activeSection = useActiveSection(MENU_ITEMS.map((item) => item.id));
   const hidden = direction === "down" && !atTop;
 
-  const [isLogoReady, setIsLogoReady] = useState<boolean>(() => {
-    if (typeof document === "undefined") return false;
-    return document.documentElement.dataset.introLogo === "true";
-  });
+  const [isLogoReady, setIsLogoReady] = useState<boolean>(true);
 
   useEffect(() => {
     const onLogoStart = () => setIsLogoReady(true);

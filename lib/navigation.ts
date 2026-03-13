@@ -51,9 +51,16 @@ export function scrollToSection(id: string): void {
   }
 
   const target = document.getElementById(id);
-  if (!target) return;
+  if (!target) {
+    console.warn(`Section #${id} not found`);
+    return;
+  }
 
   const offset = getCurrentHeaderOffset();
   const top = target.getBoundingClientRect().top + window.scrollY - offset;
-  window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  
+  // Небольшая задержка для плавности
+  window.requestAnimationFrame(() => {
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  });
 }

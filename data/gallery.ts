@@ -1,11 +1,8 @@
 export const galleryImages = [
-  "/images/gallery/gallery-01.jpg",
   "/images/gallery/gallery-02.jpg",
   "/images/gallery/gallery-03.jpg",
   "/images/gallery/gallery-04.jpg",
   "/images/gallery/gallery-05.jpg",
-  "/images/gallery/gallery-06.jpg",
-  "/images/gallery/gallery-07.jpg",
   "/images/gallery/gallery-08.jpg",
   "/images/gallery/gallery-09.jpg",
   "/images/gallery/gallery-10.jpg",
@@ -16,7 +13,5 @@ export const galleryImages = [
   "/images/gallery/gallery-15.jpg",
   "/images/gallery/gallery-16.jpg",
   "/images/gallery/gallery-17.jpg",
-  "/images/gallery/gallery-18.jpg",
   "/images/gallery/gallery-19.jpg",
-  "/images/gallery/gallery-20.jpg",
 ] as const;
