@@ -2420,8 +2420,6 @@ html[data-logo-glitch="on"] .mobile-logo-glitch {
   pointer-events: none;
   z-index: 0;
   background: #0b1116;
-  transform: translate3d(0, 0, 0);
-  will-change: transform;
   contain: layout paint style;
 }
 
@@ -2447,7 +2445,6 @@ html[data-logo-glitch="on"] .mobile-logo-glitch {
   object-position: center center;
   opacity: 0.9;
   filter: none;
-  transform: translateZ(0);
   backface-visibility: hidden;
   display: block;
 }
