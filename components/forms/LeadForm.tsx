@@ -79,6 +79,7 @@ function getCursorFromDigitsCount(count: number) {
 
 export function LeadForm() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const [name, setName] = useState("");
   const [phoneDigits, setPhoneDigits] = useState("");
   const [service, setService] = useState(services[0]?.title ?? "");
@@ -133,16 +134,19 @@ export function LeadForm() {
 
     setFormState("loading");
 
+    // Отправляем через Netlify Forms
+    const formData = new FormData();
+    formData.append("form-name", "contact");
+    formData.append("name", name);
+    formData.append("phone", cleanPhone);
+    formData.append("service", service);
+    formData.append("message", message);
+
     try {
-      const response = await fetch("/api/lead", {
+      const response = await fetch("/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          phone: cleanPhone,
-          service,
-          message,
-        }),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData as any).toString(),
       });
 
       if (!response.ok) {
@@ -153,13 +157,23 @@ export function LeadForm() {
       setName("");
       setPhoneDigits("");
       setMessage("");
+      formRef.current?.reset();
     } catch {
       setFormState("error");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6" noValidate>
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      method="POST"
+      data-netlify="true"
+      name="contact"
+      className="space-y-4 md:space-y-6"
+      noValidate
+    >
+      <input type="hidden" name="form-name" value="contact" />
       <label htmlFor="lead-name" className="block">
         <span className="mb-2 block text-sm font-medium text-zinc-300">Имя</span>
         <input

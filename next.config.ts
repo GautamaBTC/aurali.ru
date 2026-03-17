@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  basePath: "/vipauto_161",
   output: "export",
   images: {
     unoptimized: true,
