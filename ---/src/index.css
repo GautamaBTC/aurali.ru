@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+/* Spa Gradient Colors */
+:root {
+  /* Deep Blue to Terracotta */
+  --gradient-start: #1e3a5f;
+  --gradient-mid: #4a6b8a;
+  --gradient-end: #c4826c;
+  
+  /* Sage to Cream alternative */
+  --sage: #9caf88;
+  --cream: #f5f0e6;
+  
+  /* Animation timings */
+  --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-rubber: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Animated gradient for burger lines */
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes gradient-rotation {
+  0% { --gradient-angle: 0deg; }
+  100% { --gradient-angle: 360deg; }
+}
+
+.gradient-animated {
+  background: linear-gradient(
+    var(--gradient-angle),
+    var(--gradient-start),
+    var(--gradient-mid),
+    var(--gradient-end),
+    var(--gradient-mid),
+    var(--gradient-start)
+  );
+  animation: gradient-rotation 4s linear infinite;
+}
+
+/* Soft blur overlay for spa aesthetic */
+.blur-overlay {
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+/* Smooth menu appearance */
+@keyframes menu-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+    filter: blur(10px);
+  }
+  40% {
+    opacity: 0.6;
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes menu-slide-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+    filter: blur(10px);
+  }
+}
+
+.menu-enter {
+  animation: menu-slide-in 0.8s var(--ease-rubber) forwards;
+}
+
+.menu-exit {
+  animation: menu-slide-out 0.5s var(--ease-soft) forwards;
+}
+
+/* Staggered menu items */
+@keyframes item-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+.menu-item-enter {
+  animation: item-fade-in 0.7s var(--ease-rubber) forwards;
+  opacity: 0;
+}
+
+/* Ripple effect for tactile feedback */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple-effect::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  transform: scale(0);
+  opacity: 0;
+}
+
+.ripple-effect:active::after {
+  animation: ripple 0.8s var(--ease-soft);
+}
+
+/* Natural textures */
+.texture-sand {
+  background-image: 
+    radial-gradient(ellipse at 20% 30%, rgba(245, 240, 230, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(196, 130, 108, 0.2) 0%, transparent 40%);
+}
+
+.texture-water {
+  background-image:
+    radial-gradient(ellipse at 30% 20%, rgba(30, 58, 95, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(74, 107, 138, 0.15) 0%, transparent 40%);
+}
+
+/* Soft shadows */
+.shadow-soft {
+  box-shadow: 
+    0 4px 20px -2px rgba(30, 58, 95, 0.1),
+    0 8px 40px -4px rgba(196, 130, 108, 0.08);
+}
+
+/* Press effect */
+@keyframes press {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+
+.press-effect:active {
+  animation: press 0.3s var(--ease-rubber);
+}
