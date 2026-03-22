@@ -1,52 +1,131 @@
-import type { Metadata } from 'next'
-import { Cormorant_Garamond, Inter, JetBrains_Mono } from 'next/font/google'
-import Script from 'next/script'
-import { BootGate } from '@/components/layout/boot-gate'
-import { DesktopHeader } from '@/components/layout/desktop-header'
-import { MobileMenuWrapper } from '@/components/layout/mobile-menu-wrapper'
-import { ScrollVideoBackground } from '@/components/layout/scroll-video-background'
-import { siteContent } from '@/data/site-content'
-import { createDaySpaJsonLd, createMetadata } from '@/lib/seo'
-import './globals.css'
+﻿import type { Metadata, Viewport } from "next";
+import Script from "next/script";
+import { JetBrains_Mono, Manrope } from "next/font/google";
+import { BootGate } from "@/components/layout/BootGate";
+import { DesktopHeader } from "@/components/layout/DesktopHeader";
+import { MobileMenuWrapper } from "@/components/layout/MobileMenuWrapper";
+import { SiteScrollBackdrop } from "@/components/layout/SiteScrollBackdrop";
+import { siteConfig } from "@/lib/siteConfig";
+import "./globals.css";
 
-const inter = Inter({
-  subsets: ['cyrillic', 'latin'],
-  variable: '--font-manrope',
-  weight: ['300', '400', '500'],
-})
+const manrope = Manrope({
+  subsets: ["cyrillic", "latin"],
+  variable: "--font-manrope",
+});
 
 const jetBrainsMono = JetBrains_Mono({
-  subsets: ['cyrillic', 'latin'],
-  variable: '--font-jetbrains-mono',
-})
+  subsets: ["cyrillic", "latin"],
+  variable: "--font-jetbrains-mono",
+});
 
-const cormorantGaramond = Cormorant_Garamond({
-  subsets: ['cyrillic', 'latin'],
-  variable: '--font-cormorant',
-  weight: ['300', '400', '500'],
-})
+export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.siteUrl),
+  title: {
+    default: "ВИПАВТО — Автоэлектрика и автоэлектроника в Шахтах | Официальный дилер StarLine",
+    template: "%s | ВИПАВТО",
+  },
+  description:
+    "Профессиональная автоэлектрика в г. Шахты. Установка сигнализаций StarLine, LED/Bi-LED оптика, автозвук, камеры. Рейтинг 4.7 на картах и более 25 000 обслуженных автомобилей.",
+  alternates: {
+    canonical: "/",
+  },
+  category: "autos",
+  keywords: [
+    "автоэлектрика шахты",
+    "автоэлектрик шахты",
+    "автоэлектроника",
+    "установка starline",
+    "сигнализация starline шахты",
+    "установка led линз",
+    "автозвук",
+    "диагностика автоэлектрики",
+    "vipauto161",
+  ],
+  openGraph: {
+    title: "ВИПАВТО",
+    description: "Премиальная автоэлектрика и автоэлектроника в г. Шахты.",
+    type: "website",
+    locale: "ru_RU",
+    url: siteConfig.siteUrl,
+    siteName: "ВИПАВТО",
+    images: [
+      {
+        url: "/images/plate-logo.svg",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ВИПАВТО",
+    description: "Премиальная автоэлектрика и автоэлектроника в г. Шахты.",
+    images: ["/images/plate-logo.svg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
-export const metadata: Metadata = createMetadata(siteContent)
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#09090b",
+};
 
-interface RootLayoutProps {
-  children: React.ReactNode
-}
+const localBusinessJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  name: siteConfig.brand,
+  image: `${siteConfig.siteUrl}/images/plate-logo.svg`,
+  priceRange: "₽₽",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: siteConfig.address,
+    addressLocality: siteConfig.city,
+    addressRegion: siteConfig.region,
+    addressCountry: "RU",
+  },
+  telephone: siteConfig.phones[0],
+  areaServed: "Ростовская область",
+  url: siteConfig.siteUrl,
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "10:00",
+      closes: "20:00",
+    },
+  ],
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: siteConfig.rating,
+    reviewCount: siteConfig.ratingVotes,
+  },
+  sameAs: [siteConfig.social.telegram, siteConfig.social.whatsapp, siteConfig.social.vk],
+};
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  const yandexMetrikaId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
+
   return (
-    <html lang='ru' suppressHydrationWarning>
+    <html lang="ru" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${inter.variable} ${jetBrainsMono.variable} ${cormorantGaramond.variable} antialiased text-[var(--text-primary)] bg-[var(--bg-primary)]`}
+        className={`${manrope.variable} ${jetBrainsMono.variable} antialiased text-[var(--text-primary)]`}
       >
-        <ScrollVideoBackground />
         <BootGate>
+          <SiteScrollBackdrop />
           <DesktopHeader />
           <MobileMenuWrapper />
-          <div className='boot-ui relative z-10 pt-[calc(72px+env(safe-area-inset-top))] lg:pt-[72px]'>{children}</div>
+          <div className="boot-ui relative z-10 pt-[calc(72px+env(safe-area-inset-top))] lg:pt-[72px]">
+            {children}
+          </div>
         </BootGate>
-
-        <Script id='motion-policy' strategy='beforeInteractive'>
+        <Script id="motion-policy" strategy="beforeInteractive">
           {`
             (function () {
               var root = document.documentElement;
@@ -63,10 +142,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
             })();
           `}
         </Script>
-        <Script id='aurali-day-spa-jsonld' type='application/ld+json'>
-          {createDaySpaJsonLd(siteContent)}
+        <Script id="local-business-jsonld" type="application/ld+json">
+          {JSON.stringify(localBusinessJsonLd)}
         </Script>
+        {yandexMetrikaId ? (
+          <Script id="yandex-metrika" strategy="afterInteractive">
+            {`window.ym=window.ym||function(){(window.ym.a=window.ym.a||[]).push(arguments)};ym(${yandexMetrikaId},"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true});`}
+          </Script>
+        ) : null}
       </body>
     </html>
-  )
+  );
 }
+

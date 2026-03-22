@@ -1,0 +1,105 @@
+
+> vipauto_161@0.1.0 dev
+> next dev --port 3000
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.16.219.2:3000
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+
+✓ Starting...
+✓ Ready in 3.9s
+ GET / 200 in 5.0s (compile: 3.3s, render: 1648ms)
+ HEAD / 200 in 787ms (compile: 32ms, render: 755ms)
+ GET /images/gallery/gallery-06.jpg 404 in 523ms (compile: 238ms, render: 285ms)
+⨯ The requested resource isn't a valid image for /images/gallery/gallery-06.jpg received null
+ GET /images/gallery/gallery-07.jpg 404 in 832ms (compile: 359ms, render: 473ms)
+⨯ The requested resource isn't a valid image for /images/gallery/gallery-07.jpg received null
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+ GET /images/gallery/gallery-18.jpg 404 in 267ms (compile: 31ms, render: 236ms)
+⨯ The requested resource isn't a valid image for /images/gallery/gallery-18.jpg received null
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+ GET /images/gallery/gallery-20.jpg 404 in 276ms (compile: 24ms, render: 253ms)
+⨯ The requested resource isn't a valid image for /images/gallery/gallery-20.jpg received null
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+ GET / 200 in 500ms (compile: 14ms, render: 486ms)
+ GET / 200 in 442ms (compile: 12ms, render: 430ms)
+⚠ Cross origin request detected from 192.168.1.18 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET / 200 in 571ms (compile: 11ms, render: 560ms)
+ GET / 200 in 490ms (compile: 43ms, render: 447ms)
+ GET / 200 in 402ms (compile: 9ms, render: 393ms)
+✓ Compiled in 527ms
+ GET / 200 in 1305ms (compile: 629ms, render: 676ms)
+✓ Compiled in 234ms
+✓ Compiled in 219ms
+✓ Compiled in 365ms
+✓ Compiled in 277ms
+✓ Compiled in 489ms
+ GET / 200 in 746ms (compile: 189ms, render: 556ms)
+ GET / 200 in 956ms (compile: 63ms, render: 893ms)
+✓ Compiled in 473ms
+ GET / 200 in 954ms (compile: 463ms, render: 491ms)
+ GET / 200 in 974ms (compile: 401ms, render: 573ms)
+ GET / 200 in 506ms (compile: 7ms, render: 499ms)
+ GET / 200 in 469ms (compile: 9ms, render: 460ms)
+ GET / 200 in 507ms (compile: 5ms, render: 502ms)
+ GET / 200 in 678ms (compile: 7ms, render: 671ms)
+ GET / 200 in 639ms (compile: 7ms, render: 632ms)
+ GET / 200 in 642ms (compile: 8ms, render: 634ms)
+ GET / 200 in 749ms (compile: 9ms, render: 740ms)
+ GET / 200 in 755ms (compile: 21ms, render: 734ms)
+ GET / 200 in 728ms (compile: 16ms, render: 712ms)
+ GET / 200 in 769ms (compile: 20ms, render: 749ms)
+ GET / 200 in 766ms (compile: 65ms, render: 701ms)
+ GET / 200 in 770ms (compile: 15ms, render: 755ms)
+ GET / 200 in 647ms (compile: 12ms, render: 635ms)
+ GET / 200 in 688ms (compile: 99ms, render: 589ms)
+ GET / 200 in 556ms (compile: 21ms, render: 535ms)
+ GET / 200 in 573ms (compile: 61ms, render: 511ms)
+ GET / 200 in 586ms (compile: 23ms, render: 563ms)
+ GET / 200 in 527ms (compile: 13ms, render: 513ms)
+ GET / 200 in 528ms (compile: 47ms, render: 481ms)
+ GET / 200 in 500ms (compile: 12ms, render: 489ms)
+ GET / 200 in 506ms (compile: 49ms, render: 458ms)
+ GET / 200 in 541ms (compile: 14ms, render: 527ms)
+ GET / 200 in 544ms (compile: 54ms, render: 490ms)
+ GET / 200 in 527ms (compile: 19ms, render: 508ms)
+ GET / 200 in 530ms (compile: 62ms, render: 469ms)
+ GET / 200 in 486ms (compile: 13ms, render: 472ms)
+ GET / 200 in 487ms (compile: 42ms, render: 445ms)
+ GET / 200 in 464ms (compile: 9ms, render: 455ms)
+ GET / 200 in 471ms (compile: 35ms, render: 436ms)
+ GET / 200 in 403ms (compile: 14ms, render: 389ms)
+ GET / 200 in 406ms (compile: 84ms, render: 322ms)
+ GET / 200 in 294ms (compile: 18ms, render: 276ms)
+ GET / 200 in 217ms (compile: 14ms, render: 203ms)
+ GET / 200 in 145ms (compile: 18ms, render: 128ms)
+  Reload env: .env.local
+✓ Compiled in 1114ms
+ GET / 200 in 1714ms (compile: 1287ms, render: 427ms)
+ GET / 200 in 1718ms (compile: 1383ms, render: 334ms)
+ GET / 200 in 266ms (compile: 17ms, render: 249ms)
+ GET / 200 in 264ms (compile: 84ms, render: 180ms)
+ GET / 200 in 129ms (compile: 9ms, render: 120ms)
+ GET / 200 in 128ms (compile: 56ms, render: 72ms)
+ GET / 200 in 6.0s (compile: 3.0s, render: 3.0s)
+✓ Compiled in 631ms
+✓ Compiled in 225ms
+✓ Compiled in 379ms
+^C^C

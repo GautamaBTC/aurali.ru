@@ -1,0 +1,997 @@
+﻿"use client";
+
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { gsap } from "gsap";
+import { siteConfig } from "@/lib/siteConfig";
+import { useLockScroll } from "@/hooks/useLockScroll";
+import { resolveMotionOverride, shouldReduceMotionInBrowser } from "@/lib/motion";
+import { MENU_ITEMS, scrollToSection } from "@/lib/navigation";
+const HEADER_PHONE = "+7 (928) 7777-009";
+const DISABLE_HEADER_INTRO_ANIMATIONS = false;
+const HEADER_PHONE_CHARS = [
+  "+",
+  "7",
+  " ",
+  "(",
+  "9",
+  "2",
+  "8",
+  ")",
+  " ",
+  "7",
+  "7",
+  "7",
+  "7",
+  "-",
+  "0",
+  "0",
+  "9",
+] as const;
+
+export function MobileMenu() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [isBurgerVisible, setIsBurgerVisible] = useState(false);
+  const [isLogoIntroReady, setIsLogoIntroReady] = useState(false);
+  const [activeId, setActiveId] = useState<string>("services");
+  const [menuScale, setMenuScale] = useState(1);
+
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
+  const burgerRef = useRef<HTMLButtonElement>(null);
+  const firstItemRef = useRef<HTMLAnchorElement | null>(null);
+  const lineTopRef = useRef<HTMLSpanElement>(null);
+  const lineMidRef = useRef<HTMLSpanElement>(null);
+  const lineBotRef = useRef<HTMLSpanElement>(null);
+  const logoRef = useRef<HTMLAnchorElement | null>(null);
+  const logoVipRef = useRef<HTMLSpanElement | null>(null);
+  const logoAutoRef = useRef<HTMLSpanElement | null>(null);
+  const logoRegionRef = useRef<HTMLSpanElement | null>(null);
+  const topPhoneRef = useRef<HTMLAnchorElement | null>(null);
+  const callArrowRef = useRef<HTMLDivElement | null>(null);
+  const callLabelRef = useRef<HTMLSpanElement | null>(null);
+  const burgerEntryPlayedRef = useRef(false);
+
+  const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const pendingAnchorRef = useRef<string | null>(null);
+  const closeTlRef = useRef<gsap.core.Timeline | null>(null);
+  const openTlRef = useRef<gsap.core.Timeline | null>(null);
+  const burgerTlRef = useRef<gsap.core.Timeline | null>(null);
+  const burgerEntryTlRef = useRef<gsap.core.Timeline | null>(null);
+  const openFocusTimerRef = useRef<number | null>(null);
+  const logoAccentTimerRef = useRef<number | null>(null);
+
+  useLockScroll(isLocked);
+
+  useEffect(() => {
+    const onLogoStart = () => setIsLogoIntroReady(true);
+    const onBurgerStart = () => setIsBurgerVisible(true);
+    window.addEventListener("ui:intro-logo", onLogoStart as EventListener);
+    window.addEventListener("ui:intro-burger", onBurgerStart as EventListener);
+
+    if (document.documentElement.dataset.introLogo === "true") {
+      window.requestAnimationFrame(onLogoStart);
+    }
+    if (document.documentElement.dataset.introBurger === "true") {
+      window.requestAnimationFrame(onBurgerStart);
+    }
+
+    return () => {
+      window.removeEventListener("ui:intro-logo", onLogoStart as EventListener);
+      window.removeEventListener("ui:intro-burger", onBurgerStart as EventListener);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!isLogoIntroReady) return;
+
+    const logo = logoRef.current;
+    const vip = logoVipRef.current;
+    const auto = logoAutoRef.current;
+    const region = logoRegionRef.current;
+    if (!logo || !vip || !auto || !region) return;
+
+    const override = resolveMotionOverride(window.location.search);
+    const reduce = override === "force-reduced";
+    if (reduce || DISABLE_HEADER_INTRO_ANIMATIONS) {
+      gsap.set(logo, { clearProps: "all" });
+      gsap.set([vip, auto, region], {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        filter: "none",
+        clearProps: "all",
+        force3D: false,
+      });
+      return;
+    }
+
+    const parts = [vip, auto, region];
+    gsap.killTweensOf(parts);
+    gsap.killTweensOf(logo);
+
+    gsap.set(vip, {
+      opacity: 0,
+      x: -22,
+      y: 6,
+      scale: 0.97,
+      filter: "blur(4px)",
+      transformOrigin: "center center",
+      willChange: "transform, opacity, filter",
+      force3D: false,
+    });
+    gsap.set(auto, {
+      opacity: 0,
+      x: 22,
+      y: 6,
+      scale: 0.97,
+      filter: "blur(4px)",
+      transformOrigin: "center center",
+      willChange: "transform, opacity, filter",
+      force3D: false,
+    });
+    gsap.set(region, {
+      opacity: 0,
+      x: -14,
+      y: 10,
+      scale: 0.96,
+      filter: "blur(4px)",
+      transformOrigin: "center center",
+      willChange: "transform, opacity, filter",
+      force3D: false,
+    });
+    gsap.set(logo, {
+      filter: "drop-shadow(0 0 0 rgba(0,0,0,0))",
+      willChange: "filter",
+      force3D: false,
+    });
+
+    const tl = gsap.timeline({ delay: 0.14 });
+    tl.to(
+      vip,
+      {
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 0.46,
+        ease: "back.out(1.7)",
+        force3D: false,
+      },
+      0,
+    )
+      .to(
+        auto,
+        {
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 0.46,
+        ease: "back.out(1.7)",
+        force3D: false,
+      },
+        0.1,
+      )
+      .to(
+        region,
+        {
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 0.46,
+        ease: "back.out(1.7)",
+        force3D: false,
+      },
+        0.22,
+      )
+      .to(
+        logo,
+        {
+          filter: "drop-shadow(0 0 16px rgba(204,255,0,0.24)) drop-shadow(0 0 22px rgba(0,240,255,0.2))",
+          duration: 0.22,
+          ease: "power2.out",
+          force3D: false,
+        },
+        0.14,
+      )
+      .to(
+        logo,
+        {
+          filter: "drop-shadow(0 0 0 rgba(0,0,0,0))",
+          duration: 0.42,
+          ease: "power2.out",
+          force3D: false,
+        },
+        0.36,
+      )
+      .set(parts, { clearProps: "willChange" })
+      .set(logo, { clearProps: "willChange" });
+
+    return () => {
+      tl.kill();
+    };
+  }, [isLogoIntroReady]);
+
+  useEffect(() => {
+    const logo = logoRef.current;
+    if (!logo || !isOpen) return;
+    const override = resolveMotionOverride(window.location.search);
+    if (override === "force-reduced" || shouldReduceMotionInBrowser()) return;
+
+    logo.classList.remove("logo-open-accent");
+    void logo.offsetWidth;
+    logo.classList.add("logo-open-accent");
+
+    if (logoAccentTimerRef.current) {
+      window.clearTimeout(logoAccentTimerRef.current);
+    }
+
+    logoAccentTimerRef.current = window.setTimeout(() => {
+      logo.classList.remove("logo-open-accent");
+      logoAccentTimerRef.current = null;
+    }, 280);
+  }, [isOpen]);
+
+  useEffect(() => {
+    return () => {
+      if (logoAccentTimerRef.current) {
+        window.clearTimeout(logoAccentTimerRef.current);
+      }
+    };
+  }, []);
+
+  const setItemRef = useCallback((index: number, el: HTMLAnchorElement | null) => {
+    itemRefs.current[index] = el;
+    if (index === 0) firstItemRef.current = el;
+  }, []);
+
+  const runPendingScroll = useCallback(() => {
+    const pending = pendingAnchorRef.current;
+    if (!pending) return;
+    pendingAnchorRef.current = null;
+
+    const id = pending.split("#")[1] ?? "";
+    if (!id) return;
+
+    window.requestAnimationFrame(() => {
+      scrollToSection(id);
+    });
+  }, []);
+
+  const closeMenu = useCallback((href?: string) => {
+    if (isAnimating) return;
+    if (href) pendingAnchorRef.current = href;
+    setIsAnimating(true);
+    setIsOpen(false);
+  }, [isAnimating]);
+
+  const openMenu = useCallback(() => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setIsLocked(true);
+    setIsOpen(true);
+  }, [isAnimating]);
+
+  const buildBurgerTimeline = useCallback(() => {
+    const top = lineTopRef.current;
+    const mid = lineMidRef.current;
+    const bot = lineBotRef.current;
+    if (!top || !mid || !bot) return null;
+
+    gsap.killTweensOf([top, mid, bot]);
+    burgerTlRef.current?.kill();
+
+    gsap.set(mid, {
+      clipPath: "inset(0% 0% 0% 0%)",
+      WebkitClipPath: "inset(0% 0% 0% 0%)",
+      opacity: 1,
+    });
+
+    const tl = gsap.timeline({ paused: true });
+    tl.to(
+      top,
+      {
+        y: 8,
+        rotate: 45,
+        duration: 0.4,
+        ease: "power3.inOut",
+      },
+      0,
+    )
+      .to(
+        bot,
+        {
+          y: -8,
+          rotate: -45,
+          width: "100%",
+          duration: 0.4,
+          ease: "power3.inOut",
+        },
+        0,
+      )
+      .to(
+        mid,
+        {
+          clipPath: "inset(0% 0% 0% 100%)",
+          WebkitClipPath: "inset(0% 0% 0% 100%)",
+          duration: 0.3,
+          ease: "power2.inOut",
+        },
+        0,
+      );
+
+    burgerTlRef.current = tl;
+    return tl;
+  }, []);
+
+  const trapFocus = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key !== "Tab" || !isOpen || !panelRef.current) return;
+      const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusable.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    },
+    [isOpen],
+  );
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const sections = MENU_ITEMS.map((item) => document.getElementById(item.id)).filter(Boolean) as HTMLElement[];
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visible?.target?.id) setActiveId(visible.target.id);
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: [0.2, 0.4, 0.7] },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [isOpen]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isOpen) {
+        event.preventDefault();
+        closeMenu();
+        return;
+      }
+      trapFocus(event);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [closeMenu, isOpen, trapFocus]);
+
+  useEffect(() => {
+    if (!isOpen || !topPhoneRef.current) return;
+
+    const phoneNode = topPhoneRef.current;
+    const chars = Array.from(phoneNode.querySelectorAll<HTMLElement>('[data-phone-char="digit"]'));
+    const arrow = callArrowRef.current;
+    const label = callLabelRef.current;
+    if (!chars.length) return;
+
+    const ctx = gsap.context(() => {
+      gsap.set(chars, {
+        opacity: 0,
+        y: 20,
+        scale: 1,
+        color: "#ffffff",
+        backgroundColor: "transparent",
+        textShadow: "none",
+        force3D: false,
+      });
+      if (arrow) gsap.set(arrow, { opacity: 0, y: 0, force3D: false });
+      if (label) gsap.set(label, { opacity: 0, scale: 1, color: "#ffffff", force3D: false });
+
+      const masterTl = gsap.timeline();
+
+      masterTl.to(chars, {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        ease: "power2.out",
+        stagger: 0.03,
+        force3D: false,
+      });
+
+      if (label) {
+        masterTl.to(
+          label,
+          {
+            opacity: 1,
+            duration: 0.4,
+            ease: "power2.out",
+            force3D: false,
+          },
+          "-=0.1",
+        );
+      }
+
+      if (arrow) {
+        masterTl.to(
+          arrow,
+          {
+            opacity: 1,
+            duration: 0.3,
+            ease: "power2.out",
+            force3D: false,
+          },
+          "-=0.2",
+        );
+      }
+
+      const waveTl = gsap.timeline({ repeat: -1, repeatDelay: 3 });
+      waveTl.to(
+        chars,
+        {
+          keyframes: [
+            {
+              color: "#ccff00",
+              scale: 1.25,
+              duration: 0.25,
+              ease: "power2.out",
+              force3D: false,
+            },
+            {
+              color: "#ffffff",
+              scale: 1,
+              duration: 0.4,
+              ease: "power2.inOut",
+              force3D: false,
+            },
+          ],
+          stagger: { each: 0.06, from: "start" },
+        },
+        0,
+      );
+
+      masterTl.add(waveTl, "+=0.5");
+
+      if (arrow) {
+        const arrowTl = gsap.timeline({ repeat: -1, repeatDelay: 1.5 });
+        arrowTl
+          .to(arrow, { y: 8, duration: 0.8, ease: "sine.inOut", force3D: false })
+          .to(arrow, { y: 0, duration: 0.8, ease: "sine.inOut", force3D: false });
+        masterTl.add(arrowTl, 1.5);
+      }
+
+      if (label) {
+        const labelTl = gsap.timeline({ repeat: -1, repeatDelay: 2 });
+        labelTl
+          .to(label, { color: "#ccff00", scale: 1.1, duration: 0.4, ease: "power2.out" })
+          .to(label, { color: "#00f0ff", scale: 1, duration: 0.5, ease: "power2.inOut" })
+          .to(label, { color: "#ffffff", duration: 0.3, ease: "power1.in" });
+        masterTl.add(labelTl, 2);
+      }
+    }, phoneNode);
+
+    return () => {
+      ctx.revert();
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!burgerTlRef.current) return;
+    if (isOpen) {
+      burgerTlRef.current.play();
+    } else {
+      burgerTlRef.current.reverse();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    const top = lineTopRef.current;
+    const mid = lineMidRef.current;
+    const bot = lineBotRef.current;
+    if (!isBurgerVisible || !top || !mid || !bot || burgerEntryPlayedRef.current) return;
+
+    const lines = [top, mid, bot];
+    gsap.killTweensOf(lines);
+    burgerEntryTlRef.current?.kill();
+    gsap.set(lines, { y: -60, opacity: 0, scaleX: 0.3 });
+
+    const entryTl = gsap.timeline({
+      delay: 0.3,
+      onComplete: () => {
+        burgerEntryPlayedRef.current = true;
+        gsap.set(lines, { clearProps: "y,opacity,scaleX" });
+        const tl = buildBurgerTimeline();
+        if (tl) {
+          if (isOpen) tl.play();
+          else tl.progress(0);
+        }
+        burgerEntryTlRef.current = null;
+      },
+    });
+      entryTl
+        .to(top, { y: 0, opacity: 1, scaleX: 1, duration: 0.8, ease: "elastic.out(0.4, 0.3)" }, 0)
+        .to(mid, { y: 0, opacity: 1, scaleX: 1, duration: 0.75, ease: "elastic.out(0.4, 0.3)" }, "-=0.55")
+        .to(bot, { y: 0, opacity: 1, scaleX: 1, duration: 0.7, ease: "elastic.out(0.4, 0.3)" }, "-=0.5");
+    burgerEntryTlRef.current = entryTl;
+
+    return () => {
+      burgerEntryTlRef.current?.kill();
+      burgerEntryTlRef.current = null;
+      if (!burgerEntryPlayedRef.current) {
+        gsap.set(lines, { clearProps: "y,opacity,scaleX" });
+      }
+    };
+  }, [buildBurgerTimeline, isBurgerVisible, isOpen]);
+
+  useEffect(() => {
+    if (!isBurgerVisible || !burgerEntryPlayedRef.current || burgerTlRef.current) return;
+    const tl = buildBurgerTimeline();
+    if (!tl) return;
+    if (isOpen) tl.play();
+    else tl.progress(0);
+  }, [buildBurgerTimeline, isBurgerVisible, isOpen]);
+
+  useEffect(() => {
+    const overlay = overlayRef.current;
+    const panel = panelRef.current;
+    const footer = footerRef.current;
+    const items = itemRefs.current.filter(Boolean) as HTMLAnchorElement[];
+
+    if (!overlay || !panel || !footer || !items.length) return;
+
+    openTlRef.current?.kill();
+    closeTlRef.current?.kill();
+    gsap.killTweensOf([overlay, panel, footer, ...items]);
+
+    if (isOpen) {
+      gsap.set(overlay, {
+        autoAlpha: 1,
+        visibility: "visible",
+        pointerEvents: "auto",
+      });
+
+      gsap.set(panel, { y: 36, scale: 0.985, autoAlpha: 0 });
+      gsap.set(items, {
+        y: 46,
+        autoAlpha: 0,
+      });
+      gsap.set(footer, { autoAlpha: 0, y: 24 });
+
+      const openTl = gsap.timeline({
+        onComplete: () => {
+          setIsAnimating(false);
+        },
+      });
+
+      openTl
+        .to(
+          panel,
+          {
+            y: 0,
+            scale: 1,
+            autoAlpha: 1,
+            duration: 0.62,
+            ease: "back.out(1.45)",
+          },
+          0,
+        )
+        .to(
+          items,
+          {
+            y: 0,
+            autoAlpha: 1,
+            duration: 0.48,
+            stagger: 0.08,
+            ease: "back.out(1.45)",
+          },
+          0.1,
+        )
+        .to(footer, { autoAlpha: 1, y: 0, duration: 0.36, ease: "back.out(1.35)" }, 0.28);
+
+      openTlRef.current = openTl;
+
+      if (openFocusTimerRef.current) {
+        window.clearTimeout(openFocusTimerRef.current);
+      }
+      openFocusTimerRef.current = window.setTimeout(() => firstItemRef.current?.focus(), 200);
+      return () => {
+        if (openFocusTimerRef.current) {
+          window.clearTimeout(openFocusTimerRef.current);
+          openFocusTimerRef.current = null;
+        }
+        openTlRef.current?.kill();
+      };
+    }
+
+    const closeTl = gsap.timeline({
+      onComplete: () => {
+        gsap.set(overlay, {
+          autoAlpha: 0,
+          visibility: "hidden",
+          pointerEvents: "none",
+        });
+        burgerRef.current?.focus();
+        setIsLocked(false);
+        runPendingScroll();
+        setIsAnimating(false);
+      },
+    });
+
+    closeTl
+      .to(
+        items,
+        {
+          y: 22,
+          autoAlpha: 0,
+          duration: 0.2,
+          stagger: { each: 0.04, from: "end" },
+          ease: "power2.inOut",
+        },
+        0,
+      )
+      .to(footer, { autoAlpha: 0, y: 16, duration: 0.15, ease: "power2.in" }, 0)
+      .to(panel, { y: 26, autoAlpha: 0, scale: 0.985, duration: 0.34, ease: "power3.in" }, 0.06);
+
+    closeTlRef.current = closeTl;
+
+    return () => {
+      if (openFocusTimerRef.current) {
+        window.clearTimeout(openFocusTimerRef.current);
+        openFocusTimerRef.current = null;
+      }
+      openTlRef.current?.kill();
+      closeTlRef.current?.kill();
+    };
+  }, [isOpen, runPendingScroll]);
+
+  const phoneHref = useMemo(() => `tel:${HEADER_PHONE.replace(/[^\d+]/g, "")}`, []);
+  const phoneChars = useMemo(() => HEADER_PHONE_CHARS, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    let resizeDebounceTimer: number | undefined;
+    const recalcScale = () => {
+      const content = contentRef.current;
+      if (!content) return;
+      const viewportHeight = window.innerHeight;
+      const contentHeight = content.scrollHeight;
+      if (contentHeight <= viewportHeight) {
+        setMenuScale(1);
+        return;
+      }
+      const ratio = viewportHeight / contentHeight;
+      setMenuScale(Math.max(0.72, Math.min(1, ratio * 0.99)));
+    };
+
+    const onResize = () => {
+      if (resizeDebounceTimer) {
+        window.clearTimeout(resizeDebounceTimer);
+      }
+      resizeDebounceTimer = window.setTimeout(recalcScale, 150);
+    };
+
+    const raf = window.requestAnimationFrame(recalcScale);
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.cancelAnimationFrame(raf);
+      if (resizeDebounceTimer) {
+        window.clearTimeout(resizeDebounceTimer);
+      }
+      window.removeEventListener("resize", onResize);
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    const rootContent = document.querySelector<HTMLElement>(".boot-ui");
+    if (!rootContent) return;
+
+    if (isOpen) {
+      rootContent.setAttribute("aria-hidden", "true");
+      rootContent.setAttribute("inert", "");
+      return () => {
+        rootContent.removeAttribute("aria-hidden");
+        rootContent.removeAttribute("inert");
+      };
+    }
+
+    rootContent.removeAttribute("aria-hidden");
+    rootContent.removeAttribute("inert");
+    return undefined;
+  }, [isOpen]);
+
+  return (
+    <>
+      <header
+        data-site-header="mobile"
+        className="fixed left-0 right-0 top-0 z-[1200] flex h-[calc(72px+env(safe-area-inset-top))] items-center justify-start px-4 pt-[env(safe-area-inset-top)] md:hidden"
+        style={{
+          background: "rgba(5,10,20,0.8)",
+          backdropFilter: "blur(10px) saturate(130%)",
+          WebkitBackdropFilter: "blur(10px) saturate(130%)",
+          willChange: "transform",
+          transform: "translateZ(0)",
+        }}
+      >
+        <Link
+          ref={logoRef}
+          href="/"
+          className="header-logo pointer-events-auto z-[1201] select-none"
+          style={{
+            marginLeft: "max(0.5rem, env(safe-area-inset-left))",
+            transition: "none",
+          }}
+          aria-label="ВИПАВТО 161 Главная"
+        >
+          <span className="vip-logo-monolith" aria-label="ВИПАВТО 161 RUS" style={{ overflow: "visible" }}>
+            <span className="logo-text mobile-logo-glitch" style={{ overflow: "visible" }}>
+              <span
+                ref={logoVipRef}
+                className="vip-part logo-anim-node logo-anim-node--vip"
+                style={{ display: "inline-block", opacity: isLogoIntroReady ? undefined : 0 }}
+              >
+                ВИП
+              </span>
+              <span
+                ref={logoAutoRef}
+                className="auto-part logo-anim-node logo-anim-node--auto"
+                style={{ display: "inline-block", opacity: isLogoIntroReady ? undefined : 0 }}
+              >
+                АВТО
+              </span>
+            </span>
+            <span
+              ref={logoRegionRef}
+              className="logo-region logo-anim-node logo-anim-node--region"
+              style={{ opacity: isLogoIntroReady ? undefined : 0 }}
+            >
+              <span className="region-code">161</span>
+              <span className="region-flag">RUS</span>
+            </span>
+          </span>
+        </Link>
+      </header>
+
+      <button
+        ref={burgerRef}
+        type="button"
+        onClick={isOpen ? () => closeMenu() : openMenu}
+        aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
+        aria-expanded={isOpen}
+        aria-controls="mobile-nav-dialog"
+        className={`tap-none touch-manipulation fixed right-4 top-0 z-[10001] flex h-[calc(72px+env(safe-area-inset-top))] w-[72px] items-center justify-end pt-[env(safe-area-inset-top)] transition-opacity duration-300 md:hidden ${isBurgerVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+        style={{
+          background: "none",
+          border: "none",
+          outline: "none",
+          opacity: isBurgerVisible ? 1 : 0,
+          visibility: isBurgerVisible ? "visible" : "hidden",
+        }}
+      >
+        <div className="relative h-[22px] w-[38px]">
+          <span
+            ref={lineTopRef}
+            className="absolute left-0 top-0 block h-[1.5px] rounded-[2px]"
+            style={{
+              width: "100%",
+              background: "#ccff00",
+              boxShadow: "0 0 8px rgba(204,255,0,0.25)",
+              transform: "translateY(0) rotate(0)",
+              transformOrigin: "center center",
+              transition: "none",
+            }}
+          />
+          <span
+            ref={lineMidRef}
+            className="absolute left-0 top-[10px] block h-[1.5px] rounded-[2px]"
+            style={{
+              width: "72%",
+              background: "linear-gradient(90deg, #ccff00 0%, #00f0ff 100%)",
+              boxShadow: "0 0 8px rgba(224,230,237,0.25)",
+              opacity: 1,
+              clipPath: "inset(0 0 0 0)",
+              WebkitClipPath: "inset(0 0 0 0)",
+              transformOrigin: "center center",
+              transition: "none",
+            }}
+          />
+          <span
+            ref={lineBotRef}
+            className="absolute bottom-0 left-0 block h-[1.5px] rounded-[2px]"
+            style={{
+              width: "50%",
+              background: "#00f0ff",
+              boxShadow: "0 0 8px rgba(0,240,255,0.25)",
+              transform: "translateY(0) rotate(0)",
+              transformOrigin: "center center",
+              transition: "none",
+            }}
+          />
+        </div>
+      </button>
+
+      <div
+        ref={overlayRef}
+        className="pointer-events-none invisible fixed inset-0 z-[9999] bg-[#050a14]/95 md:hidden"
+        aria-hidden={!isOpen}
+      >
+        <div
+          id="mobile-nav-dialog"
+          ref={panelRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Мобильная навигация"
+          className="absolute inset-0 overflow-hidden"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) closeMenu();
+          }}
+        >
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute inset-0 bg-[#0b1116]/96" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,17,22,0.96)_0%,rgba(11,17,22,0.9)_42%,rgba(11,17,22,0.97)_100%)] backdrop-blur-[20px]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(0,240,255,0.12),transparent_40%),radial-gradient(circle_at_86%_90%,rgba(204,255,0,0.12),transparent_44%)] opacity-90" />
+            <div className="absolute inset-x-0 bottom-0 h-[42vh] bg-[linear-gradient(0deg,rgba(5,10,20,0.98)_0%,rgba(5,10,20,0.82)_45%,transparent_100%)]" />
+            <div className="menu-film-grain absolute inset-0 opacity-[0.04]" />
+          </div>
+
+          <div
+            ref={contentRef}
+            className="mobile-menu-content relative z-10 flex min-h-dvh max-h-dvh flex-col justify-between overflow-x-hidden overflow-y-auto px-5 pt-[calc(80px+env(safe-area-inset-top))] pb-[calc(12px+env(safe-area-inset-bottom))]"
+            style={{
+              // Keep scale stable during close animation to avoid visual jump.
+              transform: `scale(${menuScale})`,
+              transformOrigin: "top center",
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
+
+            <nav className="flex flex-1 items-stretch justify-center pt-2">
+              <ul className="flex h-full min-h-[380px] w-full max-w-md flex-col justify-evenly">
+                {MENU_ITEMS.map((item, index) => {
+                  const isActive = activeId === item.id;
+                  return (
+                    <li key={item.id}>
+                      <a
+                        ref={(el) => setItemRef(index, el)}
+                        href={item.href}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          closeMenu(item.href);
+                        }}
+                        className="tap-none touch-manipulation group flex items-baseline justify-center py-[clamp(12px,2.6vh,24px)] text-center focus-visible:outline-none"
+                      >
+                        <span
+                          className="menu-item"
+                          style={{
+                            fontSize: "clamp(2.25rem, 8.2vw, 3.3rem)",
+                            fontWeight: 350,
+                            lineHeight: 1.02,
+                            letterSpacing: "-0.02em",
+                            color: isActive ? "#ffffff" : "#f4f7fb",
+                            transition: "color 220ms ease, text-shadow 220ms ease, transform 220ms ease",
+                            opacity: isActive ? 1 : 0.92,
+                            textShadow: isActive ? "0 0 24px rgba(204,255,0,0.22)" : "0 0 14px rgba(255,255,255,0.1)",
+                          }}
+                        >
+                          <span className="inline-block">{item.label}</span>
+                        </span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+
+            <div ref={footerRef} className="menu-footer mt-3">
+              <div className="mb-4 flex justify-center">
+                <div className="h-px w-16 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              </div>
+
+              <div className="mb-4 flex flex-col items-center gap-2">
+                <a
+                  ref={topPhoneRef}
+                  href={phoneHref}
+                  className="menu-top-phone-wrapper text-white"
+                  style={{
+                    fontFamily: "var(--font-jetbrains-mono), monospace",
+                    fontSize: "1.65rem",
+                    letterSpacing: "0.02em",
+                  }}
+                  aria-label={`Позвонить ${HEADER_PHONE}`}
+                >
+                  {phoneChars.map((char, index) => (
+                    <span
+                      key={`phone-top-${index}-${char}`}
+                      data-phone-char={char === " " ? "space" : "digit"}
+                      className={`menu-top-phone-char ${char === " " ? "space" : ""}`}
+                      style={{
+                        display: "inline-block",
+                        backgroundColor: "transparent",
+                        isolation: "isolate",
+                        transformOrigin: "center center",
+                        transition: "none",
+                        WebkitTextFillColor: "currentColor",
+                      }}
+                    >
+                      {char === " " ? "\u00A0" : char}
+                    </span>
+                  ))}
+                </a>
+
+                <div className="flex flex-col items-center gap-1">
+                  <div ref={callArrowRef} className="call-arrow" style={{ transformOrigin: "center center" }}>
+                    <svg width="24" height="32" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <line x1="12" y1="32" x2="12" y2="6" stroke="url(#arrowGrad)" strokeWidth="2" strokeLinecap="round" />
+                      <line x1="12" y1="6" x2="5" y2="13" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" />
+                      <line x1="12" y1="6" x2="19" y2="13" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" />
+                      <defs>
+                        <linearGradient id="arrowGrad" x1="12" y1="32" x2="12" y2="6">
+                          <stop offset="0%" stopColor="#00f0ff" stopOpacity="0.3" />
+                          <stop offset="100%" stopColor="#ccff00" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+                  <span ref={callLabelRef} className="call-label inline-block text-xs font-bold uppercase tracking-[0.25em] text-white/80">
+                    нажмите для звонка
+                  </span>
+                </div>
+              </div>
+
+              <div className="menu-actions mt-3 grid grid-cols-2 gap-2.5">
+                <a
+                  href={siteConfig.social.whatsapp}
+                  aria-label="WhatsApp"
+                  className="tap-none touch-manipulation flex h-12 items-center justify-center gap-2 rounded-2xl border border-[#ccff0040] bg-[linear-gradient(135deg,rgba(204,255,0,0.22),rgba(204,255,0,0.08))] px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_10px_30px_rgba(204,255,0,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ccff0080] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_16px_34px_rgba(204,255,0,0.22)]"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                  </svg>
+                  <span className="text-[0.78rem] font-semibold tracking-[0.04em] text-[#ccff00]">WhatsApp</span>
+                </a>
+
+                <a
+                  href={siteConfig.social.telegram}
+                  aria-label="Telegram"
+                  className="tap-none touch-manipulation flex h-12 items-center justify-center gap-2 rounded-2xl border border-[#00f0ff45] bg-[linear-gradient(135deg,rgba(0,240,255,0.22),rgba(0,240,255,0.08))] px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_10px_30px_rgba(0,240,255,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#00f0ff85] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_16px_34px_rgba(0,240,255,0.22)]"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <line x1="22" y1="2" x2="11" y2="13" />
+                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                  </svg>
+                  <span className="text-[0.78rem] font-semibold tracking-[0.04em] text-[#00f0ff]">Telegram</span>
+                </a>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

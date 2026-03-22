@@ -1,50 +1,43 @@
-﻿import Link from 'next/link'
-import { InlineBrandMark } from '@/components/ui/inline-brand-mark'
-import { MENU_ITEMS } from '@/lib/navigation'
+import { BrandWordmark } from "@/components/ui/BrandWordmark";
+import { siteConfig } from "@/lib/siteConfig";
 
-interface FooterProps {
-  domain: string
-}
-
-export function Footer({ domain }: FooterProps) {
-  const year = new Date().getFullYear()
+export function Footer() {
+  const year = new Date().getFullYear();
 
   return (
-    <footer className='section-magnetic border-t border-[var(--line)] bg-[#0c0b09]/90 backdrop-blur-md'>
-      <div className='section-container py-8 text-[#f0ead6]'>
-        <div className='flex flex-col gap-6'>
-          <nav aria-label='Футер меню' className='flex flex-wrap gap-x-4 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-[#d9cfc4] sm:text-[12px]'>
-            {MENU_ITEMS.filter((item) => item.id !== 'top').map((item) => (
-              <Link key={`footer-menu-${item.id}`} href={item.href} className='transition-colors duration-300 hover:text-[#f5f0e8]'>
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className='flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-[#c7b8a8] sm:text-[12px]'>
-            <Link href='/privacy' className='transition-colors duration-300 hover:text-[#f5f0e8]'>
-              Политика конфиденциальности
-            </Link>
-            <Link href='/terms' className='transition-colors duration-300 hover:text-[#f5f0e8]'>
-              Правила использования
-            </Link>
-            <a href='#top' className='transition-colors duration-300 hover:text-[#f5f0e8]'>
-              Наверх
-            </a>
-          </div>
-
-          <div className='flex flex-col gap-1 text-[11px] text-[#b5aa9d] sm:flex-row sm:items-center sm:justify-between sm:text-[12px]'>
-            <p className='inline-flex items-baseline gap-1'>
-              <span>© {year}</span>
-              <InlineBrandMark className='text-[0.82em] tracking-[0.09em]' />
-              <span>Все права защищены.</span>
+    <footer className="border-t border-zinc-800 pb-28 pt-16 md:py-24">
+      <div className="container-shell">
+        <div className="grid gap-6 text-sm leading-normal text-zinc-400 md:grid-cols-2 md:gap-8">
+          <div className="space-y-3 md:space-y-4">
+            <p className="text-sm font-medium text-zinc-100">
+              <BrandWordmark />
             </p>
-            <a href={`https://${domain}`} className='text-[#d4b483] transition-colors duration-300 hover:text-[#e8d5b7]'>
-              {domain}
-            </a>
+            <p>{siteConfig.specialization}</p>
+            <p>{siteConfig.address}</p>
+            <p>Email: {siteConfig.email}</p>
           </div>
+          <div className="space-y-3 md:space-y-4 md:text-right">
+            <p>ОГРНИП: {siteConfig.ogrnip}</p>
+            <p>ИНН: {siteConfig.inn}</p>
+            <p>ОКПО: {siteConfig.okpo}</p>
+            <p>{siteConfig.schedule}</p>
+            <div className="flex gap-3 md:justify-end md:gap-4">
+              <a href="/privacy" className="transition-colors duration-200 hover:text-zinc-100">
+                Политика
+              </a>
+              <a href="/terms" className="transition-colors duration-200 hover:text-zinc-100">
+                Оферта
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="mt-8 border-t border-zinc-800/80 pt-4 text-xs leading-normal text-zinc-500 md:mt-10 md:flex md:items-center md:justify-between">
+          <p>
+            © {siteConfig.founded}-{year} <BrandWordmark />. Все права защищены.
+          </p>
+          <p className="mt-2 md:mt-0">ИП {siteConfig.legalBrand}</p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
