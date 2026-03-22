@@ -1,28 +1,19 @@
-﻿import Link from "next/link";
-import { siteConfig } from "@/lib/siteConfig";
+﻿import Link from 'next/link'
 
 export default function NotFound() {
   return (
-    <main className="section-padding pt-24">
-      <div className="container-shell">
-        <article className="card-surface max-w-2xl p-8">
-          <p className="text-sm uppercase tracking-widest text-zinc-500">404</p>
-          <h1 className="mt-4 text-4xl font-bold leading-tight tracking-tight md:text-5xl">Цепь разорвана, страница не найдена</h1>
-          <p className="mt-4 text-base leading-relaxed text-zinc-400 md:text-lg">
-            Возможно, ссылка устарела или адрес введен с ошибкой. Вернитесь на главную или свяжитесь с нами.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3 md:gap-4">
-            <Link href="/" className="btn-primary">
-              На главную
-            </Link>
-            <a href={`tel:${siteConfig.phones[0].replace(/[^\d+]/g, "")}`} className="btn-secondary">
-              {siteConfig.phones[0]}
-            </a>
-          </div>
-        </article>
-      </div>
+    <main className='mx-auto flex min-h-[70vh] w-full max-w-4xl flex-col items-start justify-center gap-5 px-4 py-14 sm:px-6 lg:px-8'>
+      <p className='text-sm uppercase tracking-[0.16em] text-zinc-400'>404</p>
+      <h1 className='text-3xl font-semibold leading-tight sm:text-4xl'>Страница не найдена</h1>
+      <p className='max-w-xl text-zinc-300'>
+        Раздел отсутствует или был перемещен во время подготовки нового лендинга LI Studio.
+      </p>
+      <Link
+        href='/'
+        className='inline-flex rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-100 transition hover:border-zinc-500 hover:bg-zinc-700'
+      >
+        На главную
+      </Link>
     </main>
-  );
+  )
 }
-
-
